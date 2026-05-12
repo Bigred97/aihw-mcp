@@ -1,0 +1,91 @@
+id: GRIM_DEATHS
+name: GRIM — General Record of Incidence of Mortality
+description: |
+  AIHW General Record of Incidence of Mortality (GRIM) — a national, long-term
+  time series of deaths by cause × year × sex × age group. Covers ~120 years
+  (1907 onward) and includes counts and rates per 100,000 (crude and
+  age-standardised). The single best dataset for any "how have deaths from
+  [cause] changed over time?" question, plus differences by sex and age
+  group across the full Australian population.
+  Source: AIHW via data.gov.au.
+period_coverage: 1907 to most recent published year
+update_frequency: annual
+source_url: https://data.gov.au/data/dataset/grim-books
+download_url: https://data.gov.au/data/dataset/488ef6d4-c763-4b24-b8fb-9c15b67ece19/resource/edcbc14c-ba7c-44ae-9d4f-2622ad3fafe0/download/aihw-phe-229-grim-data-gov-au-2025.csv
+discovery:
+  package_id: grim-books
+  resource_name: GRIM
+format: csv
+header_row: 1
+layout: wide
+cache_kind: data
+search_keywords:
+  - mortality
+  - deaths
+  - cause of death
+  - grim
+  - long term mortality
+  - historical deaths
+  - life expectancy
+  - cardiovascular deaths
+  - cancer deaths
+  - diabetes deaths
+  - suicide deaths
+  - dementia deaths
+  - icd
+  - age standardised mortality
+columns:
+  grim_code:
+    source_column: "grim"
+    description: AIHW GRIM cause-of-death code (e.g. GRIM0000 = All causes combined).
+    role: id
+    dtype: string
+  cause_of_death:
+    source_column: "cause_of_death"
+    description: Plain-English cause of death label.
+    role: dimension
+    dtype: string
+  year:
+    source_column: "year"
+    description: Calendar year of death.
+    role: dimension
+    dtype: string
+  sex:
+    source_column: "sex"
+    description: Sex (Females, Males, or Persons = both combined).
+    role: dimension
+    dtype: string
+  age_group:
+    source_column: "age_group"
+    description: 5-year age band (e.g. '0–4', '85+', or 'Total').
+    role: dimension
+    dtype: string
+  deaths:
+    source_column: "deaths"
+    description: Number of deaths in the cell.
+    unit: Deaths
+    role: measure
+    dtype: float
+  crude_rate_per_100000:
+    source_column: "crude_rate_per_100000"
+    description: Crude death rate per 100,000 population in the cell.
+    unit: Rate per 100,000
+    role: measure
+    dtype: float
+  age_standardised_rate_per_100000:
+    source_column: "age_standardised_rate_per_100000"
+    description: |
+      Age-standardised death rate per 100,000 (direct standardisation to the
+      Australian 2001 standard population). Blank for age-specific rows where
+      age standardisation isn't meaningful.
+    unit: Rate per 100,000
+    role: measure
+    dtype: float
+dimension_values:
+  sex:
+    female: Females
+    male: Males
+    persons: Persons
+    Females: Females
+    Males: Males
+    Persons: Persons

@@ -1,0 +1,93 @@
+id: HEALTH_EXPENDITURE
+name: Health Expenditure in Australia (by Area and Source)
+description: |
+  AIHW Health Expenditure — real-dollar (CPI-adjusted) spending on health
+  goods and services across Australia, broken down by financial year ×
+  state × area of expenditure (e.g. Public hospitals, Medical services,
+  Benefit-paid pharmaceuticals, Dental services, Community health) ×
+  broad source (Government / Non-government) × detailed source (Australian
+  Government, State and local, Individuals, Private health insurance,
+  Other non-government). Covers 1997-98 onward.
+  Source: AIHW via data.gov.au.
+period_coverage: 1997-98 to most recent published financial year
+update_frequency: annual
+source_url: https://data.gov.au/data/dataset/health-expenditure-in-australia
+download_url: https://data.gov.au/data/dataset/f84b9baf-c1c1-437c-8c1e-654b2829848c/resource/88399d53-d55c-466c-8f4a-6cb965d24d6d/download/healthexpenditurebyareaandsource.csv
+discovery:
+  package_id: health-expenditure-in-australia
+  resource_name: health expenditure by area and source
+format: csv
+header_row: 1
+layout: wide
+cache_kind: data
+search_keywords:
+  - health expenditure
+  - health spending
+  - public hospital spending
+  - medicare spending
+  - pbs spending
+  - benefit paid pharmaceuticals
+  - dental spending
+  - private health insurance
+  - state health spending
+  - government health funding
+columns:
+  financial_year:
+    source_column: "financial_year"
+    description: Australian financial year (e.g. '2022-23').
+    role: dimension
+    dtype: string
+  state:
+    source_column: "state"
+    description: State or territory abbreviation, or 'Australia' for national totals.
+    role: dimension
+    dtype: string
+  area_of_expenditure:
+    source_column: "area_of_expenditure"
+    description: |
+      Area of health expenditure (e.g. 'Public hospitals', 'Medical services',
+      'Benefit-paid pharmaceuticals', 'Dental services', 'Community health',
+      'Administration', 'Aids and appliances', 'Capital expenditure').
+    role: dimension
+    dtype: string
+  broad_source_of_funding:
+    source_column: "broad_source_of_funding"
+    description: Broad funding source — 'Government' or 'Non-government'.
+    role: dimension
+    dtype: string
+  detailed_source_of_funding:
+    source_column: "detailed_source_of_funding"
+    description: |
+      Detailed funding source — 'Australian Government', 'State and local',
+      'Individuals', 'Private health insurance funds', 'Other non-government'.
+    role: dimension
+    dtype: string
+  real_expenditure_millions:
+    source_column: "real_expenditure_millions"
+    description: Real (inflation-adjusted) expenditure in millions of AUD.
+    unit: AUD millions (real)
+    role: measure
+    dtype: float
+dimension_values:
+  state:
+    nsw: NSW
+    vic: VIC
+    qld: QLD
+    sa: SA
+    wa: WA
+    tas: TAS
+    nt: NT
+    act: ACT
+    NSW: NSW
+    VIC: VIC
+    QLD: QLD
+    SA: SA
+    WA: WA
+    TAS: TAS
+    NT: NT
+    ACT: ACT
+  broad_source_of_funding:
+    government: Government
+    non_government: Non-government
+    Government: Government
+    Non-government: Non-government

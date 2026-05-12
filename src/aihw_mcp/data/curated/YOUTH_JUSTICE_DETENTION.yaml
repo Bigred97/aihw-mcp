@@ -1,0 +1,117 @@
+id: YOUTH_JUSTICE_DETENTION
+name: Youth Justice Detention Data
+description: |
+  AIHW Youth Justice Detention — quarterly average nightly population in
+  Australian youth detention facilities, broken down by state × sex ×
+  legal status (Sentenced / Unsentenced) × Indigenous status × quarter ×
+  year. The headline indicator for tracking youth incarceration over
+  time, including the (large) Indigenous-vs-Total disparity that drives
+  most policy debates in this area.
+  Source: AIHW via data.gov.au.
+period_coverage: 2008 onward (quarterly)
+update_frequency: irregular
+source_url: https://data.gov.au/data/dataset/youth-justice-detention-data
+download_url: https://data.gov.au/data/dataset/469ea5ba-2ab3-4972-a045-52bfc87fc512/resource/c7edfa08-7bc9-404d-8f2b-22bcd0425021/download/youth-justice-detention-data-2017.csv
+discovery:
+  package_id: youth-justice-detention-data
+  resource_name: Youth Justice Detention Data
+format: csv
+header_row: 1
+layout: wide
+cache_kind: data
+search_keywords:
+  - youth justice
+  - youth detention
+  - juvenile detention
+  - young offenders
+  - indigenous youth justice
+  - sentenced youth
+  - unsentenced youth
+  - youth incarceration
+  - youth on remand
+  - criminal justice youth
+columns:
+  age_group:
+    source_column: "agegrp"
+    description: Age group covered (always '10 to 17' in the published data).
+    role: dimension
+    dtype: string
+  indigenous_status:
+    source_column: "indig_status"
+    description: "'Indigenous' (Aboriginal and Torres Strait Islander) or 'Total' (all young people)."
+    role: dimension
+    dtype: string
+  legal_status:
+    source_column: "legal_status"
+    description: "'Sentenced', 'Unsentenced' (on remand), or 'Total'."
+    role: dimension
+    dtype: string
+  sex:
+    source_column: "sex"
+    description: "'Female', 'Male', 'Total', or 'Unknow' (note source spelling)."
+    role: dimension
+    dtype: string
+  state:
+    source_column: "state"
+    description: State or territory abbreviation (mixed case — 'NSW', 'Vic', 'Qld', etc.).
+    role: dimension
+    dtype: string
+  quarter:
+    source_column: "quarter"
+    description: Quarter label (e.g. 'Jun qtr 2015').
+    role: dimension
+    dtype: string
+  quart:
+    source_column: "quart"
+    description: Short quarter code ('Mar', 'Jun', 'Sep', 'Dec').
+    role: dimension
+    dtype: string
+  year:
+    source_column: "year"
+    description: Calendar year.
+    role: dimension
+    dtype: string
+  avg_nightly_pop:
+    source_column: "avg_nightly_pop"
+    description: Average nightly detention population for the quarter.
+    unit: Persons
+    role: measure
+    dtype: float
+dimension_values:
+  sex:
+    female: Female
+    male: Male
+    total: Total
+    unknown: Unknow
+    Female: Female
+    Male: Male
+    Total: Total
+  indigenous_status:
+    indigenous: Indigenous
+    total: Total
+    Indigenous: Indigenous
+    Total: Total
+  legal_status:
+    sentenced: Sentenced
+    unsentenced: Unsentenced
+    total: Total
+    Sentenced: Sentenced
+    Unsentenced: Unsentenced
+    Total: Total
+  state:
+    nsw: NSW
+    vic: Vic
+    qld: Qld
+    sa: SA
+    wa: WA
+    tas: Tas
+    nt: NT
+    act: ACT
+    NSW: NSW
+    Vic: Vic
+    Qld: Qld
+    SA: SA
+    WA: WA
+    Tas: Tas
+    NT: NT
+    ACT: ACT

@@ -1,0 +1,167 @@
+id: MORT_GEOGRAPHY
+name: MORT — Mortality Over Regions and Time
+description: |
+  AIHW Mortality Over Regions and Time (MORT) — recent deaths data summarised
+  by geographic area. Each row is one (region category × geography × year ×
+  sex) combination, with ~15 measures including raw deaths, crude and
+  age-standardised rates, rate ratios, premature deaths, potential years of
+  life lost, potentially avoidable deaths, and median age at death. Region
+  categories include State, Statistical Area Level 3 / 4 (SA3 / SA4),
+  Primary Health Network (PHN), Greater Capital City Statistical Area
+  (GCCSA), Remoteness area, and Socioeconomic group.
+  Source: AIHW via data.gov.au.
+period_coverage: 2019 to most recent published year
+update_frequency: annual
+source_url: https://data.gov.au/data/dataset/mort-books
+download_url: https://data.gov.au/data/dataset/a84a6e8e-dd8f-4bae-a79d-77a5e32877ad/resource/a5de4e7e-d062-4356-9d1b-39f44b1961dc/download/aihw-phe-229-mort-table1-data-gov-au-2025.csv
+discovery:
+  package_id: mort-books
+  resource_name: MORT_TABLE_1
+format: csv
+header_row: 1
+layout: wide
+cache_kind: data
+search_keywords:
+  - mortality
+  - deaths by region
+  - mort
+  - sa3 deaths
+  - sa4 deaths
+  - phn deaths
+  - state deaths
+  - remoteness mortality
+  - socioeconomic mortality
+  - premature deaths
+  - potentially avoidable deaths
+  - pyll
+  - median age at death
+columns:
+  mort_code:
+    source_column: "mort"
+    description: AIHW MORT region category code (e.g. SEG1 for socioeconomic group 1).
+    role: id
+    dtype: string
+  category:
+    source_column: "category"
+    description: |
+      Region category. One of: 'State and territory', 'Statistical Area Level 3
+      (SA3)', 'Statistical Area Level 4 (SA4)', 'Primary Health Network (PHN)',
+      'Greater Capital City Statistical Areas (GCCSA)', 'Remoteness area',
+      'Socioeconomic group'.
+    role: dimension
+    dtype: string
+  geography:
+    source_column: "geography"
+    description: Region name within the chosen category (e.g. 'Sydney - Inner West' for SA3).
+    role: dimension
+    dtype: string
+  YEAR:
+    source_column: "YEAR"
+    description: Calendar year of death.
+    role: dimension
+    dtype: string
+  SEX:
+    source_column: "SEX"
+    description: Sex (Females, Males, or Persons).
+    role: dimension
+    dtype: string
+  deaths:
+    source_column: "deaths"
+    description: Number of deaths in the cell.
+    unit: Deaths
+    role: measure
+    dtype: float
+  population:
+    source_column: "population"
+    description: Estimated resident population of the region for the year.
+    unit: Persons
+    role: measure
+    dtype: float
+  crude_rate_per_100000:
+    source_column: "crude_rate_per_100000"
+    description: Crude death rate per 100,000 population.
+    unit: Rate per 100,000
+    role: measure
+    dtype: float
+  age_standardised_rate_per_100000:
+    source_column: "age_standardised_rate_per_100000"
+    description: Age-standardised death rate per 100,000 (Australian 2001 standard).
+    unit: Rate per 100,000
+    role: measure
+    dtype: float
+  rate_ratio:
+    source_column: "rate_ratio"
+    description: Region rate divided by national rate. >1 means region exceeds national.
+    unit: Ratio
+    role: measure
+    dtype: float
+  premature_deaths:
+    source_column: "premature_deaths"
+    description: Deaths in people aged 0–74.
+    unit: Deaths
+    role: measure
+    dtype: float
+  premature_deaths_percent:
+    source_column: "premature_deaths_percent"
+    description: Premature deaths as a percentage of all deaths.
+    unit: Per cent
+    role: measure
+    dtype: float
+  premature_deaths_asr_per_100000:
+    source_column: "premature_deaths_asr_per_100000"
+    description: Age-standardised premature death rate per 100,000.
+    unit: Rate per 100,000
+    role: measure
+    dtype: float
+  potential_years_of_life_lost:
+    source_column: "potential_years_of_life_lost"
+    description: Total years of life lost before age 75 due to premature death.
+    unit: Years
+    role: measure
+    dtype: float
+  pyll_rate_per_1000:
+    source_column: "pyll_rate_per_1000"
+    description: Potential years of life lost per 1,000 population.
+    unit: Rate per 1,000
+    role: measure
+    dtype: float
+  potentially_avoidable_deaths:
+    source_column: "potentially_avoidable_deaths"
+    description: Deaths considered avoidable through prevention or healthcare (under 75).
+    unit: Deaths
+    role: measure
+    dtype: float
+  pad_percent:
+    source_column: "pad_percent"
+    description: Potentially avoidable deaths as a percentage of premature deaths.
+    unit: Per cent
+    role: measure
+    dtype: float
+  pad_asr_per_100000:
+    source_column: "pad_asr_per_100000"
+    description: Age-standardised potentially avoidable death rate per 100,000.
+    unit: Rate per 100,000
+    role: measure
+    dtype: float
+  median_age:
+    source_column: "median_age"
+    description: Median age at death.
+    unit: Years
+    role: measure
+    dtype: float
+dimension_values:
+  SEX:
+    female: Females
+    male: Males
+    persons: Persons
+    Females: Females
+    Males: Males
+    Persons: Persons
+  category:
+    state: State and territory
+    sa3: Statistical Area Level 3 (SA3)
+    sa4: Statistical Area Level 4 (SA4)
+    phn: Primary Health Network (PHN)
+    gccsa: Greater Capital City Statistical Areas (GCCSA)
+    remoteness: Remoteness area
+    socioeconomic: Socioeconomic group

@@ -1,0 +1,84 @@
+# aihw-mcp — MCP server for Australian Institute of Health and Welfare statistics
+
+MCP (Model Context Protocol) server giving Claude and other LLM agents plain-English access to AIHW datasets via data.gov.au. Sister package to abs-mcp, rba-mcp, and ato-mcp.
+
+## What's exposed
+
+Six MCP tools — same surface as the sister packages:
+
+- search_datasets(query, limit=10) -> list[DatasetSummary]
+- describe_dataset(dataset_id) -> DatasetDetail
+- get_data(dataset_id, filters?, measures?, start_period?, end_period?, format?) -> DataResponse
+- latest(dataset_id, filters?, measures?) -> DataResponse
+- top_n(dataset_id, measure, n=10, filters?, direction="top"|"bottom") -> DataResponse
+- list_curated() -> list[str]
+
+## Curated datasets (v0.1)
+
+- GRIM_DEATHS: National long-term mortality. Deaths × cause × year × sex × age group, 1907 onward. ~370k rows.
+- MORT_GEOGRAPHY: Recent deaths by State / SA3 / SA4 / PHN / Remoteness / Socioeconomic group. 15 measures including premature deaths, PYLL, potentially avoidable deaths.
+- CANCER_INCIDENCE_MORTALITY: Cancer incidence + mortality counts by year × sex × cancer type × 5-year age band from 1968. 19 age-band measures.
+- HEALTH_EXPENDITURE: Real (CPI-adjusted) health expenditure by financial year × state × area × broad/detailed source from 1997-98.
+- YOUTH_JUSTICE_DETENTION: Quarterly avg nightly detention pop × state × sex × legal status × Indigenous status, 2008 onward.
+- PUBLIC_HOSPITALS: Directory of every Australian public hospital with state, peer group, remoteness, LHN, Medicare provider, IHPA funding, bed count.
+
+## Filter shape
+
+All filters are plain-English keys. Values are matched after a small alias resolver, e.g. {"sex": "female"} resolves to "Females" before matching.
+
+Examples:
+- {"sex": "Females", "year": "2023"}
+- {"cause_of_death": "Diabetes"}
+- {"category": "Statistical Area Level 3 (SA3)", "SEX": "Persons"}
+- {"cancer_type": "Breast cancer", "type": "Incidence", "sex": "Female"}
+- {"state": "NSW", "financial_year": "2022-23"}
+- {"state": "NSW", "peer_group_name": "Principal referral"}
+
+## Response shape
+
+Every tool returns the same envelope:
+{
+  dataset_id: str,
+  dataset_name: str,
+  query: dict,             # echo of inputs for debugging
+  period: {start, end},
+  unit: str | null,        # set when all records share a unit (Deaths, Rate per 100,000, etc.)
+  row_count: int,
+  records: [Observation],  # or list of series dicts when format="series"
+  csv: str | null,         # set when format="csv"
+  source: "Australian Institute of Health and Welfare",
+  attribution: "Data sourced from ... CC BY 3.0 AU",
+  retrieved_at: ISO datetime,
+  aihw_url: str,           # canonical data.gov.au URL
+  server_version: str,
+}
+
+Observation:
+{ period, value, measure, dimensions: dict, unit }
+
+## When to call which tool
+
+- Don't know the dataset ID? search_datasets("mortality") first.
+- Want to know what filters/measures a dataset supports? describe_dataset(...).
+- Want a time series or filtered slice? get_data(...).
+- Want only the most recent row(s)? latest(...).
+- Want the top 10 X by Y? top_n(dataset_id, measure, n=10, filters=...).
+- Want to enumerate everything available? list_curated().
+
+## Common errors and what they mean
+
+- "Unknown filter 'X' for dataset Y" — the filter key isn't a curated dimension. Call describe_dataset(Y) to see valid keys.
+- "Unknown value 'X' for filter 'sex'" — the value isn't a valid alias. The error message lists valid options.
+- "Unknown measure 'X' for dataset Y" — not a curated measure. describe_dataset for the list.
+- "end_period before start_period" — period order is wrong; swap them.
+
+## Caching
+
+Server caches downloaded resources under ~/.aihw-mcp/cache.db. TTLs:
+- "data" (annual AIHW files): 7 days
+- "register" (weekly-updated registers): 24 hours
+- "catalog" (CKAN metadata): 1 hour
+
+## Attribution
+
+Every response carries a CC BY 3.0 AU attribution string per the data.gov.au licence. Cite AIHW as the source and link back to aihw_url.

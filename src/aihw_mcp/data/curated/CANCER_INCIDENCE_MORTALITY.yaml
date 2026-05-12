@@ -1,0 +1,181 @@
+id: CANCER_INCIDENCE_MORTALITY
+name: Australian Cancer Incidence and Mortality (ACIM)
+description: |
+  AIHW Australian Cancer Incidence and Mortality (ACIM) — annual counts of
+  new cancer diagnoses (Incidence) and cancer deaths (Mortality) by year,
+  sex, cancer type, and 5-year age band. ~50 cancer types from 1968
+  forward, including the major site cancers (breast, bowel, lung,
+  prostate, melanoma) and rarer types. Each row carries 19 age-band
+  counts as separate columns (Age_0_to_4 … Age_85+, Age_Unknown).
+  Source: AIHW via data.gov.au.
+period_coverage: 1968 to most recent published year
+update_frequency: annual
+source_url: https://data.gov.au/data/dataset/australian-cancer-incidence-and-mortality
+download_url: https://data.gov.au/data/dataset/05696f6f-6ff5-42a2-904f-af5e4d1f56f8/resource/7fbac314-4bf9-4601-b812-0307316ef5a4/download/acimcombinedcounts.csv
+discovery:
+  package_id: australian-cancer-incidence-and-mortality
+  resource_name: ACIM Combined Counts
+format: csv
+header_row: 1
+layout: wide
+cache_kind: data
+search_keywords:
+  - cancer
+  - cancer incidence
+  - cancer mortality
+  - breast cancer
+  - bowel cancer
+  - lung cancer
+  - prostate cancer
+  - melanoma
+  - acim
+  - age band cancer
+  - oncology
+columns:
+  year:
+    source_column: "Year"
+    description: Calendar year of diagnosis (Incidence) or death (Mortality).
+    role: dimension
+    dtype: string
+  sex:
+    source_column: "Sex"
+    description: Sex (Female, Male, or Persons = both combined).
+    role: dimension
+    dtype: string
+  type:
+    source_column: "Type"
+    description: Incidence (new diagnoses) or Mortality (deaths).
+    role: dimension
+    dtype: string
+  cancer_type:
+    source_column: "Cancer_Type"
+    description: Cancer site / type (e.g. 'Breast cancer', 'Bowel cancer', 'Melanoma of the skin').
+    role: dimension
+    dtype: string
+  age_0_to_4:
+    source_column: "Age_0_to_4"
+    description: Count for ages 0–4.
+    unit: Count
+    role: measure
+    dtype: float
+  age_5_to_9:
+    source_column: "Age_5_to_9"
+    description: Count for ages 5–9.
+    unit: Count
+    role: measure
+    dtype: float
+  age_10_to_14:
+    source_column: "Age_10_to_14"
+    description: Count for ages 10–14.
+    unit: Count
+    role: measure
+    dtype: float
+  age_15_to_19:
+    source_column: "Age_15_to_19"
+    description: Count for ages 15–19.
+    unit: Count
+    role: measure
+    dtype: float
+  age_20_to_24:
+    source_column: "Age_20_to_24"
+    description: Count for ages 20–24.
+    unit: Count
+    role: measure
+    dtype: float
+  age_25_to_29:
+    source_column: "Age_25_to_29"
+    description: Count for ages 25–29.
+    unit: Count
+    role: measure
+    dtype: float
+  age_30_to_34:
+    source_column: "Age_30_to_34"
+    description: Count for ages 30–34.
+    unit: Count
+    role: measure
+    dtype: float
+  age_35_to_39:
+    source_column: "Age_35_to_39"
+    description: Count for ages 35–39.
+    unit: Count
+    role: measure
+    dtype: float
+  age_40_to_44:
+    source_column: "Age_40_to_44"
+    description: Count for ages 40–44.
+    unit: Count
+    role: measure
+    dtype: float
+  age_45_to_49:
+    source_column: "Age_45_to_49"
+    description: Count for ages 45–49.
+    unit: Count
+    role: measure
+    dtype: float
+  age_50_to_54:
+    source_column: "Age_50_to_54"
+    description: Count for ages 50–54.
+    unit: Count
+    role: measure
+    dtype: float
+  age_55_to_59:
+    source_column: "Age_55_to_59"
+    description: Count for ages 55–59.
+    unit: Count
+    role: measure
+    dtype: float
+  age_60_to_64:
+    source_column: "Age_60_to_64"
+    description: Count for ages 60–64.
+    unit: Count
+    role: measure
+    dtype: float
+  age_65_to_69:
+    source_column: "Age_65_to_69"
+    description: Count for ages 65–69.
+    unit: Count
+    role: measure
+    dtype: float
+  age_70_to_74:
+    source_column: "Age_70_to_74"
+    description: Count for ages 70–74.
+    unit: Count
+    role: measure
+    dtype: float
+  age_75_to_79:
+    source_column: "Age_75_to_79"
+    description: Count for ages 75–79.
+    unit: Count
+    role: measure
+    dtype: float
+  age_80_to_84:
+    source_column: "Age_80_to_84"
+    description: Count for ages 80–84.
+    unit: Count
+    role: measure
+    dtype: float
+  age_85_plus:
+    source_column: "Age_85+"
+    description: Count for ages 85 and over.
+    unit: Count
+    role: measure
+    dtype: float
+  age_unknown:
+    source_column: "Age_Unknown"
+    description: Count where age is unknown.
+    unit: Count
+    role: measure
+    dtype: float
+dimension_values:
+  sex:
+    female: Female
+    male: Male
+    persons: Persons
+    Female: Female
+    Male: Male
+    Persons: Persons
+  type:
+    incidence: Incidence
+    mortality: Mortality
+    Incidence: Incidence
+    Mortality: Mortality

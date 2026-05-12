@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "aihw": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/REPLACE/WITH/ABSOLUTE/PATH/TO/aihw-mcp",
+        "aihw-mcp"
+      ]
+    }
+  }
+}

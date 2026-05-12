@@ -1,0 +1,161 @@
+id: PUBLIC_HOSPITALS
+name: Public Hospitals — AIHW Hospitals Databases
+description: |
+  AIHW directory of every public hospital included in the national
+  hospitals databases. ~700 hospitals × state × peer group × remoteness
+  × Local Hospital Network × Medicare provider number × IHPA funding
+  designation × bed count. The named-entity table that powers "how many
+  public hospitals are in NSW?", "list all Principal referral hospitals
+  in Victoria", or "find hospitals in Remote Australia".
+  Source: AIHW Australian hospital statistics 2016-17 via data.gov.au.
+period_coverage: 2016-17 reference year
+update_frequency: irregular
+source_url: https://data.gov.au/data/dataset/australian-hospital-statistics-public-hospitals
+download_url: https://data.gov.au/data/dataset/88a95824-c0e7-4ec0-bb78-b36223dd16a8/resource/43b9e4a4-0752-44c7-b825-bc32c46cf3b7/download/public_hospital_list.csv
+discovery:
+  package_id: australian-hospital-statistics-public-hospitals
+  resource_name_pattern: "Public hospitals"
+format: csv
+header_row: 1
+layout: wide
+cache_kind: register
+search_keywords:
+  - public hospital
+  - hospital list
+  - principal referral
+  - lhn
+  - local hospital network
+  - hospital by state
+  - remote hospital
+  - rural hospital
+  - peer group hospital
+  - hospital register
+  - medicare provider hospital
+columns:
+  state:
+    source_column: "State"
+    description: State or territory abbreviation.
+    role: dimension
+    dtype: string
+  hospital_name:
+    source_column: "Hospital name"
+    description: Hospital name.
+    role: dimension
+    dtype: string
+  establishment_id:
+    source_column: "Establishment ID"
+    description: AIHW establishment ID (unique per hospital × reporting year).
+    role: id
+    dtype: string
+  medicare_provider_no:
+    source_column: "Medicare Provider No."
+    description: Medicare provider number used for billing.
+    role: id
+    dtype: string
+  lhn_id:
+    source_column: "Local Hospital Network identifier"
+    description: Local Hospital Network ID code.
+    role: id
+    dtype: string
+  lhn_name:
+    source_column: "Local Hospital Network"
+    description: Local Hospital Network name (e.g. 'Sydney', 'Hunter New England').
+    role: dimension
+    dtype: string
+  address_line_1:
+    source_column: "Address Line 1"
+    description: Street address (line 1).
+    role: dimension
+    dtype: string
+  address_line_2:
+    source_column: "Address Line 2"
+    description: Suburb / postcode (line 2).
+    role: dimension
+    dtype: string
+  asgc_ra_code:
+    source_column: "asgc_ra"
+    description: |
+      ASGC Remoteness Area code (0 = Major Cities, 1 = Inner Regional,
+      2 = Outer Regional, 3 = Remote, 4 = Very remote).
+    role: dimension
+    dtype: string
+  remoteness_area:
+    source_column: "Remoteness area"
+    description: ASGC Remoteness Area name.
+    role: dimension
+    dtype: string
+  peer_group_code:
+    source_column: "2012-13 Peer Group code"
+    description: AIHW Peer Group code (e.g. 'A1' = Principal referral).
+    role: dimension
+    dtype: string
+  peer_group_name:
+    source_column: "Peer Group Name"
+    description: |
+      AIHW Peer Group name (e.g. 'Principal referral', 'Public acute group A',
+      'Mixed subacute and non-acute', 'Early parenting centres', 'Very small').
+    role: dimension
+    dtype: string
+  provided_nphed:
+    source_column: "Provided data for NPHED"
+    description: Provided data for the National Public Hospital Establishments Database.
+    role: dimension
+    dtype: string
+  provided_nhmd:
+    source_column: "Provided data for NHMD"
+    description: Provided data for the National Hospital Morbidity Database.
+    role: dimension
+    dtype: string
+  provided_napedcd:
+    source_column: "Provided data for NAPEDCD"
+    description: Provided data for the Non-Admitted Patient Emergency Department Care Database.
+    role: dimension
+    dtype: string
+  provided_eswt:
+    source_column: "Provided data for ESWT"
+    description: Provided data for the Elective Surgery Waiting Times collection.
+    role: dimension
+    dtype: string
+  provided_nnapcd:
+    source_column: "Provided data for NNAPCD"
+    description: Provided data for the National Non-Admitted Patient Care Database.
+    role: dimension
+    dtype: string
+  ihpa_funding_designation:
+    source_column: "IHPA funding designation"
+    description: |
+      Independent Hospital Pricing Authority funding designation — one of:
+      'Activity-based funded hospital', 'Block-funded hospital',
+      'Funding not designated/Unknown'.
+    role: dimension
+    dtype: string
+  number_of_available_beds:
+    source_column: "Number of available beds"
+    description: Number of available beds at the hospital.
+    unit: Beds
+    role: measure
+    dtype: float
+dimension_values:
+  state:
+    nsw: NSW
+    vic: VIC
+    qld: QLD
+    sa: SA
+    wa: WA
+    tas: TAS
+    nt: NT
+    act: ACT
+    NSW: NSW
+    VIC: VIC
+    QLD: QLD
+    SA: SA
+    WA: WA
+    TAS: TAS
+    NT: NT
+    ACT: ACT
+  remoteness_area:
+    major_cities: Major Cities
+    inner_regional: Inner Regional
+    outer_regional: Outer Regional
+    remote: Remote
+    very_remote: Very remote

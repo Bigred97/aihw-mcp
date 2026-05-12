@@ -20,6 +20,7 @@ format: csv
 header_row: 1
 layout: wide
 cache_kind: data
+period_dimension: financial_year
 search_keywords:
   - health expenditure
   - health spending

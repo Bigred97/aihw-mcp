@@ -21,6 +21,7 @@ format: csv
 header_row: 1
 layout: wide
 cache_kind: data
+period_dimension: YEAR
 search_keywords:
   - mortality
   - deaths by region

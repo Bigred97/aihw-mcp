@@ -25,6 +25,7 @@ import pandas as pd
 from .curated import (
     CuratedColumn,
     CuratedDataset,
+    _suggest,
     dimension_columns,
     id_columns,
     measure_columns,
@@ -138,9 +139,11 @@ def _apply_filters(
     for user_key, user_val in filters.items():
         if user_key not in valid_dim_keys:
             valid = sorted(valid_dim_keys)
+            suggestion = _suggest(user_key, valid)
+            suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
             raise ValueError(
                 f"Unknown filter {user_key!r} for dataset {cd.id!r}. "
-                f"Try one of: {', '.join(valid[:15])}"
+                f"{suggest_msg}Try one of: {', '.join(valid[:15])}"
             )
         # Lists mean "OR" across values.
         if isinstance(user_val, list):
@@ -315,6 +318,41 @@ def shape_transposed(
     return records
 
 
+def _filter_wide_by_period(
+    df: pd.DataFrame,
+    cd: CuratedDataset,
+    start_period: str | None,
+    end_period: str | None,
+) -> pd.DataFrame:
+    """Apply start_period/end_period to a wide-layout DataFrame.
+
+    No-op when the dataset hasn't declared period_dimension or when neither
+    start nor end was supplied. Drops rows whose period value lies outside
+    the requested range; values that don't parse as a period (NaN, footnotes)
+    pass through unchanged so non-time-series filtering still works.
+    """
+    if not cd.period_dimension or (start_period is None and end_period is None):
+        return df
+    col = cd.period_dimension
+    if col not in df.columns:
+        return df
+    s = df[col].astype("string")
+    mask = s.apply(lambda v: v is None or _period_in_range(str(v), start_period, end_period))
+    return df.loc[mask].reset_index(drop=True)
+
+
+def _sort_wide_by_period(df: pd.DataFrame, cd: CuratedDataset) -> pd.DataFrame:
+    """Sort a wide DataFrame ascending by its period_dimension.
+
+    No-op when period_dimension is unset (register-style tables) or the
+    column is missing. Uses mergesort for stability so secondary order
+    inside same-period groups stays whatever the source file gave us.
+    """
+    if not cd.period_dimension or cd.period_dimension not in df.columns:
+        return df
+    return df.sort_values(cd.period_dimension, kind="mergesort").reset_index(drop=True)
+
+
 def _period_in_range(p: str, start: str | None, end: str | None) -> bool:
     """Lenient period-in-range check.
 
@@ -439,11 +477,19 @@ def build_response(
     """
     renamed = _apply_aliases(df, cd)
     coerced = _coerce_dtypes(renamed, cd)
+    # Period range filter for wide datasets that declare a period_dimension.
+    # Transposed datasets apply periods inside shape_transposed via column trim.
+    if cd.layout == "wide":
+        coerced = _filter_wide_by_period(coerced, cd, start_period, end_period)
     filtered = _apply_filters(coerced, cd, filters)
 
     measure_keys = resolve_measure_keys(cd, measures)
 
     if cd.layout == "wide":
+        # Sort by period_dimension ascending so the last_n tail trim downstream
+        # returns the most-recent period rather than whatever happens to be at
+        # the end of source order. No-op when period_dimension is unset.
+        filtered = _sort_wide_by_period(filtered, cd)
         records = shape_wide(filtered, cd, measure_keys)
     else:
         records = shape_transposed(filtered, cd, measure_keys, start_period, end_period)

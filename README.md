@@ -15,6 +15,7 @@
 "How much did Australia spend on public hospitals in 2022-23?"
 "How many young people are in detention in NSW vs VIC?"
 "List all Principal referral hospitals in Queensland."
+"Top 5 causes of death in 2023."
 ```
 
 Sister to [abs-mcp](https://github.com/Bigred97/abs-mcp) (Australian Bureau of Statistics), [rba-mcp](https://github.com/Bigred97/rba-mcp) (Reserve Bank of Australia), [ato-mcp](https://github.com/Bigred97/ato-mcp) (Australian Taxation Office), and [au-weather-mcp](https://github.com/Bigred97/au-weather-mcp) (Australian weather). The five together cover the macro / regulator / tax / health / climate layer of Australian official data.
@@ -71,6 +72,8 @@ Six tools, all plain-English in, structured out:
 | `list_curated`      | Enumerate the curated dataset IDs                             |
 
 Every response is the same shape — `dataset_id`, `dataset_name`, `query`, `period`, `unit`, `row_count`, `records`, `aihw_url`, `attribution`, `server_version` — across every curated dataset.
+
+Time-series datasets (GRIM, MORT, ACIM, Health Expenditure, Youth Justice) accept `start_period` and `end_period` on `get_data` — e.g. `start_period="2000", end_period="2010"` narrows GRIM to that decade. `latest()` returns the most-recent observation per measure, sorted by the dataset's declared period dimension (not by source row order). Error messages include fuzzy "did you mean?" suggestions when you typo a filter or measure name.
 
 ---
 

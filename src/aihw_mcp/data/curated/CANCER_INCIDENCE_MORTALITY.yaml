@@ -19,6 +19,7 @@ format: csv
 header_row: 1
 layout: wide
 cache_kind: data
+period_dimension: year
 search_keywords:
   - cancer
   - cancer incidence

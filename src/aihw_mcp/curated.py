@@ -73,6 +73,17 @@ class CuratedDataset:
     # current download URL via CKAN at fetch time so new yearly releases
     # land without a YAML edit. See discovery.py.
     discovery: dict | None = None
+    # Optional period dimension key — names a column the shaping layer should
+    # treat as the dataset's time axis. When set:
+    #   - start_period / end_period on get_data filters rows by this column
+    #     (using the lenient _normalize_period parser shared with transposed
+    #     tables).
+    #   - latest() sorts by this column ascending before trimming, so
+    #     `last_n=1` returns the most-recent period rather than whatever
+    #     happens to be last in source order.
+    # Leave unset for register-style datasets without a meaningful time axis
+    # (e.g. PUBLIC_HOSPITALS, where every row is one current establishment).
+    period_dimension: str | None = None
 
 
 _REGISTRY: dict[str, CuratedDataset] | None = None
@@ -139,6 +150,10 @@ def _load_one(path: Path) -> CuratedDataset:
     if discovery_raw is not None and not isinstance(discovery_raw, dict):
         raise ValueError(f"{path.name}: discovery must be a mapping if provided")
 
+    period_dim_raw = raw.get("period_dimension")
+    if period_dim_raw is not None and not isinstance(period_dim_raw, str):
+        raise ValueError(f"{path.name}: period_dimension must be a string if provided")
+
     return CuratedDataset(
         id=str(raw["id"]),
         name=str(raw["name"]),
@@ -159,6 +174,7 @@ def _load_one(path: Path) -> CuratedDataset:
         metric_label_column=raw.get("metric_label_column"),
         unit_column=raw.get("unit_column"),
         discovery=discovery_raw,
+        period_dimension=period_dim_raw,
     )
 
 
@@ -222,6 +238,8 @@ def translate_filter_value(
     If the dim has an enumerated `dimension_values` map, the user can pass either
     a plain-English alias (e.g. 'nsw') or the raw source value (e.g. 'NSW') —
     both resolve. If the dim is free-form (no enum), the raw value passes through.
+    On miss, the error message includes a fuzzy "did you mean" hint when a
+    close match exists (typo tolerance for high-traffic filters like state/sex).
     """
     dv = cd.dimension_values.get(dim_key)
     if dv is None or dv.values is None:
@@ -232,11 +250,32 @@ def translate_filter_value(
     if user_value in dv.values.values():
         return user_value
     valid = sorted(dv.values.keys())
+    suggestion = _suggest(user_value, valid)
+    suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
     raise ValueError(
         f"Unknown value {user_value!r} for filter {dim_key!r} on dataset {cd.id!r}. "
-        f"Try one of: {', '.join(valid[:15])}"
+        f"{suggest_msg}Try one of: {', '.join(valid[:15])}"
         + ("..." if len(valid) > 15 else "")
     )
+
+
+def _suggest(query: str, candidates: list[str], cutoff: int = 70) -> str | None:
+    """Return the best fuzzy match for `query` in `candidates`, or None.
+
+    Uses RapidFuzz WRatio (already a project dep). The 70 cutoff is tight enough
+    to avoid spurious suggestions ('nsw' vs 'act') but loose enough to catch
+    real typos ('femal' → 'female').
+    """
+    if not query or not candidates:
+        return None
+    try:
+        from rapidfuzz import fuzz, process
+    except ImportError:
+        return None
+    match = process.extractOne(
+        query, candidates, scorer=fuzz.WRatio, score_cutoff=cutoff,
+    )
+    return match[0] if match else None
 
 
 def transposed_measure_aliases(cd: CuratedDataset) -> list[str]:
@@ -305,10 +344,13 @@ def resolve_measure_keys(
         elif v_str in source_to_key:
             out.append(source_to_key[v_str])
         else:
-            valid_hint = ", ".join(sorted(valid_keys)[:15]) if valid_keys else "(none — dataset has no curated measures)"
+            valid_sorted = sorted(valid_keys)
+            valid_hint = ", ".join(valid_sorted[:15]) if valid_keys else "(none — dataset has no curated measures)"
+            suggestion = _suggest(v_str, valid_sorted) if valid_keys else None
+            suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
             raise ValueError(
                 f"Unknown measure {v!r} for dataset {cd.id!r}. "
-                f"Try one of: {valid_hint}"
+                f"{suggest_msg}Try one of: {valid_hint}"
                 + ("..." if len(valid_keys) > 15 else "")
             )
     # Dedupe while preserving order.

@@ -42,6 +42,31 @@ against live data.gov.au.
 - Parsed-DataFrame in-process LRU cache (8 entries) — warm `get_data` calls
   skip the pandas CSV re-parse and respond in tens of milliseconds.
 
+### Tests
+- **247 total** (241 unit + 6 live integration)
+- 3 consecutive full-suite runs with zero flakes
+- Test files: `test_curated`, `test_parsing`, `test_shaping`, `test_server_validation`,
+  `test_cache`, `test_edge_inputs`, `test_edge_data`, `test_concurrency`,
+  `test_customer_flows`, `test_resilience`, `test_discovery`, `test_df_cache`,
+  `test_top_n`, `test_integration`
+- Coverage: parsing (CSV/XLSX, BOM, Unicode, malformed bodies, blank-row
+  trimming, header normalisation); shaping (alias rename, dtype coercion,
+  filter resolution, CSV/series/records output formats, empty-result CSV);
+  server-tool validation (every tool's rejected/accepted input); cache layer
+  (TTL, corrupt-DB silent rebuild, 50-concurrent writes, 10MB roundtrip,
+  binary-safe); adversarial edge inputs (Unicode, RTL, emoji, SQL/script
+  injection, path traversal, 16KB strings, type confusion); data edge cases
+  (NaN cells, `*`/`na` sentinels, mixed dtypes, trailing whitespace,
+  numeric-ID float coercion); concurrency (50 parallel callers dedupe to
+  one fetch, 6 parallel cross-dataset queries, cache-warm rapid sequential);
+  realistic customer agent flows; resilience (404, 503, timeout, DNS
+  failure, malformed CKAN JSON, non-http URLs, in-flight dedup); discovery
+  (CKAN package_show, package_search-with-pattern, host pin against
+  attacker.com, off-host suffix attacks, malformed URLs); parsed-DataFrame
+  LRU cache (content-aware invalidation, no re-parse on warm hits); top_n
+  (top/bottom direction, null-value skip, envelope preservation, cross-query
+  caching); live integration smoke tests against real data.gov.au.
+
 ### Known limitations
 - v0.1 ships only wide-layout (one-row-per-entity) datasets. The transposed
   code path is preserved for future AIHW reports (e.g. mental-health data

@@ -1,0 +1,801 @@
+financial_year,state,area_of_expenditure,broad_source_of_funding,detailed_source_of_funding,real_expenditure_millions
+2009-10,NSW,Administration,Government,Australian Government,504
+2009-10,NSW,Administration,Non-government,Private health insurance funds,296
+2009-10,NSW,Aids and appliances,Government,Australian Government,188
+2009-10,NSW,Aids and appliances,Non-government,Individuals,446
+2009-10,NSW,Aids and appliances,Non-government,Other non-government,6
+2009-10,NSW,Aids and appliances,Non-government,Private health insurance funds,127
+2009-10,NSW,All other medications,Government,Australian Government,128
+2009-10,NSW,All other medications,Non-government,Individuals,1903
+2009-10,NSW,All other medications,Non-government,Other non-government,10
+2009-10,NSW,All other medications,Non-government,Private health insurance funds,21
+2009-10,NSW,Benefit-paid pharmaceuticals,Government,Australian Government,2754
+2009-10,NSW,Benefit-paid pharmaceuticals,Non-government,Individuals,517
+2009-10,NSW,Capital expenditure,Government,Australian Government,40
+2009-10,NSW,Capital expenditure,Government,State and local,672
+2009-10,NSW,Capital expenditure,Non-government,Other non-government,736
+2009-10,NSW,Community health,Government,Australian Government,209
+2009-10,NSW,Community health,Government,State and local,1164
+2009-10,NSW,Community health,Non-government,Individuals,52
+2009-10,NSW,Community health,Non-government,Other non-government,71
+2009-10,NSW,Community health,Non-government,Private health insurance funds,0
+2009-10,NSW,Dental services,Government,Australian Government,578
+2009-10,NSW,Dental services,Government,State and local,194
+2009-10,NSW,Dental services,Non-government,Individuals,1672
+2009-10,NSW,Dental services,Non-government,Other non-government,8
+2009-10,NSW,Dental services,Non-government,Private health insurance funds,349
+2009-10,NSW,Medical expense tax rebate,Government,Australian Government,216
+2009-10,NSW,Medical expense tax rebate,Non-government,Individuals,-216
+2009-10,NSW,Medical services,Government,Australian Government,5977
+2009-10,NSW,Medical services,Non-government,Individuals,994
+2009-10,NSW,Medical services,Non-government,Other non-government,541
+2009-10,NSW,Medical services,Non-government,Private health insurance funds,280
+2009-10,NSW,Other health practitioners,Government,Australian Government,485
+2009-10,NSW,Other health practitioners,Non-government,Individuals,574
+2009-10,NSW,Other health practitioners,Non-government,Other non-government,120
+2009-10,NSW,Other health practitioners,Non-government,Private health insurance funds,177
+2009-10,NSW,Patient transport services,Government,Australian Government,107
+2009-10,NSW,Patient transport services,Government,State and local,484
+2009-10,NSW,Patient transport services,Non-government,Individuals,71
+2009-10,NSW,Patient transport services,Non-government,Other non-government,56
+2009-10,NSW,Patient transport services,Non-government,Private health insurance funds,106
+2009-10,NSW,Private hospitals,Government,Australian Government,957
+2009-10,NSW,Private hospitals,Non-government,Individuals,287
+2009-10,NSW,Private hospitals,Non-government,Other non-government,230
+2009-10,NSW,Private hospitals,Non-government,Private health insurance funds,1338
+2009-10,NSW,Public health,Government,Australian Government,293
+2009-10,NSW,Public health,Government,State and local,224
+2009-10,NSW,Public health,Non-government,Other non-government,35
+2009-10,NSW,Public hospitals,Government,Australian Government,4857
+2009-10,NSW,Public hospitals,Government,State and local,6419
+2009-10,NSW,Public hospitals,Non-government,Individuals,159
+2009-10,NSW,Public hospitals,Non-government,Other non-government,653
+2009-10,NSW,Public hospitals,Non-government,Private health insurance funds,355
+2009-10,NSW,Research,Government,Australian Government,1150
+2009-10,NSW,Research,Government,State and local,168
+2009-10,NSW,Research,Non-government,Individuals,0
+2009-10,NSW,Research,Non-government,Other non-government,89
+2009-10,VIC,Administration,Government,Australian Government,369
+2009-10,VIC,Administration,Non-government,Private health insurance funds,229
+2009-10,VIC,Aids and appliances,Government,Australian Government,130
+2009-10,VIC,Aids and appliances,Non-government,Individuals,698
+2009-10,VIC,Aids and appliances,Non-government,Other non-government,15
+2009-10,VIC,Aids and appliances,Non-government,Private health insurance funds,72
+2009-10,VIC,All other medications,Government,Australian Government,89
+2009-10,VIC,All other medications,Non-government,Individuals,1605
+2009-10,VIC,All other medications,Non-government,Other non-government,27
+2009-10,VIC,All other medications,Non-government,Private health insurance funds,6
+2009-10,VIC,Benefit-paid pharmaceuticals,Government,Australian Government,1999
+2009-10,VIC,Benefit-paid pharmaceuticals,Non-government,Individuals,382
+2009-10,VIC,Capital expenditure,Government,Australian Government,27
+2009-10,VIC,Capital expenditure,Government,State and local,160
+2009-10,VIC,Capital expenditure,Non-government,Other non-government,522
+2009-10,VIC,Community health,Government,Australian Government,121
+2009-10,VIC,Community health,Government,State and local,838
+2009-10,VIC,Community health,Non-government,Individuals,8
+2009-10,VIC,Community health,Non-government,Other non-government,34
+2009-10,VIC,Community health,Non-government,Private health insurance funds,0
+2009-10,VIC,Dental services,Government,Australian Government,280
+2009-10,VIC,Dental services,Government,State and local,131
+2009-10,VIC,Dental services,Non-government,Individuals,1605
+2009-10,VIC,Dental services,Non-government,Other non-government,15
+2009-10,VIC,Dental services,Non-government,Private health insurance funds,211
+2009-10,VIC,Medical expense tax rebate,Government,Australian Government,148
+2009-10,VIC,Medical expense tax rebate,Non-government,Individuals,-148
+2009-10,VIC,Medical services,Government,Australian Government,4264
+2009-10,VIC,Medical services,Non-government,Individuals,607
+2009-10,VIC,Medical services,Non-government,Other non-government,158
+2009-10,VIC,Medical services,Non-government,Private health insurance funds,269
+2009-10,VIC,Other health practitioners,Government,Australian Government,369
+2009-10,VIC,Other health practitioners,Non-government,Individuals,586
+2009-10,VIC,Other health practitioners,Non-government,Other non-government,93
+2009-10,VIC,Other health practitioners,Non-government,Private health insurance funds,114
+2009-10,VIC,Patient transport services,Government,Australian Government,48
+2009-10,VIC,Patient transport services,Government,State and local,331
+2009-10,VIC,Patient transport services,Non-government,Individuals,227
+2009-10,VIC,Patient transport services,Non-government,Other non-government,28
+2009-10,VIC,Patient transport services,Non-government,Private health insurance funds,18
+2009-10,VIC,Private hospitals,Government,Australian Government,850
+2009-10,VIC,Private hospitals,Government,State and local,76
+2009-10,VIC,Private hospitals,Non-government,Individuals,385
+2009-10,VIC,Private hospitals,Non-government,Other non-government,168
+2009-10,VIC,Private hospitals,Non-government,Private health insurance funds,1204
+2009-10,VIC,Public health,Government,Australian Government,235
+2009-10,VIC,Public health,Government,State and local,181
+2009-10,VIC,Public health,Non-government,Other non-government,24
+2009-10,VIC,Public hospitals,Government,Australian Government,3386
+2009-10,VIC,Public hospitals,Government,State and local,4693
+2009-10,VIC,Public hospitals,Non-government,Individuals,356
+2009-10,VIC,Public hospitals,Non-government,Other non-government,365
+2009-10,VIC,Public hospitals,Non-government,Private health insurance funds,147
+2009-10,VIC,Research,Government,Australian Government,1107
+2009-10,VIC,Research,Government,State and local,225
+2009-10,VIC,Research,Non-government,Other non-government,103
+2009-10,QLD,Administration,Government,Australian Government,326
+2009-10,QLD,Administration,Government,State and local,145
+2009-10,QLD,Administration,Non-government,Private health insurance funds,193
+2009-10,QLD,Aids and appliances,Government,Australian Government,110
+2009-10,QLD,Aids and appliances,Non-government,Individuals,453
+2009-10,QLD,Aids and appliances,Non-government,Other non-government,4
+2009-10,QLD,Aids and appliances,Non-government,Private health insurance funds,73
+2009-10,QLD,All other medications,Government,Australian Government,74
+2009-10,QLD,All other medications,Non-government,Individuals,1331
+2009-10,QLD,All other medications,Non-government,Other non-government,8
+2009-10,QLD,All other medications,Non-government,Private health insurance funds,11
+2009-10,QLD,Benefit-paid pharmaceuticals,Government,Australian Government,1575
+2009-10,QLD,Benefit-paid pharmaceuticals,Non-government,Individuals,302
+2009-10,QLD,Capital expenditure,Government,Australian Government,22
+2009-10,QLD,Capital expenditure,Government,State and local,1109
+2009-10,QLD,Capital expenditure,Non-government,Other non-government,567
+2009-10,QLD,Community health,Government,Australian Government,193
+2009-10,QLD,Community health,Government,State and local,1434
+2009-10,QLD,Community health,Non-government,Individuals,12
+2009-10,QLD,Community health,Non-government,Other non-government,17
+2009-10,QLD,Community health,Non-government,Private health insurance funds,0
+2009-10,QLD,Dental services,Government,Australian Government,195
+2009-10,QLD,Dental services,Government,State and local,168
+2009-10,QLD,Dental services,Non-government,Individuals,556
+2009-10,QLD,Dental services,Non-government,Other non-government,3
+2009-10,QLD,Dental services,Non-government,Private health insurance funds,219
+2009-10,QLD,Medical expense tax rebate,Government,Australian Government,106
+2009-10,QLD,Medical expense tax rebate,Non-government,Individuals,-106
+2009-10,QLD,Medical services,Government,Australian Government,3349
+2009-10,QLD,Medical services,Non-government,Individuals,558
+2009-10,QLD,Medical services,Non-government,Other non-government,117
+2009-10,QLD,Medical services,Non-government,Private health insurance funds,197
+2009-10,QLD,Other health practitioners,Government,Australian Government,288
+2009-10,QLD,Other health practitioners,Non-government,Individuals,374
+2009-10,QLD,Other health practitioners,Non-government,Other non-government,53
+2009-10,QLD,Other health practitioners,Non-government,Private health insurance funds,104
+2009-10,QLD,Patient transport services,Government,Australian Government,57
+2009-10,QLD,Patient transport services,Government,State and local,556
+2009-10,QLD,Patient transport services,Non-government,Individuals,0
+2009-10,QLD,Patient transport services,Non-government,Other non-government,10
+2009-10,QLD,Patient transport services,Non-government,Private health insurance funds,0
+2009-10,QLD,Private hospitals,Government,Australian Government,898
+2009-10,QLD,Private hospitals,Government,State and local,25
+2009-10,QLD,Private hospitals,Non-government,Individuals,273
+2009-10,QLD,Private hospitals,Non-government,Other non-government,161
+2009-10,QLD,Private hospitals,Non-government,Private health insurance funds,1070
+2009-10,QLD,Public health,Government,Australian Government,194
+2009-10,QLD,Public health,Government,State and local,226
+2009-10,QLD,Public health,Non-government,Individuals,13
+2009-10,QLD,Public health,Non-government,Other non-government,25
+2009-10,QLD,Public hospitals,Government,Australian Government,2731
+2009-10,QLD,Public hospitals,Government,State and local,4286
+2009-10,QLD,Public hospitals,Non-government,Individuals,266
+2009-10,QLD,Public hospitals,Non-government,Other non-government,159
+2009-10,QLD,Public hospitals,Non-government,Private health insurance funds,41
+2009-10,QLD,Research,Government,Australian Government,373
+2009-10,QLD,Research,Government,State and local,203
+2009-10,QLD,Research,Non-government,Other non-government,35
+2009-10,WA,Administration,Government,Australian Government,161
+2009-10,WA,Administration,Government,State and local,22
+2009-10,WA,Administration,Non-government,Individuals,0
+2009-10,WA,Administration,Non-government,Other non-government,0
+2009-10,WA,Administration,Non-government,Private health insurance funds,105
+2009-10,WA,Aids and appliances,Government,Australian Government,57
+2009-10,WA,Aids and appliances,Non-government,Individuals,447
+2009-10,WA,Aids and appliances,Non-government,Other non-government,7
+2009-10,WA,Aids and appliances,Non-government,Private health insurance funds,41
+2009-10,WA,All other medications,Government,Australian Government,37
+2009-10,WA,All other medications,Non-government,Individuals,626
+2009-10,WA,All other medications,Non-government,Other non-government,18
+2009-10,WA,All other medications,Non-government,Private health insurance funds,5
+2009-10,WA,Benefit-paid pharmaceuticals,Government,Australian Government,703
+2009-10,WA,Benefit-paid pharmaceuticals,Non-government,Individuals,146
+2009-10,WA,Capital expenditure,Government,Australian Government,13
+2009-10,WA,Capital expenditure,Government,State and local,489
+2009-10,WA,Capital expenditure,Non-government,Other non-government,163
+2009-10,WA,Community health,Government,Australian Government,122
+2009-10,WA,Community health,Government,State and local,581
+2009-10,WA,Community health,Non-government,Individuals,14
+2009-10,WA,Community health,Non-government,Other non-government,5
+2009-10,WA,Community health,Non-government,Private health insurance funds,0
+2009-10,WA,Dental services,Government,Australian Government,89
+2009-10,WA,Dental services,Government,State and local,66
+2009-10,WA,Dental services,Non-government,Individuals,545
+2009-10,WA,Dental services,Non-government,Other non-government,4
+2009-10,WA,Dental services,Non-government,Private health insurance funds,153
+2009-10,WA,Medical expense tax rebate,Government,Australian Government,27
+2009-10,WA,Medical expense tax rebate,Non-government,Individuals,-27
+2009-10,WA,Medical services,Government,Australian Government,1500
+2009-10,WA,Medical services,Non-government,Individuals,282
+2009-10,WA,Medical services,Non-government,Other non-government,101
+2009-10,WA,Medical services,Non-government,Private health insurance funds,112
+2009-10,WA,Other health practitioners,Government,Australian Government,135
+2009-10,WA,Other health practitioners,Non-government,Individuals,80
+2009-10,WA,Other health practitioners,Non-government,Other non-government,24
+2009-10,WA,Other health practitioners,Non-government,Private health insurance funds,57
+2009-10,WA,Patient transport services,Government,Australian Government,34
+2009-10,WA,Patient transport services,Government,State and local,122
+2009-10,WA,Patient transport services,Non-government,Individuals,0
+2009-10,WA,Patient transport services,Non-government,Other non-government,8
+2009-10,WA,Patient transport services,Non-government,Private health insurance funds,14
+2009-10,WA,Private hospitals,Government,Australian Government,370
+2009-10,WA,Private hospitals,Government,State and local,275
+2009-10,WA,Private hospitals,Non-government,Individuals,198
+2009-10,WA,Private hospitals,Non-government,Other non-government,37
+2009-10,WA,Private hospitals,Non-government,Private health insurance funds,523
+2009-10,WA,Public health,Government,Australian Government,99
+2009-10,WA,Public health,Government,State and local,98
+2009-10,WA,Public health,Non-government,Individuals,5
+2009-10,WA,Public health,Non-government,Other non-government,11
+2009-10,WA,Public hospitals,Government,Australian Government,1416
+2009-10,WA,Public hospitals,Government,State and local,1932
+2009-10,WA,Public hospitals,Non-government,Individuals,118
+2009-10,WA,Public hospitals,Non-government,Other non-government,49
+2009-10,WA,Public hospitals,Non-government,Private health insurance funds,53
+2009-10,WA,Research,Government,Australian Government,272
+2009-10,WA,Research,Government,State and local,69
+2009-10,WA,Research,Non-government,Individuals,0
+2009-10,WA,Research,Non-government,Other non-government,18
+2009-10,SA,Administration,Government,Australian Government,128
+2009-10,SA,Administration,Government,State and local,284
+2009-10,SA,Administration,Non-government,Individuals,0
+2009-10,SA,Administration,Non-government,Other non-government,19
+2009-10,SA,Administration,Non-government,Private health insurance funds,76
+2009-10,SA,Aids and appliances,Government,Australian Government,46
+2009-10,SA,Aids and appliances,Non-government,Individuals,142
+2009-10,SA,Aids and appliances,Non-government,Other non-government,11
+2009-10,SA,Aids and appliances,Non-government,Private health insurance funds,33
+2009-10,SA,All other medications,Government,Australian Government,33
+2009-10,SA,All other medications,Non-government,Individuals,422
+2009-10,SA,All other medications,Non-government,Other non-government,6
+2009-10,SA,All other medications,Non-government,Private health insurance funds,4
+2009-10,SA,Benefit-paid pharmaceuticals,Government,Australian Government,677
+2009-10,SA,Benefit-paid pharmaceuticals,Non-government,Individuals,123
+2009-10,SA,Capital expenditure,Government,Australian Government,14
+2009-10,SA,Capital expenditure,Government,State and local,265
+2009-10,SA,Capital expenditure,Non-government,Other non-government,55
+2009-10,SA,Community health,Government,Australian Government,73
+2009-10,SA,Community health,Government,State and local,457
+2009-10,SA,Community health,Non-government,Individuals,39
+2009-10,SA,Community health,Non-government,Other non-government,11
+2009-10,SA,Community health,Non-government,Private health insurance funds,0
+2009-10,SA,Dental services,Government,Australian Government,101
+2009-10,SA,Dental services,Government,State and local,53
+2009-10,SA,Dental services,Non-government,Individuals,168
+2009-10,SA,Dental services,Non-government,Other non-government,2
+2009-10,SA,Dental services,Non-government,Private health insurance funds,100
+2009-10,SA,Medical expense tax rebate,Government,Australian Government,50
+2009-10,SA,Medical expense tax rebate,Non-government,Individuals,-50
+2009-10,SA,Medical services,Government,Australian Government,1286
+2009-10,SA,Medical services,Non-government,Individuals,136
+2009-10,SA,Medical services,Non-government,Other non-government,110
+2009-10,SA,Medical services,Non-government,Private health insurance funds,90
+2009-10,SA,Other health practitioners,Government,Australian Government,114
+2009-10,SA,Other health practitioners,Non-government,Individuals,42
+2009-10,SA,Other health practitioners,Non-government,Other non-government,35
+2009-10,SA,Other health practitioners,Non-government,Private health insurance funds,57
+2009-10,SA,Patient transport services,Government,Australian Government,23
+2009-10,SA,Patient transport services,Government,State and local,147
+2009-10,SA,Patient transport services,Non-government,Individuals,68
+2009-10,SA,Patient transport services,Non-government,Other non-government,13
+2009-10,SA,Patient transport services,Non-government,Private health insurance funds,13
+2009-10,SA,Private hospitals,Government,Australian Government,232
+2009-10,SA,Private hospitals,Government,State and local,5
+2009-10,SA,Private hospitals,Non-government,Individuals,72
+2009-10,SA,Private hospitals,Non-government,Other non-government,25
+2009-10,SA,Private hospitals,Non-government,Private health insurance funds,352
+2009-10,SA,Public health,Government,Australian Government,71
+2009-10,SA,Public health,Government,State and local,111
+2009-10,SA,Public health,Non-government,Individuals,1
+2009-10,SA,Public health,Non-government,Other non-government,10
+2009-10,SA,Public hospitals,Government,Australian Government,1183
+2009-10,SA,Public hospitals,Government,State and local,1697
+2009-10,SA,Public hospitals,Non-government,Individuals,64
+2009-10,SA,Public hospitals,Non-government,Other non-government,52
+2009-10,SA,Public hospitals,Non-government,Private health insurance funds,44
+2009-10,SA,Research,Government,Australian Government,293
+2009-10,SA,Research,Government,State and local,30
+2009-10,SA,Research,Non-government,Individuals,0
+2009-10,SA,Research,Non-government,Other non-government,14
+2009-10,TAS,Administration,Government,Australian Government,46
+2009-10,TAS,Administration,Non-government,Private health insurance funds,23
+2009-10,TAS,Aids and appliances,Government,Australian Government,14
+2009-10,TAS,Aids and appliances,Non-government,Individuals,52
+2009-10,TAS,Aids and appliances,Non-government,Other non-government,2
+2009-10,TAS,Aids and appliances,Non-government,Private health insurance funds,10
+2009-10,TAS,All other medications,Government,Australian Government,10
+2009-10,TAS,All other medications,Non-government,Individuals,141
+2009-10,TAS,All other medications,Non-government,Other non-government,2
+2009-10,TAS,All other medications,Non-government,Private health insurance funds,2
+2009-10,TAS,Benefit-paid pharmaceuticals,Government,Australian Government,216
+2009-10,TAS,Benefit-paid pharmaceuticals,Non-government,Individuals,39
+2009-10,TAS,Capital expenditure,Government,Australian Government,6
+2009-10,TAS,Capital expenditure,Government,State and local,35
+2009-10,TAS,Capital expenditure,Non-government,Other non-government,27
+2009-10,TAS,Community health,Government,Australian Government,19
+2009-10,TAS,Community health,Government,State and local,130
+2009-10,TAS,Community health,Non-government,Individuals,0
+2009-10,TAS,Community health,Non-government,Other non-government,1
+2009-10,TAS,Community health,Non-government,Private health insurance funds,0
+2009-10,TAS,Dental services,Government,Australian Government,15
+2009-10,TAS,Dental services,Government,State and local,27
+2009-10,TAS,Dental services,Non-government,Individuals,65
+2009-10,TAS,Dental services,Non-government,Other non-government,0
+2009-10,TAS,Dental services,Non-government,Private health insurance funds,21
+2009-10,TAS,Medical expense tax rebate,Government,Australian Government,7
+2009-10,TAS,Medical expense tax rebate,Non-government,Individuals,-7
+2009-10,TAS,Medical services,Government,Australian Government,413
+2009-10,TAS,Medical services,Non-government,Individuals,55
+2009-10,TAS,Medical services,Non-government,Other non-government,17
+2009-10,TAS,Medical services,Non-government,Private health insurance funds,23
+2009-10,TAS,Other health practitioners,Government,Australian Government,35
+2009-10,TAS,Other health practitioners,Non-government,Individuals,29
+2009-10,TAS,Other health practitioners,Non-government,Other non-government,10
+2009-10,TAS,Other health practitioners,Non-government,Private health insurance funds,10
+2009-10,TAS,Patient transport services,Government,Australian Government,5
+2009-10,TAS,Patient transport services,Government,State and local,52
+2009-10,TAS,Patient transport services,Non-government,Individuals,2
+2009-10,TAS,Patient transport services,Non-government,Other non-government,1
+2009-10,TAS,Patient transport services,Non-government,Private health insurance funds,0
+2009-10,TAS,Private hospitals,Government,Australian Government,81
+2009-10,TAS,Private hospitals,Government,State and local,13
+2009-10,TAS,Private hospitals,Non-government,Individuals,7
+2009-10,TAS,Private hospitals,Non-government,Other non-government,15
+2009-10,TAS,Private hospitals,Non-government,Private health insurance funds,115
+2009-10,TAS,Public health,Government,Australian Government,31
+2009-10,TAS,Public health,Government,State and local,29
+2009-10,TAS,Public health,Non-government,Other non-government,3
+2009-10,TAS,Public hospitals,Government,Australian Government,421
+2009-10,TAS,Public hospitals,Government,State and local,373
+2009-10,TAS,Public hospitals,Non-government,Individuals,0
+2009-10,TAS,Public hospitals,Non-government,Other non-government,10
+2009-10,TAS,Public hospitals,Non-government,Private health insurance funds,15
+2009-10,TAS,Research,Government,Australian Government,55
+2009-10,TAS,Research,Government,State and local,14
+2009-10,TAS,Research,Non-government,Other non-government,3
+2009-10,ACT,Administration,Government,Australian Government,63
+2009-10,ACT,Administration,Non-government,Private health insurance funds,13
+2009-10,ACT,Aids and appliances,Government,Australian Government,8
+2009-10,ACT,Aids and appliances,Non-government,Individuals,20
+2009-10,ACT,Aids and appliances,Non-government,Other non-government,1
+2009-10,ACT,Aids and appliances,Non-government,Private health insurance funds,6
+2009-10,ACT,All other medications,Government,Australian Government,6
+2009-10,ACT,All other medications,Non-government,Individuals,74
+2009-10,ACT,All other medications,Non-government,Other non-government,2
+2009-10,ACT,All other medications,Non-government,Private health insurance funds,1
+2009-10,ACT,Benefit-paid pharmaceuticals,Government,Australian Government,99
+2009-10,ACT,Benefit-paid pharmaceuticals,Non-government,Individuals,24
+2009-10,ACT,Capital expenditure,Government,Australian Government,4
+2009-10,ACT,Capital expenditure,Government,State and local,80
+2009-10,ACT,Capital expenditure,Non-government,Other non-government,15
+2009-10,ACT,Community health,Government,Australian Government,11
+2009-10,ACT,Community health,Government,State and local,146
+2009-10,ACT,Community health,Non-government,Other non-government,0
+2009-10,ACT,Community health,Non-government,Private health insurance funds,0
+2009-10,ACT,Dental services,Government,Australian Government,14
+2009-10,ACT,Dental services,Government,State and local,11
+2009-10,ACT,Dental services,Non-government,Individuals,71
+2009-10,ACT,Dental services,Non-government,Other non-government,0
+2009-10,ACT,Dental services,Non-government,Private health insurance funds,19
+2009-10,ACT,Medical expense tax rebate,Government,Australian Government,3
+2009-10,ACT,Medical expense tax rebate,Non-government,Individuals,-3
+2009-10,ACT,Medical services,Government,Australian Government,220
+2009-10,ACT,Medical services,Non-government,Individuals,74
+2009-10,ACT,Medical services,Non-government,Other non-government,8
+2009-10,ACT,Medical services,Non-government,Private health insurance funds,10
+2009-10,ACT,Other health practitioners,Government,Australian Government,28
+2009-10,ACT,Other health practitioners,Non-government,Individuals,30
+2009-10,ACT,Other health practitioners,Non-government,Other non-government,9
+2009-10,ACT,Other health practitioners,Non-government,Private health insurance funds,8
+2009-10,ACT,Patient transport services,Government,Australian Government,5
+2009-10,ACT,Patient transport services,Government,State and local,23
+2009-10,ACT,Patient transport services,Non-government,Individuals,0
+2009-10,ACT,Patient transport services,Non-government,Other non-government,1
+2009-10,ACT,Patient transport services,Non-government,Private health insurance funds,11
+2009-10,ACT,Private hospitals,Government,Australian Government,41
+2009-10,ACT,Private hospitals,Government,State and local,0
+2009-10,ACT,Private hospitals,Non-government,Individuals,27
+2009-10,ACT,Private hospitals,Non-government,Other non-government,7
+2009-10,ACT,Private hospitals,Non-government,Private health insurance funds,55
+2009-10,ACT,Public health,Government,Australian Government,18
+2009-10,ACT,Public health,Government,State and local,29
+2009-10,ACT,Public health,Non-government,Other non-government,6
+2009-10,ACT,Public hospitals,Government,Australian Government,219
+2009-10,ACT,Public hospitals,Government,State and local,551
+2009-10,ACT,Public hospitals,Non-government,Individuals,0
+2009-10,ACT,Public hospitals,Non-government,Other non-government,7
+2009-10,ACT,Public hospitals,Non-government,Private health insurance funds,10
+2009-10,ACT,Research,Government,Australian Government,180
+2009-10,ACT,Research,Government,State and local,28
+2009-10,ACT,Research,Non-government,Other non-government,5
+2009-10,NT,Administration,Government,Australian Government,36
+2009-10,NT,Administration,Non-government,Private health insurance funds,4
+2009-10,NT,Aids and appliances,Government,Australian Government,4
+2009-10,NT,Aids and appliances,Non-government,Individuals,15
+2009-10,NT,Aids and appliances,Non-government,Other non-government,1
+2009-10,NT,Aids and appliances,Non-government,Private health insurance funds,3
+2009-10,NT,All other medications,Government,Australian Government,7
+2009-10,NT,All other medications,Non-government,Individuals,33
+2009-10,NT,All other medications,Non-government,Other non-government,0
+2009-10,NT,All other medications,Non-government,Private health insurance funds,0
+2009-10,NT,Benefit-paid pharmaceuticals,Government,Australian Government,50
+2009-10,NT,Benefit-paid pharmaceuticals,Non-government,Individuals,7
+2009-10,NT,Capital expenditure,Government,Australian Government,10
+2009-10,NT,Capital expenditure,Government,State and local,43
+2009-10,NT,Capital expenditure,Non-government,Other non-government,7
+2009-10,NT,Community health,Government,Australian Government,164
+2009-10,NT,Community health,Government,State and local,175
+2009-10,NT,Community health,Non-government,Other non-government,0
+2009-10,NT,Community health,Non-government,Private health insurance funds,0
+2009-10,NT,Dental services,Government,Australian Government,3
+2009-10,NT,Dental services,Government,State and local,3
+2009-10,NT,Dental services,Non-government,Individuals,55
+2009-10,NT,Dental services,Non-government,Other non-government,0
+2009-10,NT,Dental services,Non-government,Private health insurance funds,6
+2009-10,NT,Medical expense tax rebate,Government,Australian Government,18
+2009-10,NT,Medical expense tax rebate,Non-government,Individuals,-18
+2009-10,NT,Medical services,Government,Australian Government,124
+2009-10,NT,Medical services,Non-government,Individuals,17
+2009-10,NT,Medical services,Non-government,Other non-government,10
+2009-10,NT,Medical services,Non-government,Private health insurance funds,4
+2009-10,NT,Other health practitioners,Government,Australian Government,7
+2009-10,NT,Other health practitioners,Non-government,Individuals,20
+2009-10,NT,Other health practitioners,Non-government,Other non-government,2
+2009-10,NT,Other health practitioners,Non-government,Private health insurance funds,3
+2009-10,NT,Patient transport services,Government,Australian Government,13
+2009-10,NT,Patient transport services,Government,State and local,33
+2009-10,NT,Patient transport services,Non-government,Individuals,0
+2009-10,NT,Patient transport services,Non-government,Other non-government,0
+2009-10,NT,Patient transport services,Non-government,Private health insurance funds,0
+2009-10,NT,Private hospitals,Government,Australian Government,11
+2009-10,NT,Private hospitals,Government,State and local,1
+2009-10,NT,Private hospitals,Non-government,Individuals,23
+2009-10,NT,Private hospitals,Non-government,Other non-government,4
+2009-10,NT,Private hospitals,Non-government,Private health insurance funds,19
+2009-10,NT,Public health,Government,Australian Government,32
+2009-10,NT,Public health,Government,State and local,73
+2009-10,NT,Public health,Non-government,Other non-government,4
+2009-10,NT,Public hospitals,Government,Australian Government,191
+2009-10,NT,Public hospitals,Government,State and local,311
+2009-10,NT,Public hospitals,Non-government,Individuals,5
+2009-10,NT,Public hospitals,Non-government,Other non-government,8
+2009-10,NT,Public hospitals,Non-government,Private health insurance funds,1
+2009-10,NT,Research,Government,Australian Government,13
+2009-10,NT,Research,Government,State and local,47
+2009-10,NT,Research,Non-government,Individuals,0
+2009-10,NT,Research,Non-government,Other non-government,1
+2010-11,NSW,Administration,Government,Australian Government,196
+2010-11,NSW,Administration,Government,State and local,10
+2010-11,NSW,Administration,Non-government,Other non-government,1
+2010-11,NSW,Administration,Non-government,Private health insurance funds,306
+2010-11,NSW,Aids and appliances,Government,Australian Government,205
+2010-11,NSW,Aids and appliances,Non-government,Individuals,479
+2010-11,NSW,Aids and appliances,Non-government,Other non-government,5
+2010-11,NSW,Aids and appliances,Non-government,Private health insurance funds,147
+2010-11,NSW,All other medications,Government,Australian Government,175
+2010-11,NSW,All other medications,Non-government,Individuals,2708
+2010-11,NSW,All other medications,Non-government,Other non-government,10
+2010-11,NSW,All other medications,Non-government,Private health insurance funds,19
+2010-11,NSW,Benefit-paid pharmaceuticals,Government,Australian Government,2795
+2010-11,NSW,Benefit-paid pharmaceuticals,Non-government,Individuals,527
+2010-11,NSW,Capital expenditure,Government,Australian Government,41
+2010-11,NSW,Capital expenditure,Government,State and local,818
+2010-11,NSW,Capital expenditure,Non-government,Other non-government,889
+2010-11,NSW,Community health,Government,Australian Government,237
+2010-11,NSW,Community health,Government,State and local,1370
+2010-11,NSW,Community health,Non-government,Individuals,63
+2010-11,NSW,Community health,Non-government,Other non-government,89
+2010-11,NSW,Community health,Non-government,Private health insurance funds,0
+2010-11,NSW,Dental services,Government,Australian Government,613
+2010-11,NSW,Dental services,Government,State and local,203
+2010-11,NSW,Dental services,Non-government,Individuals,1277
+2010-11,NSW,Dental services,Non-government,Other non-government,7
+2010-11,NSW,Dental services,Non-government,Private health insurance funds,360
+2010-11,NSW,Medical expense tax rebate,Government,Australian Government,185
+2010-11,NSW,Medical expense tax rebate,Non-government,Individuals,-185
+2010-11,NSW,Medical services,Government,Australian Government,6134
+2010-11,NSW,Medical services,Non-government,Individuals,997
+2010-11,NSW,Medical services,Non-government,Other non-government,490
+2010-11,NSW,Medical services,Non-government,Private health insurance funds,307
+2010-11,NSW,Other health practitioners,Government,Australian Government,502
+2010-11,NSW,Other health practitioners,Non-government,Individuals,607
+2010-11,NSW,Other health practitioners,Non-government,Other non-government,113
+2010-11,NSW,Other health practitioners,Non-government,Private health insurance funds,182
+2010-11,NSW,Patient transport services,Government,Australian Government,101
+2010-11,NSW,Patient transport services,Government,State and local,516
+2010-11,NSW,Patient transport services,Non-government,Individuals,69
+2010-11,NSW,Patient transport services,Non-government,Other non-government,47
+2010-11,NSW,Patient transport services,Non-government,Private health insurance funds,103
+2010-11,NSW,Private hospitals,Government,Australian Government,1000
+2010-11,NSW,Private hospitals,Non-government,Individuals,290
+2010-11,NSW,Private hospitals,Non-government,Other non-government,230
+2010-11,NSW,Private hospitals,Non-government,Private health insurance funds,1462
+2010-11,NSW,Public health,Government,Australian Government,321
+2010-11,NSW,Public health,Government,State and local,191
+2010-11,NSW,Public health,Non-government,Other non-government,30
+2010-11,NSW,Public hospitals,Government,Australian Government,5285
+2010-11,NSW,Public hospitals,Government,State and local,6386
+2010-11,NSW,Public hospitals,Non-government,Individuals,232
+2010-11,NSW,Public hospitals,Non-government,Other non-government,657
+2010-11,NSW,Public hospitals,Non-government,Private health insurance funds,360
+2010-11,NSW,Research,Government,Australian Government,986
+2010-11,NSW,Research,Government,State and local,175
+2010-11,NSW,Research,Non-government,Individuals,0
+2010-11,NSW,Research,Non-government,Other non-government,94
+2010-11,VIC,Administration,Government,Australian Government,153
+2010-11,VIC,Administration,Non-government,Private health insurance funds,240
+2010-11,VIC,Aids and appliances,Government,Australian Government,141
+2010-11,VIC,Aids and appliances,Non-government,Individuals,781
+2010-11,VIC,Aids and appliances,Non-government,Other non-government,17
+2010-11,VIC,Aids and appliances,Non-government,Private health insurance funds,85
+2010-11,VIC,All other medications,Government,Australian Government,123
+2010-11,VIC,All other medications,Non-government,Individuals,2093
+2010-11,VIC,All other medications,Non-government,Other non-government,27
+2010-11,VIC,All other medications,Non-government,Private health insurance funds,7
+2010-11,VIC,Benefit-paid pharmaceuticals,Government,Australian Government,2028
+2010-11,VIC,Benefit-paid pharmaceuticals,Non-government,Individuals,391
+2010-11,VIC,Capital expenditure,Government,Australian Government,28
+2010-11,VIC,Capital expenditure,Government,State and local,507
+2010-11,VIC,Capital expenditure,Non-government,Other non-government,622
+2010-11,VIC,Community health,Government,Australian Government,141
+2010-11,VIC,Community health,Government,State and local,544
+2010-11,VIC,Community health,Non-government,Individuals,5
+2010-11,VIC,Community health,Non-government,Other non-government,31
+2010-11,VIC,Community health,Non-government,Private health insurance funds,0
+2010-11,VIC,Dental services,Government,Australian Government,314
+2010-11,VIC,Dental services,Government,State and local,142
+2010-11,VIC,Dental services,Non-government,Individuals,1641
+2010-11,VIC,Dental services,Non-government,Other non-government,15
+2010-11,VIC,Dental services,Non-government,Private health insurance funds,223
+2010-11,VIC,Medical expense tax rebate,Government,Australian Government,125
+2010-11,VIC,Medical expense tax rebate,Non-government,Individuals,-125
+2010-11,VIC,Medical services,Government,Australian Government,4444
+2010-11,VIC,Medical services,Non-government,Individuals,648
+2010-11,VIC,Medical services,Non-government,Other non-government,165
+2010-11,VIC,Medical services,Non-government,Private health insurance funds,293
+2010-11,VIC,Other health practitioners,Government,Australian Government,385
+2010-11,VIC,Other health practitioners,Non-government,Individuals,621
+2010-11,VIC,Other health practitioners,Non-government,Other non-government,121
+2010-11,VIC,Other health practitioners,Non-government,Private health insurance funds,120
+2010-11,VIC,Patient transport services,Government,Australian Government,47
+2010-11,VIC,Patient transport services,Government,State and local,359
+2010-11,VIC,Patient transport services,Non-government,Individuals,227
+2010-11,VIC,Patient transport services,Non-government,Other non-government,27
+2010-11,VIC,Patient transport services,Non-government,Private health insurance funds,18
+2010-11,VIC,Private hospitals,Government,Australian Government,871
+2010-11,VIC,Private hospitals,Government,State and local,80
+2010-11,VIC,Private hospitals,Non-government,Individuals,422
+2010-11,VIC,Private hospitals,Non-government,Other non-government,162
+2010-11,VIC,Private hospitals,Non-government,Private health insurance funds,1277
+2010-11,VIC,Public health,Government,Australian Government,262
+2010-11,VIC,Public health,Government,State and local,183
+2010-11,VIC,Public health,Non-government,Other non-government,0
+2010-11,VIC,Public hospitals,Government,Australian Government,3879
+2010-11,VIC,Public hospitals,Government,State and local,5104
+2010-11,VIC,Public hospitals,Non-government,Individuals,396
+2010-11,VIC,Public hospitals,Non-government,Other non-government,424
+2010-11,VIC,Public hospitals,Non-government,Private health insurance funds,159
+2010-11,VIC,Research,Government,Australian Government,1142
+2010-11,VIC,Research,Government,State and local,197
+2010-11,VIC,Research,Non-government,Other non-government,101
+2010-11,QLD,Administration,Government,Australian Government,126
+2010-11,QLD,Administration,Government,State and local,138
+2010-11,QLD,Administration,Non-government,Private health insurance funds,198
+2010-11,QLD,Aids and appliances,Government,Australian Government,122
+2010-11,QLD,Aids and appliances,Non-government,Individuals,492
+2010-11,QLD,Aids and appliances,Non-government,Other non-government,7
+2010-11,QLD,Aids and appliances,Non-government,Private health insurance funds,86
+2010-11,QLD,All other medications,Government,Australian Government,105
+2010-11,QLD,All other medications,Non-government,Individuals,1508
+2010-11,QLD,All other medications,Non-government,Other non-government,6
+2010-11,QLD,All other medications,Non-government,Private health insurance funds,10
+2010-11,QLD,Benefit-paid pharmaceuticals,Government,Australian Government,1592
+2010-11,QLD,Benefit-paid pharmaceuticals,Non-government,Individuals,307
+2010-11,QLD,Capital expenditure,Government,Australian Government,23
+2010-11,QLD,Capital expenditure,Government,State and local,1495
+2010-11,QLD,Capital expenditure,Non-government,Other non-government,480
+2010-11,QLD,Community health,Government,Australian Government,199
+2010-11,QLD,Community health,Government,State and local,1491
+2010-11,QLD,Community health,Non-government,Individuals,14
+2010-11,QLD,Community health,Non-government,Other non-government,22
+2010-11,QLD,Community health,Non-government,Private health insurance funds,0
+2010-11,QLD,Dental services,Government,Australian Government,256
+2010-11,QLD,Dental services,Government,State and local,197
+2010-11,QLD,Dental services,Non-government,Individuals,569
+2010-11,QLD,Dental services,Non-government,Other non-government,4
+2010-11,QLD,Dental services,Non-government,Private health insurance funds,224
+2010-11,QLD,Medical expense tax rebate,Government,Australian Government,89
+2010-11,QLD,Medical expense tax rebate,Non-government,Individuals,-89
+2010-11,QLD,Medical services,Government,Australian Government,3589
+2010-11,QLD,Medical services,Non-government,Individuals,593
+2010-11,QLD,Medical services,Non-government,Other non-government,153
+2010-11,QLD,Medical services,Non-government,Private health insurance funds,215
+2010-11,QLD,Other health practitioners,Government,Australian Government,304
+2010-11,QLD,Other health practitioners,Non-government,Individuals,445
+2010-11,QLD,Other health practitioners,Non-government,Other non-government,58
+2010-11,QLD,Other health practitioners,Non-government,Private health insurance funds,104
+2010-11,QLD,Patient transport services,Government,Australian Government,56
+2010-11,QLD,Patient transport services,Government,State and local,646
+2010-11,QLD,Patient transport services,Non-government,Individuals,0
+2010-11,QLD,Patient transport services,Non-government,Other non-government,6
+2010-11,QLD,Patient transport services,Non-government,Private health insurance funds,0
+2010-11,QLD,Private hospitals,Government,Australian Government,913
+2010-11,QLD,Private hospitals,Government,State and local,27
+2010-11,QLD,Private hospitals,Non-government,Individuals,335
+2010-11,QLD,Private hospitals,Non-government,Other non-government,162
+2010-11,QLD,Private hospitals,Non-government,Private health insurance funds,1113
+2010-11,QLD,Public health,Government,Australian Government,217
+2010-11,QLD,Public health,Government,State and local,160
+2010-11,QLD,Public health,Non-government,Individuals,15
+2010-11,QLD,Public health,Non-government,Other non-government,0
+2010-11,QLD,Public hospitals,Government,Australian Government,3050
+2010-11,QLD,Public hospitals,Government,State and local,3901
+2010-11,QLD,Public hospitals,Non-government,Individuals,316
+2010-11,QLD,Public hospitals,Non-government,Other non-government,235
+2010-11,QLD,Public hospitals,Non-government,Private health insurance funds,51
+2010-11,QLD,Research,Government,Australian Government,473
+2010-11,QLD,Research,Government,State and local,237
+2010-11,QLD,Research,Non-government,Other non-government,32
+2010-11,WA,Administration,Government,Australian Government,70
+2010-11,WA,Administration,Government,State and local,93
+2010-11,WA,Administration,Non-government,Other non-government,0
+2010-11,WA,Administration,Non-government,Private health insurance funds,113
+2010-11,WA,Aids and appliances,Government,Australian Government,64
+2010-11,WA,Aids and appliances,Non-government,Individuals,491
+2010-11,WA,Aids and appliances,Non-government,Other non-government,8
+2010-11,WA,Aids and appliances,Non-government,Private health insurance funds,49
+2010-11,WA,All other medications,Government,Australian Government,54
+2010-11,WA,All other medications,Non-government,Individuals,747
+2010-11,WA,All other medications,Non-government,Other non-government,18
+2010-11,WA,All other medications,Non-government,Private health insurance funds,6
+2010-11,WA,Benefit-paid pharmaceuticals,Government,Australian Government,732
+2010-11,WA,Benefit-paid pharmaceuticals,Non-government,Individuals,151
+2010-11,WA,Capital expenditure,Government,Australian Government,13
+2010-11,WA,Capital expenditure,Government,State and local,819
+2010-11,WA,Capital expenditure,Non-government,Other non-government,177
+2010-11,WA,Community health,Government,Australian Government,162
+2010-11,WA,Community health,Government,State and local,596
+2010-11,WA,Community health,Non-government,Individuals,3
+2010-11,WA,Community health,Non-government,Other non-government,6
+2010-11,WA,Community health,Non-government,Private health insurance funds,0
+2010-11,WA,Dental services,Government,Australian Government,98
+2010-11,WA,Dental services,Government,State and local,71
+2010-11,WA,Dental services,Non-government,Individuals,698
+2010-11,WA,Dental services,Non-government,Other non-government,4
+2010-11,WA,Dental services,Non-government,Private health insurance funds,165
+2010-11,WA,Medical expense tax rebate,Government,Australian Government,23
+2010-11,WA,Medical expense tax rebate,Non-government,Individuals,-23
+2010-11,WA,Medical services,Government,Australian Government,1531
+2010-11,WA,Medical services,Non-government,Individuals,300
+2010-11,WA,Medical services,Non-government,Other non-government,108
+2010-11,WA,Medical services,Non-government,Private health insurance funds,117
+2010-11,WA,Other health practitioners,Government,Australian Government,139
+2010-11,WA,Other health practitioners,Non-government,Individuals,68
+2010-11,WA,Other health practitioners,Non-government,Other non-government,35
+2010-11,WA,Other health practitioners,Non-government,Private health insurance funds,60
+2010-11,WA,Patient transport services,Government,Australian Government,36
+2010-11,WA,Patient transport services,Government,State and local,153
+2010-11,WA,Patient transport services,Non-government,Individuals,0
+2010-11,WA,Patient transport services,Non-government,Other non-government,11
+2010-11,WA,Patient transport services,Non-government,Private health insurance funds,18
+2010-11,WA,Private hospitals,Government,Australian Government,401
+2010-11,WA,Private hospitals,Government,State and local,335
+2010-11,WA,Private hospitals,Non-government,Individuals,197
+2010-11,WA,Private hospitals,Non-government,Other non-government,32
+2010-11,WA,Private hospitals,Non-government,Private health insurance funds,575
+2010-11,WA,Public health,Government,Australian Government,116
+2010-11,WA,Public health,Government,State and local,110
+2010-11,WA,Public health,Non-government,Individuals,0
+2010-11,WA,Public health,Non-government,Other non-government,0
+2010-11,WA,Public hospitals,Government,Australian Government,1573
+2010-11,WA,Public hospitals,Government,State and local,2068
+2010-11,WA,Public hospitals,Non-government,Individuals,197
+2010-11,WA,Public hospitals,Non-government,Other non-government,44
+2010-11,WA,Public hospitals,Non-government,Private health insurance funds,48
+2010-11,WA,Research,Government,Australian Government,256
+2010-11,WA,Research,Government,State and local,97
+2010-11,WA,Research,Non-government,Individuals,0
+2010-11,WA,Research,Non-government,Other non-government,14
+2010-11,SA,Administration,Government,Australian Government,49
+2010-11,SA,Administration,Government,State and local,220
+2010-11,SA,Administration,Non-government,Individuals,0
+2010-11,SA,Administration,Non-government,Other non-government,5
+2010-11,SA,Administration,Non-government,Private health insurance funds,79
+2010-11,SA,Aids and appliances,Government,Australian Government,50
+2010-11,SA,Aids and appliances,Non-government,Individuals,152
+2010-11,SA,Aids and appliances,Non-government,Other non-government,14
+2010-11,SA,Aids and appliances,Non-government,Private health insurance funds,38
+2010-11,SA,All other medications,Government,Australian Government,43
+2010-11,SA,All other medications,Non-government,Individuals,633
+2010-11,SA,All other medications,Non-government,Other non-government,6
+2010-11,SA,All other medications,Non-government,Private health insurance funds,4
+2010-11,SA,Benefit-paid pharmaceuticals,Government,Australian Government,678
+2010-11,SA,Benefit-paid pharmaceuticals,Non-government,Individuals,124
+2010-11,SA,Capital expenditure,Government,Australian Government,12
+2010-11,SA,Capital expenditure,Government,State and local,256
+2010-11,SA,Capital expenditure,Non-government,Other non-government,58
+2010-11,SA,Community health,Government,Australian Government,83
+2010-11,SA,Community health,Government,State and local,572
+2010-11,SA,Community health,Non-government,Individuals,63
+2010-11,SA,Community health,Non-government,Other non-government,13
+2010-11,SA,Community health,Non-government,Private health insurance funds,0
+2010-11,SA,Dental services,Government,Australian Government,121
+2010-11,SA,Dental services,Government,State and local,61
+2010-11,SA,Dental services,Non-government,Individuals,137
+2010-11,SA,Dental services,Non-government,Other non-government,3
+2010-11,SA,Dental services,Non-government,Private health insurance funds,103
+2010-11,SA,Medical expense tax rebate,Government,Australian Government,43
+2010-11,SA,Medical expense tax rebate,Non-government,Individuals,-43
+2010-11,SA,Medical services,Government,Australian Government,1350
+2010-11,SA,Medical services,Non-government,Individuals,146
+2010-11,SA,Medical services,Non-government,Other non-government,124
+2010-11,SA,Medical services,Non-government,Private health insurance funds,98
+2010-11,SA,Other health practitioners,Government,Australian Government,117
+2010-11,SA,Other health practitioners,Non-government,Individuals,44
+2010-11,SA,Other health practitioners,Non-government,Other non-government,41
+2010-11,SA,Other health practitioners,Non-government,Private health insurance funds,58
+2010-11,SA,Patient transport services,Government,Australian Government,25
+2010-11,SA,Patient transport services,Government,State and local,139
+2010-11,SA,Patient transport services,Non-government,Individuals,75
+2010-11,SA,Patient transport services,Non-government,Other non-government,8
+2010-11,SA,Patient transport services,Non-government,Private health insurance funds,15
+2010-11,SA,Private hospitals,Government,Australian Government,239
+2010-11,SA,Private hospitals,Government,State and local,5
+2010-11,SA,Private hospitals,Non-government,Individuals,86
+2010-11,SA,Private hospitals,Non-government,Other non-government,15
+2010-11,SA,Private hospitals,Non-government,Private health insurance funds,368
+2010-11,SA,Public health,Government,Australian Government,89
+2010-11,SA,Public health,Government,State and local,79
+2010-11,SA,Public health,Non-government,Individuals,1
+2010-11,SA,Public health,Non-government,Other non-government,1
+2010-11,SA,Public hospitals,Government,Australian Government,1230
+2010-11,SA,Public hospitals,Government,State and local,1778
+2010-11,SA,Public hospitals,Non-government,Individuals,37
+2010-11,SA,Public hospitals,Non-government,Other non-government,85
+2010-11,SA,Public hospitals,Non-government,Private health insurance funds,43
+2010-11,SA,Research,Government,Australian Government,285
+2010-11,SA,Research,Government,State and local,25
+2010-11,SA,Research,Non-government,Individuals,3
+2010-11,SA,Research,Non-government,Other non-government,13
+2010-11,TAS,Administration,Government,Australian Government,15
+2010-11,TAS,Administration,Non-government,Private health insurance funds,24
+2010-11,TAS,Aids and appliances,Government,Australian Government,15
+2010-11,TAS,Aids and appliances,Non-government,Individuals,55
+2010-11,TAS,Aids and appliances,Non-government,Other non-government,3
+2010-11,TAS,Aids and appliances,Non-government,Private health insurance funds,11
+2010-11,TAS,All other medications,Government,Australian Government,13
+2010-11,TAS,All other medications,Non-government,Individuals,200
+2010-11,TAS,All other medications,Non-government,Other non-government,2
+2010-11,TAS,All other medications,Non-government,Private health insurance funds,1
+2010-11,TAS,Benefit-paid pharmaceuticals,Government,Australian Government,222
+2010-11,TAS,Benefit-paid pharmaceuticals,Non-government,Individuals,40
+2010-11,TAS,Capital expenditure,Government,Australian Government,5
+2010-11,TAS,Capital expenditure,Government,State and local,131
+2010-11,TAS,Capital expenditure,Non-government,Other non-government,48
+2010-11,TAS,Community health,Government,Australian Government,21
+2010-11,TAS,Community health,Government,State and local,121
+2010-11,TAS,Community health,Non-government,Individuals,0
+2010-11,TAS,Community health,Non-government,Other non-government,2
+2010-11,TAS,Community health,Non-government,Private health insurance funds,0
+2010-11,TAS,Dental services,Government,Australian Government,17
+2010-11,TAS,Dental services,Government,State and local,24
+2010-11,TAS,Dental services,Non-government,Individuals,75
+2010-11,TAS,Dental services,Non-government,Other non-government,1
+2010-11,TAS,Dental services,Non-government,Private health insurance funds,21
+2010-11,TAS,Medical expense tax rebate,Government,Australian Government,6
+2010-11,TAS,Medical expense tax rebate,Non-government,Individuals,-6
+2010-11,TAS,Medical services,Government,Australian Government,482
+2010-11,TAS,Medical services,Non-government,Individuals,68
+2010-11,TAS,Medical services,Non-government,Other non-government,19
+2010-11,TAS,Medical services,Non-government,Private health insurance funds,25
+2010-11,TAS,Other health practitioners,Government,Australian Government,35
+2010-11,TAS,Other health practitioners,Non-government,Individuals,38
+2010-11,TAS,Other health practitioners,Non-government,Other non-government,11
+2010-11,TAS,Other health practitioners,Non-government,Private health insurance funds,10
+2010-11,TAS,Patient transport services,Government,Australian Government,8
+2010-11,TAS,Patient transport services,Government,State and local,60
+2010-11,TAS,Patient transport services,Non-government,Individuals,2
+2010-11,TAS,Patient transport services,Non-government,Other non-government,4
+2010-11,TAS,Patient transport services,Non-government,Private health insurance funds,0
+2010-11,TAS,Private hospitals,Government,Australian Government,81
+2010-11,TAS,Private hospitals,Government,State and local,11
+2010-11,TAS,Private hospitals,Non-government,Individuals,5
+2010-11,TAS,Private hospitals,Non-government,Other non-government,14
+2010-11,TAS,Private hospitals,Non-government,Private health insurance funds,121
+2010-11,TAS,Public health,Government,Australian Government,28
+2010-11,TAS,Public health,Government,State and local,25
+2010-11,TAS,Public health,Non-government,Other non-government,0

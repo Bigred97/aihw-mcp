@@ -1,0 +1,601 @@
+mort,category,geography,YEAR,SEX,deaths,population,crude_rate_per_100000,age_standardised_rate_per_100000,rate_ratio,premature_deaths,premature_deaths_percent,premature_deaths_asr_per_100000,potential_years_of_life_lost,pyll_rate_per_1000,potentially_avoidable_deaths,pad_percent,pad_asr_per_100000,median_age
+REM1,Remoteness area,Major Cities of Australia,2023,Males,"61,437","9,573,595",641.7,575.5,0.95,"21,938",35.7,225.4,"358,240",40,"10,692",48.7,111,80.2
+REM2,Remoteness area,Inner Regional Australia,2023,Males,"22,335","2,323,176",961.4,643.6,1.06,"8,350",37.4,281.1,"120,691",57.4,"4,102",49.1,146.6,79.3
+REM3,Remoteness area,Outer Regional Australia,2023,Males,"10,052","1,071,636",938,677.8,1.12,"4,213",41.9,312,"63,871",65.1,"2,163",51.3,168.4,77.8
+REM4,Remoteness area,Remote Australia,2023,Males,"1,164","157,512",739,695,1.15,609,52.3,343.2,"10,850",73.1,343,56.3,200.3,74.2
+REM5,Remoteness area,Very Remote Australia,2023,Males,690,"103,865",664.2,829.3,1.37,465,67.5,451.6,"10,373",103.6,268,57.6,262.4,66.4
+REM8,Remoteness area,Unknown/missing,2023,Males,503,,,,,,,,,,,,,
+REM9,Remoteness area,Australia (total),2023,Males,"96,180","13,232,590",726.8,604.8,1,"35,955",37.4,249.2,"571,549",46.5,"17,805",49.5,126.2,79.6
+REM1,Remoteness area,Major Cities of Australia,2023,Females,"57,744","9,768,826",591.1,411.4,0.95,"14,096",24.4,134.2,"217,375",24.2,"6,275",44.5,60.8,85.2
+REM2,Remoteness area,Inner Regional Australia,2023,Females,"19,638","2,363,441",830.9,463,1.07,"5,168",26.3,165.6,"72,092",34.1,"2,401",46.5,80.2,84.1
+REM3,Remoteness area,Outer Regional Australia,2023,Females,"7,973","1,045,989",762.2,475.9,1.1,"2,388",30,178.6,"35,564",37.5,"1,144",47.9,88.2,83.1
+REM4,Remoteness area,Remote Australia,2023,Females,824,"146,641",561.9,494.2,1.15,375,45.5,234.1,"6,549",47.6,188,50.1,119.6,77.5
+REM5,Remoteness area,Very Remote Australia,2023,Females,511,"94,198",542.1,665.5,1.54,309,60.5,345.9,"6,705",73.9,193,62.6,216.2,70
+REM8,Remoteness area,Unknown/missing,2023,Females,262,,,,,,,,,,,,,
+REM9,Remoteness area,Australia (total),2023,Females,"86,951","13,420,187",647.9,430.9,1,"22,513",25.9,147.5,"341,630",27.8,"10,307",45.8,69.2,84.6
+REM1,Remoteness area,Major Cities of Australia,2023,Persons,"119,180","19,342,421",616.2,487.3,0.95,"36,034",30.2,178.2,"575,614",32.1,"16,967",47.1,85.1,82.7
+REM2,Remoteness area,Inner Regional Australia,2023,Persons,"41,972","4,686,617",895.6,549.5,1.07,"13,518",32.2,222.3,"192,783",45.7,"6,503",48.1,112.9,81.6
+REM3,Remoteness area,Outer Regional Australia,2023,Persons,"18,025","2,117,625",851.2,576.5,1.12,"6,601",36.6,246.3,"99,434",51.5,"3,306",50.1,128.9,80
+REM4,Remoteness area,Remote Australia,2023,Persons,"1,988","304,153",653.6,596.6,1.16,984,49.5,291.4,"17,399",60.8,531,54,161.8,75.2
+REM5,Remoteness area,Very Remote Australia,2023,Persons,"1,201","198,062",606.1,748.5,1.46,774,64.5,402.2,"17,078",89.5,461,59.6,240.4,67.9
+REM8,Remoteness area,Unknown/missing,2023,Persons,765,,,,,,,,,,,,,
+REM9,Remoteness area,Australia (total),2023,Persons,"183,131","26,652,777",687.1,512.7,1,"58,468",31.9,197.2,"913,179",37.2,"28,112",48.1,97.1,82
+SEG1,Socioeconomic group,Quintile 1 (lowest),2023,Males,"23,707","2,633,979",900,731.9,1.21,"10,027",42.3,343.5,"162,253",66.5,"5,085",50.7,179,77.8
+SEG2,Socioeconomic group,Quintile 2,2023,Males,"22,834","2,647,577",862.4,665,1.1,"8,651",37.9,286.9,"133,428",54.7,"4,291",49.6,146.4,79.3
+SEG3,Socioeconomic group,Quintile 3,2023,Males,"18,641","2,649,346",703.6,584,0.97,"6,832",36.7,235.6,"107,837",43.8,"3,366",49.3,118.8,79.7
+SEG4,Socioeconomic group,Quintile 4,2023,Males,"15,773","2,686,133",587.2,543.7,0.9,"5,601",35.5,203.4,"90,401",35.9,"2,727",48.7,100.1,80.3
+SEG5,Socioeconomic group,Quintile 5 (highest),2023,Males,"14,709","2,609,978",563.6,469.6,0.78,"4,455",30.3,159.4,"69,968",28.8,"2,097",47.1,76.5,82.1
+SEG8,Socioeconomic group,Unknown/missing,2023,Males,516,,,,,,,,,,,,,
+SEG9,Socioeconomic group,Australia (total),2023,Males,"96,180","13,232,590",726.8,604.8,1,"35,955",37.4,249.2,"571,549",46.5,"17,805",49.5,126.2,79.6
+SEG1,Socioeconomic group,Quintile 1 (lowest),2023,Females,"20,186","2,624,146",769.2,505,1.17,"6,167",30.6,204.1,"95,258",39.9,"3,022",49,101.7,83
+SEG2,Socioeconomic group,Quintile 2,2023,Females,"20,332","2,662,962",763.5,471.6,1.09,"5,269",25.9,166.6,"76,901",31.8,"2,389",45.3,77.9,84.5
+SEG3,Socioeconomic group,Quintile 3,2023,Females,"16,589","2,700,370",614.3,412.9,0.96,"4,292",25.9,138.6,"65,338",26.4,"1,941",45.2,64.2,84.5
+SEG4,Socioeconomic group,Quintile 4,2023,Females,"14,814","2,726,213",543.4,397,0.92,"3,578",24.2,122.3,"56,036",22.2,"1,563",43.7,54.5,85.2
+SEG5,Socioeconomic group,Quintile 5 (highest),2023,Females,"14,758","2,703,066",546,357.2,0.83,"3,028",20.5,100.2,"44,725",18,"1,284",42.4,43.9,86.6
+SEG8,Socioeconomic group,Unknown/missing,2023,Females,272,,,,,,,,,,,,,
+SEG9,Socioeconomic group,Australia (total),2023,Females,"86,951","13,420,187",647.9,430.9,1,"22,513",25.9,147.5,"341,630",27.8,"10,307",45.8,69.2,84.6
+SEG1,Socioeconomic group,Quintile 1 (lowest),2023,Persons,"43,893","5,258,125",834.8,612.9,1.2,"16,194",36.9,273,"257,511",53.3,"8,107",50.1,140,80
+SEG2,Socioeconomic group,Quintile 2,2023,Persons,"43,166","5,310,539",812.8,563.8,1.1,"13,920",32.2,225.8,"210,329",43.3,"6,680",48,111.7,81.8
+SEG3,Socioeconomic group,Quintile 3,2023,Persons,"35,230","5,349,716",658.5,493.2,0.96,"11,124",31.6,185.7,"173,175",35.1,"5,307",47.7,90.8,82
+SEG4,Socioeconomic group,Quintile 4,2023,Persons,"30,587","5,412,346",565.1,465.3,0.91,"9,179",30,161.6,"146,437",29,"4,290",46.7,76.7,82.7
+SEG5,Socioeconomic group,Quintile 5 (highest),2023,Persons,"29,467","5,313,044",554.6,409.4,0.8,"7,483",25.4,128.8,"114,693",23.4,"3,381",45.2,59.7,84.4
+SEG8,Socioeconomic group,Unknown/missing,2023,Persons,788,,,,,,,,,,,,,
+SEG9,Socioeconomic group,Australia (total),2023,Persons,"183,131","26,652,777",687.1,512.7,1,"58,468",31.9,197.2,"913,179",37.2,"28,112",48.1,97.1,82
+STE01,State and territory,New South Wales,2023,Males,"31,110","4,149,141",749.8,604.5,1,"11,227",36.1,245.8,"169,128",44,"5,356",47.7,119.6,80
+STE02,State and territory,Victoria,2023,Males,"23,471","3,370,392",696.4,589.6,0.98,"8,463",36.1,237.2,"136,521",43.5,"4,250",50.2,121.5,80.1
+STE03,State and territory,Queensland,2023,Males,"19,631","2,704,203",725.9,619.1,1.02,"7,796",39.7,261.4,"127,752",50.8,"4,046",51.9,139,78.6
+STE04,State and territory,Western Australia,2023,Males,"9,343","1,445,251",646.5,573.1,0.95,"3,725",39.9,241.4,"62,853",46.5,"1,913",51.4,126.9,79.1
+STE05,State and territory,South Australia,2023,Males,"8,061","915,999",880,633.6,1.05,"2,846",35.3,264.3,"42,802",51,"1,274",44.8,122,80.4
+STE06,State and territory,Tasmania,2023,Males,"2,596","284,032",914,640.8,1.06,958,36.9,272.2,"13,686",52.9,480,50.1,141.3,79.3
+STE07,State and territory,Australian Capital Territory,2023,Males,"1,257","230,321",545.8,563.9,0.93,434,34.5,201.5,"8,263",38,209,48.2,96.3,80.1
+STE08,State and territory,Northern Territory,2023,Males,697,"127,821",545.3,722.8,1.2,502,72,424.1,"10,515",84.8,275,54.8,229.7,65.4
+STE09,State and territory,Other Territories,2023,Males,14,"2,624",533.5,,,4,28.6,,29,11.9,2,,,81
+STE10,State and territory,Australia (total),2023,Males,"96,180","13,232,590",726.8,604.8,1,"35,955",37.4,249.2,"571,549",46.5,"17,805",49.5,126.2,79.6
+STE01,State and territory,New South Wales,2023,Females,"28,341","4,193,144",675.9,429.9,1,"6,868",24.2,142.2,"99,755",26.1,"3,053",44.5,64.6,85
+STE02,State and territory,Victoria,2023,Females,"21,855","3,445,049",634.4,422.1,0.98,"5,492",25.1,143.2,"83,086",26.3,"2,526",46,67.5,85.1
+STE03,State and territory,Queensland,2023,Females,"16,991","2,756,217",616.5,438.7,1.02,"4,848",28.5,154.5,"76,212",30.1,"2,285",47.1,74.4,83.5
+STE04,State and territory,Western Australia,2023,Females,"8,132","1,435,976",566.3,406.9,0.94,"2,257",27.8,142.4,"36,433",27.5,"1,063",47.1,68.3,84.4
+STE05,State and territory,South Australia,2023,Females,"7,438","936,285",794.4,444.3,1.03,"1,760",23.7,152.2,"24,448",29.1,739,42,66.6,85.3
+STE06,State and territory,Tasmania,2023,Females,"2,477","289,124",856.7,491.1,1.14,623,25.2,164.3,"8,570",33,295,47.4,80,83.8
+STE07,State and territory,Australian Capital Territory,2023,Females,"1,149","236,245",486.4,398.9,0.93,307,26.7,131,"5,723",26,139,45.3,60.6,83.8
+STE08,State and territory,Northern Territory,2023,Females,556,"124,708",445.8,616,1.43,354,63.7,314,"7,309",60.5,205,57.9,178.4,69.2
+STE09,State and territory,Other Territories,2023,Females,12,"2,346",511.5,,,4,33.3,,94,43.5,2,,,83
+STE10,State and territory,Australia (total),2023,Females,"86,951","13,420,187",647.9,430.9,1,"22,513",25.9,147.5,"341,630",27.8,"10,307",45.8,69.2,84.6
+STE01,State and territory,New South Wales,2023,Persons,"59,451","8,342,285",712.6,512.3,1,"18,095",30.4,192.8,"268,883",35.1,"8,409",46.5,91.5,82.4
+STE02,State and territory,Victoria,2023,Persons,"45,326","6,815,441",665,500.1,0.98,"13,955",30.8,188.8,"219,607",34.9,"6,776",48.6,93.8,82.5
+STE03,State and territory,Queensland,2023,Persons,"36,622","5,460,420",670.7,524,1.02,"12,644",34.5,206.8,"203,964",40.4,"6,331",50.1,106.1,80.8
+STE04,State and territory,Western Australia,2023,Persons,"17,475","2,881,227",606.5,486.1,0.95,"5,982",34.2,191.3,"99,286",37.1,"2,976",49.7,97.4,81.5
+STE05,State and territory,South Australia,2023,Persons,"15,499","1,852,284",836.8,532.5,1.04,"4,606",29.7,206.9,"67,250",40,"2,013",43.7,93.7,82.7
+STE06,State and territory,Tasmania,2023,Persons,"5,073","573,156",885.1,563.2,1.1,"1,581",31.2,217,"22,256",42.9,775,49,109.9,81.5
+STE07,State and territory,Australian Capital Territory,2023,Persons,"2,406","466,566",515.7,473.4,0.92,741,30.8,164.7,"13,986",32,348,47,77.6,81.6
+STE08,State and territory,Northern Territory,2023,Persons,"1,253","252,529",496.2,671.9,1.31,856,68.3,369.8,"17,824",72.8,480,56.1,204.4,67.2
+STE09,State and territory,Other Territories,2023,Persons,26,"4,970",523.1,376,0.73,8,30.8,,123,26.8,4,,,82.3
+STE10,State and territory,Australia (total),2023,Persons,"183,131","26,652,777",687.1,512.7,1,"58,468",31.9,197.2,"913,179",37.2,"28,112",48.1,97.1,82
+GCC1GSYD,Greater Capital City Statistical Areas (GCCSA),Greater Sydney,2023,Males,"16,427","2,711,359",605.9,555.4,0.92,"5,891",35.9,216.5,"92,336",36.3,"2,788",47.3,103,80.2
+GCC1RNSW,Greater Capital City Statistical Areas (GCCSA),Rest of NSW,2023,Males,"14,595","1,437,782",1015.1,676,1.12,"5,274",36.1,293.5,"75,607",58.1,"2,533",48,147.8,79.8
+GCC2GMEL,Greater Capital City Statistical Areas (GCCSA),Greater Melbourne,2023,Males,"15,409","2,576,279",598.1,556.3,0.92,"5,440",35.3,215.3,"92,667",38.3,"2,718",50,108.3,80.5
+GCC2RVIC,Greater Capital City Statistical Areas (GCCSA),Rest of Vic.,2023,Males,"7,944","794,113",1000.4,664.7,1.1,"2,932",36.9,289.4,"42,078",58.5,"1,472",50.2,155,79.5
+GCC3GBRI,Greater Capital City Statistical Areas (GCCSA),Greater Brisbane,2023,Males,"8,256","1,341,152",615.6,603.5,1,"3,241",39.3,240.6,"55,367",43.9,"1,691",52.2,126.7,78.8
+GCC3RQLD,Greater Capital City Statistical Areas (GCCSA),Rest of Qld,2023,Males,"11,259","1,363,051",826,628.2,1.04,"4,472",39.7,276,"70,845",56.6,"2,299",51.4,147.6,78.6
+GCC4GADE,Greater Capital City Statistical Areas (GCCSA),Greater Adelaide,2023,Males,"5,730","708,515",808.7,617.5,1.02,"1,949",34,248.2,"30,005",45.9,869,44.6,112.9,80.9
+GCC4RSAU,Greater Capital City Statistical Areas (GCCSA),Rest of SA,2023,Males,"2,293","207,484",1105.1,668.7,1.11,865,37.7,301.7,"12,206",65.9,388,44.9,144.3,79.3
+GCC5GPER,Greater Capital City Statistical Areas (GCCSA),Greater Perth,2023,Males,"7,028","1,152,158",610,548.4,0.91,"2,608",37.1,217.4,"42,745",39.6,"1,284",49.2,108.7,80
+GCC5RWAU,Greater Capital City Statistical Areas (GCCSA),Rest of WA,2023,Males,"2,225","293,093",759.1,639.5,1.06,"1,048",47.1,310.8,"18,531",68,586,55.9,182.6,76.2
+GCC6GHOB,Greater Capital City Statistical Areas (GCCSA),Greater Hobart,2023,Males,"1,002","123,941",808.4,634.9,1.05,360,35.9,260,"5,474",47.8,184,51.1,137.4,79.8
+GCC6RTAS,Greater Capital City Statistical Areas (GCCSA),Rest of Tas.,2023,Males,"1,581","160,091",987.6,637.9,1.06,588,37.2,274.4,"7,947",55,290,49.3,139.6,79.1
+GCC7GDAR,Greater Capital City Statistical Areas (GCCSA),Greater Darwin,2023,Males,371,"77,111",481.1,611.4,1.01,231,62.3,313.1,"3,789",51,112,48.5,149.7,70.9
+GCC7RNTE,Greater Capital City Statistical Areas (GCCSA),Rest of NT,2023,Males,296,"50,710",583.7,833.3,1.38,245,82.8,542.7,"6,196",124.8,149,60.8,325.9,59.2
+GCC8ACTE,Greater Capital City Statistical Areas (GCCSA),Australian Capital Territory,2023,Males,"1,248","230,321",541.9,559.9,0.93,428,34.3,198.8,"8,209",37.7,204,47.7,94.1,80.1
+GCC9OTER,Greater Capital City Statistical Areas (GCCSA),Other Territories,2023,Males,13,"2,624",495.4,,,3,23.1,,23,9.5,1,,,81.5
+GCC9UNKN,Greater Capital City Statistical Areas (GCCSA),Unknown/missing,2023,Males,503,,,,,,,,,,,,,
+GCCAUSTR,Greater Capital City Statistical Areas (GCCSA),Australia (total),2023,Males,"96,180","13,232,590",726.8,604.8,1,"35,955",37.4,249.2,"571,549",46.5,"17,805",49.5,126.2,79.6
+GCC1GSYD,Greater Capital City Statistical Areas (GCCSA),Greater Sydney,2023,Females,"15,226","2,739,137",555.9,394.7,0.92,"3,588",23.6,123.2,"53,820",21.3,"1,582",44.1,55.1,85.4
+GCC1RNSW,Greater Capital City Statistical Areas (GCCSA),Rest of NSW,2023,Females,"13,041","1,454,007",896.9,480.1,1.11,"3,237",24.8,172,"45,160",34.9,"1,452",44.9,79.7,84.7
+GCC2GMEL,Greater Capital City Statistical Areas (GCCSA),Greater Melbourne,2023,Females,"14,801","2,630,866",562.6,403.8,0.94,"3,668",24.8,134,"58,272",24,"1,688",46,62.6,85.3
+GCC2RVIC,Greater Capital City Statistical Areas (GCCSA),Rest of Vic.,2023,Females,"7,006","814,183",860.5,465.4,1.08,"1,793",25.6,166.4,"24,304",33.4,820,45.7,79.4,84.8
+GCC3GBRI,Greater Capital City Statistical Areas (GCCSA),Greater Brisbane,2023,Females,"7,649","1,365,814",560,438.9,1.02,"2,155",28.2,149.9,"34,703",27.4,"1,003",46.5,70.8,84
+GCC3RQLD,Greater Capital City Statistical Areas (GCCSA),Rest of Qld,2023,Females,"9,284","1,390,403",667.7,435.9,1.01,"2,652",28.6,156.5,"40,697",32.2,"1,255",47.3,76.2,83.3
+GCC4GADE,Greater Capital City Statistical Areas (GCCSA),Greater Adelaide,2023,Females,"5,635","737,865",763.7,441.1,1.02,"1,313",23.3,149.9,"18,334",27.5,546,41.6,64.5,85.5
+GCC4RSAU,Greater Capital City Statistical Areas (GCCSA),Rest of SA,2023,Females,"1,786","198,420",900.1,451.9,1.05,435,24.4,157.1,"5,812",33.3,186,42.8,71.8,84.7
+GCC5GPER,Greater Capital City Statistical Areas (GCCSA),Greater Perth,2023,Females,"6,371","1,157,180",550.6,390.9,0.91,"1,601",25.1,127.2,"25,211",23.6,721,45,58.3,85.1
+GCC5RWAU,Greater Capital City Statistical Areas (GCCSA),Rest of WA,2023,Females,"1,720","278,796",616.9,458.1,1.06,626,36.4,192.4,"10,566",41.1,319,51,99.9,81.4
+GCC6GHOB,Greater Capital City Statistical Areas (GCCSA),Greater Hobart,2023,Females,"1,081","129,713",833.4,500.6,1.16,271,25.1,170.1,"3,543",30.2,127,46.9,82.7,84
+GCC6RTAS,Greater Capital City Statistical Areas (GCCSA),Rest of Tas.,2023,Females,"1,390","159,411",872,483.6,1.12,348,25,159.8,"4,962",34.9,165,47.4,76.9,83.8
+GCC7GDAR,Greater Capital City Statistical Areas (GCCSA),Greater Darwin,2023,Females,257,"73,625",349.1,472.2,1.1,118,45.9,172.6,"2,340",33,61,51.7,87.6,76.2
+GCC7RNTE,Greater Capital City Statistical Areas (GCCSA),Rest of NT,2023,Females,283,"51,083",554,813.9,1.89,222,78.4,504.9,"4,788",95.9,137,61.7,302.2,64.3
+GCC8ACTE,Greater Capital City Statistical Areas (GCCSA),Australian Capital Territory,2023,Females,"1,147","236,245",485.5,398.1,0.92,305,26.6,130.2,"5,678",25.8,137,44.9,59.8,83.8
+GCC9OTER,Greater Capital City Statistical Areas (GCCSA),Other Territories,2023,Females,12,"2,346",511.5,,,4,33.3,,94,43.5,2,,,83
+GCC9UNKN,Greater Capital City Statistical Areas (GCCSA),Unknown/missing,2023,Females,262,,,,,,,,,,,,,
+GCCAUSTR,Greater Capital City Statistical Areas (GCCSA),Australia (total),2023,Females,"86,951","13,420,187",647.9,430.9,1,"22,513",25.9,147.5,"341,630",27.8,"10,307",45.8,69.2,84.6
+GCC1GSYD,Greater Capital City Statistical Areas (GCCSA),Greater Sydney,2023,Persons,"31,653","5,450,496",580.7,469.7,0.92,"9,479",29.9,168.4,"146,156",28.8,"4,370",46.1,78.4,82.7
+GCC1RNSW,Greater Capital City Statistical Areas (GCCSA),Rest of NSW,2023,Persons,"27,636","2,891,789",955.7,573.7,1.12,"8,511",30.8,231.9,"120,767",46.5,"3,985",46.8,113.4,82.1
+GCC2GMEL,Greater Capital City Statistical Areas (GCCSA),Greater Melbourne,2023,Persons,"30,210","5,207,145",580.2,474,0.92,"9,108",30.1,173.2,"150,939",31.1,"4,406",48.4,84.7,82.9
+GCC2RVIC,Greater Capital City Statistical Areas (GCCSA),Rest of Vic.,2023,Persons,"14,950","1,608,296",929.6,560.4,1.09,"4,725",31.6,226.7,"66,382",45.9,"2,292",48.5,116.7,81.9
+GCC3GBRI,Greater Capital City Statistical Areas (GCCSA),Greater Brisbane,2023,Persons,"15,905","2,706,966",587.6,515.7,1.01,"5,396",33.9,193.8,"90,070",35.6,"2,694",49.9,97.9,81.2
+GCC3RQLD,Greater Capital City Statistical Areas (GCCSA),Rest of Qld,2023,Persons,"20,543","2,753,454",746.1,527.8,1.03,"7,124",34.7,215.2,"111,542",44.3,"3,554",49.9,111.3,80.6
+GCC4GADE,Greater Capital City Statistical Areas (GCCSA),Greater Adelaide,2023,Persons,"11,365","1,446,380",785.8,521,1.02,"3,262",28.7,197,"48,339",36.6,"1,415",43.4,87.8,83.2
+GCC4RSAU,Greater Capital City Statistical Areas (GCCSA),Rest of SA,2023,Persons,"4,079","405,904",1004.9,560.4,1.09,"1,300",31.9,231,"18,018",50.1,574,44.2,108.9,81.7
+GCC5GPER,Greater Capital City Statistical Areas (GCCSA),Greater Perth,2023,Persons,"13,399","2,309,338",580.2,464.7,0.91,"4,209",31.4,171.2,"67,956",31.7,"2,005",47.6,83,82.5
+GCC5RWAU,Greater Capital City Statistical Areas (GCCSA),Rest of WA,2023,Persons,"3,945","571,889",689.8,549.4,1.07,"1,674",42.4,253.2,"29,097",54.9,905,54.1,142.5,78.4
+GCC6GHOB,Greater Capital City Statistical Areas (GCCSA),Greater Hobart,2023,Persons,"2,083","253,654",821.2,562.2,1.1,631,30.3,213.2,"9,017",38.9,311,49.3,109,82.2
+GCC6RTAS,Greater Capital City Statistical Areas (GCCSA),Rest of Tas.,2023,Persons,"2,971","319,502",929.9,560.1,1.09,936,31.5,216.6,"12,909",45,455,48.6,107.8,81.1
+GCC7GDAR,Greater Capital City Statistical Areas (GCCSA),Greater Darwin,2023,Persons,628,"150,736",416.6,546.4,1.07,349,55.6,245.5,"6,129",42.2,173,49.6,119.9,73.2
+GCC7RNTE,Greater Capital City Statistical Areas (GCCSA),Rest of NT,2023,Persons,579,"101,793",568.8,821.9,1.6,467,80.7,522.5,"10,984",110.3,286,61.2,313.6,60.8
+GCC8ACTE,Greater Capital City Statistical Areas (GCCSA),Australian Capital Territory,2023,Persons,"2,395","466,566",513.3,471.3,0.92,733,30.6,163,"13,887",31.7,341,46.5,76.1,81.6
+GCC9OTER,Greater Capital City Statistical Areas (GCCSA),Other Territories,2023,Persons,25,"4,970",503,365.9,0.71,7,28,,117,25.5,3,,,82.5
+GCC9UNKN,Greater Capital City Statistical Areas (GCCSA),Unknown/missing,2023,Persons,765,,,,,,,,,,,,,
+GCCAUSTR,Greater Capital City Statistical Areas (GCCSA),Australia (total),2023,Persons,"183,131","26,652,777",687.1,512.7,1,"58,468",31.9,197.2,"913,179",37.2,"28,112",48.1,97.1,82
+PHN101,Primary Health Network (PHN),Central and Eastern Sydney,2023,Males,"4,782","802,810",595.7,533.4,0.88,"1,590",33.3,204.8,"23,851",31.7,734,46.2,94.8,81.5
+PHN102,Primary Health Network (PHN),Northern Sydney,2023,Males,"2,771","463,096",598.3,444.3,0.74,749,27,153,"12,119",28.4,331,44.1,68.9,83.5
+PHN103,Primary Health Network (PHN),Western Sydney,2023,Males,"2,754","565,522",487,568.6,0.94,"1,125",40.8,219.4,"18,881",35,531,47.2,102.7,78.2
+PHN104,Primary Health Network (PHN),Nepean Blue Mountains,2023,Males,"1,324","194,909",679.1,626.2,1.04,568,42.9,262.2,"8,449",46.3,257,45.2,120.4,77.8
+PHN105,Primary Health Network (PHN),South Western Sydney,2023,Males,"3,412","550,191",620.2,613.8,1.02,"1,397",40.9,250.3,"22,110",42.6,700,50.1,126.3,78.1
+PHN106,Primary Health Network (PHN),South Eastern NSW,2023,Males,"3,089","327,406",943.5,634.4,1.05,"1,047",33.9,254,"14,887",50.1,495,47.2,125.8,80.3
+PHN107,Primary Health Network (PHN),Western NSW,2023,Males,"1,664","158,084",1052.3,761,1.26,689,41.4,365.1,"10,107",70,347,50.4,190.2,78.1
+PHN108,Primary Health Network (PHN),Hunter New England and Central Coast,2023,Males,"6,543","662,416",987.8,686.3,1.14,"2,304",35.2,290.2,"33,958",56.4,"1,120",48.6,146.1,79.9
+PHN109,Primary Health Network (PHN),North Coast,2023,Males,"3,095","271,057",1141.7,660.3,1.09,"1,118",36.1,302,"14,893",61.8,524,46.8,151.9,80.3
+PHN110,Primary Health Network (PHN),Murrumbidgee,2023,Males,"1,321","125,739",1050.8,697.8,1.15,477,36.1,304.7,"7,068",62,234,49,154.3,79.8
+PHN201,Primary Health Network (PHN),North Western Melbourne,2023,Males,"5,081","983,592",516.6,611.1,1.01,"2,056",40.5,239.2,"37,151",39.5,"1,058",51.5,121.6,78.7
+PHN202,Primary Health Network (PHN),Eastern Melbourne,2023,Males,"5,176","779,960",663.6,522.5,0.86,"1,590",30.7,194.1,"25,876",35.8,749,47.1,93.6,82.4
+PHN203,Primary Health Network (PHN),South Eastern Melbourne,2023,Males,"5,152","812,727",633.9,542.4,0.9,"1,794",34.8,213,"29,640",39.1,911,50.8,109.8,80.3
+PHN204,Primary Health Network (PHN),Gippsland,2023,Males,"1,734","151,839",1142,710.1,1.17,665,38.4,325.3,"9,346",68.8,331,49.8,173.7,79.1
+PHN205,Primary Health Network (PHN),Murray,2023,Males,"3,234","320,925",1007.7,664.7,1.1,"1,169",36.2,290.3,"17,448",60.1,581,49.7,158.1,79.7
+PHN206,Primary Health Network (PHN),Western Victoria,2023,Males,"3,243","349,404",928.2,649.9,1.08,"1,199",37,276.3,"16,904",53,609,50.8,146,79.3
+PHN301,Primary Health Network (PHN),Brisbane North,2023,Males,"3,477","552,579",629.2,577.7,0.96,"1,272",36.6,225.6,"20,907",40.5,637,50.1,114.4,79.5
+PHN302,Primary Health Network (PHN),Brisbane South,2023,Males,"3,831","632,875",605.4,615.4,1.02,"1,478",38.6,234.5,"24,881",41.6,801,54.2,128,79
+PHN303,Primary Health Network (PHN),Gold Coast,2023,Males,"2,288","333,400",686.2,550.9,0.91,827,36.1,227.1,"13,941",45.3,419,50.7,117.5,79.9
+PHN304,Primary Health Network (PHN),Darling Downs and West Moreton,2023,Males,"2,426","315,521",769,658.6,1.09,"1,059",43.6,309.6,"19,231",65.6,559,52.8,167.9,77.1
+PHN305,Primary Health Network (PHN),Western Queensland,2023,Males,280,"32,671",857,849.2,1.41,141,50.5,408.6,"2,629",85.2,80,56.6,235.3,74.7
+PHN306,Primary Health Network (PHN),"Central Queensland, Wide Bay, Sunshine Coast",2023,Males,"4,401","467,292",941.7,625.2,1.03,"1,650",37.5,273.4,"24,203",57.3,825,50,144.1,79.4
+PHN307,Primary Health Network (PHN),Northern Queensland,2023,Males,"2,818","370,915",759.7,672.9,1.11,"1,287",45.7,299,"20,430",58.8,670,52.1,161.6,76.5
+PHN401,Primary Health Network (PHN),Adelaide,2023,Males,"5,323","647,382",822.2,627.6,1.04,"1,799",33.8,252.7,"27,426",45.9,800,44.5,114.3,81.1
+PHN402,Primary Health Network (PHN),Country SA,2023,Males,"2,700","268,616",1005.2,638.4,1.06,"1,015",37.6,281.5,"14,785",61.2,457,45,135.3,79.3
+PHN501,Primary Health Network (PHN),Perth North,2023,Males,"3,443","593,291",580.3,522.6,0.86,"1,268",36.8,204.3,"20,872",37.6,645,50.9,105.4,79.9
+PHN502,Primary Health Network (PHN),Perth South,2023,Males,"3,621","562,833",643.3,576.2,0.95,"1,352",37.4,231,"21,986",41.8,645,47.7,112.3,80.1
+PHN503,Primary Health Network (PHN),Country WA,2023,Males,"2,196","290,526",756,639.1,1.06,"1,038",47.2,311.1,"18,429",68.2,580,55.9,182.6,76.1
+PHN601,Primary Health Network (PHN),Tasmania,2023,Males,"2,583","284,032",909.4,636.5,1.05,948,36.7,268.3,"13,421",51.9,474,50,138.9,79.4
+PHN701,Primary Health Network (PHN),Northern Territory,2023,Males,667,"127,813",521.8,696.3,1.15,476,71.4,402.3,"9,983",80.5,261,54.8,217.4,65.6
+PHN801,Primary Health Network (PHN),Australian Capital Territory,2023,Males,"1,248","230,321",541.9,559.9,0.93,428,34.3,198.8,"8,209",37.7,204,47.7,94.1,80.1
+PHN888,Primary Health Network (PHN),Unknown/missing,2023,Males,503,,,,,,,,,,,,,
+PHN999,Primary Health Network (PHN),Australia (total),2023,Males,"96,180","13,232,590",726.8,604.8,1,"35,955",37.4,249.2,"571,549",46.5,"17,805",49.5,126.2,79.6
+PHN101,Primary Health Network (PHN),Central and Eastern Sydney,2023,Females,"4,480","802,951",558,379.8,0.88,988,22,120.7,"15,246",20.6,414,41.9,51.2,86.2
+PHN102,Primary Health Network (PHN),Northern Sydney,2023,Females,"2,877","485,246",592.8,329.2,0.76,472,16.4,87,"6,975",15.9,196,41.6,37.6,87.9
+PHN103,Primary Health Network (PHN),Western Sydney,2023,Females,"2,317","553,463",418.7,396.3,0.92,637,27.5,118.4,"9,713",18.6,288,45.2,53.3,84
+PHN104,Primary Health Network (PHN),Nepean Blue Mountains,2023,Females,"1,234","197,463",624.7,465.4,1.08,390,31.6,170.7,"5,890",32.3,186,47.8,83.5,82.5
+PHN105,Primary Health Network (PHN),South Western Sydney,2023,Females,"2,988","557,166",536.3,436.3,1.01,826,27.7,138.8,"12,253",23.5,379,45.9,64.8,84.1
+PHN106,Primary Health Network (PHN),South Eastern NSW,2023,Females,"2,794","328,243",851.2,467.3,1.08,676,24.2,158,"9,554",32.5,297,43.9,70.4,85
+PHN107,Primary Health Network (PHN),Western NSW,2023,Females,"1,425","156,531",910.2,526.5,1.22,389,27.3,205.1,"5,551",39.5,196,50.6,106.3,84
+PHN108,Primary Health Network (PHN),Hunter New England and Central Coast,2023,Females,"5,997","677,438",885.3,478.6,1.11,"1,442",24,168.2,"20,113",33.3,625,43.3,75.5,84.8
+PHN109,Primary Health Network (PHN),North Coast,2023,Females,"2,711","280,696",965.7,453.8,1.05,643,23.7,161.5,"8,252",33.6,279,43.4,73.5,85.1
+PHN110,Primary Health Network (PHN),Murrumbidgee,2023,Females,"1,198","124,728",960.4,522,1.21,304,25.4,194.1,"4,564",41,137,45,92.6,84.4
+PHN201,Primary Health Network (PHN),North Western Melbourne,2023,Females,"4,449","989,474",449.6,416.8,0.97,"1,326",29.8,145.9,"22,679",24.3,629,47.4,69.4,83.5
+PHN202,Primary Health Network (PHN),Eastern Melbourne,2023,Females,"5,285","804,398",657,392.9,0.91,"1,130",21.4,124.9,"17,543",24,493,43.6,56.4,86.5
+PHN203,Primary Health Network (PHN),South Eastern Melbourne,2023,Females,"5,067","836,994",605.4,403,0.93,"1,212",23.9,132.2,"18,050",23.5,566,46.7,63.2,85.3
+PHN204,Primary Health Network (PHN),Gippsland,2023,Females,"1,405","155,968",900.8,478.8,1.11,419,29.8,186.6,"5,313",38.4,208,49.6,95.7,83.6
+PHN205,Primary Health Network (PHN),Murray,2023,Females,"2,840","328,413",864.9,462.1,1.07,708,24.9,165.4,"9,775",33.4,337,47.6,81.5,84.6
+PHN206,Primary Health Network (PHN),Western Victoria,2023,Females,"3,008","359,169",837.5,464.3,1.08,725,24.1,158,"10,089",31.3,311,42.9,71.7,85.3
+PHN301,Primary Health Network (PHN),Brisbane North,2023,Females,"3,341","566,146",590.2,428.3,0.99,894,26.8,147.1,"14,265",27.3,412,46.1,70.1,84.7
+PHN302,Primary Health Network (PHN),Brisbane South,2023,Females,"3,535","643,098",549.7,441.5,1.02,968,27.4,143.9,"15,528",25.9,463,47.8,69.2,84.1
+PHN303,Primary Health Network (PHN),Gold Coast,2023,Females,"2,031","348,993",581.9,389.1,0.9,477,23.5,116,"6,542",20.5,207,43.4,51.5,84.6
+PHN304,Primary Health Network (PHN),Darling Downs and West Moreton,2023,Females,"2,022","321,264",629.5,456.5,1.06,624,30.8,172.9,"9,896",33.5,294,47.1,82.2,82.4
+PHN305,Primary Health Network (PHN),Western Queensland,2023,Females,182,"31,310",582.1,529.8,1.23,75,41.3,234.6,"1,533",52.1,45,59.1,140,77.7
+PHN306,Primary Health Network (PHN),"Central Queensland, Wide Bay, Sunshine Coast",2023,Females,"3,565","482,879",738.3,429.7,1,"1,002",28.1,162,"15,747",36.4,469,46.8,79.8,83.3
+PHN307,Primary Health Network (PHN),Northern Queensland,2023,Females,"2,263","363,644",622.2,487.7,1.13,770,34,182.2,"11,979",35.5,370,48.1,88.6,81.9
+PHN401,Primary Health Network (PHN),Adelaide,2023,Females,"5,252","674,102",779.2,445.4,1.03,"1,227",23.4,153.6,"16,930",27.9,513,41.8,66.5,85.6
+PHN402,Primary Health Network (PHN),Country SA,2023,Females,"2,169","262,183",827.2,440,1.02,521,24,147.8,"7,216",31,219,42,65.8,84.6
+PHN501,Primary Health Network (PHN),Perth North,2023,Females,"3,180","596,303",533.3,373.1,0.87,784,24.7,121,"12,516",22.8,342,43.6,53.7,85.5
+PHN502,Primary Health Network (PHN),Perth South,2023,Females,"3,214","564,516",569.4,410.3,0.95,826,25.7,134,"12,785",24.5,383,46.4,63.4,84.7
+PHN503,Primary Health Network (PHN),Country WA,2023,Females,"1,701","276,210",615.7,458.4,1.06,617,36.3,192,"10,476",41.1,315,51,99.8,81.5
+PHN601,Primary Health Network (PHN),Tasmania,2023,Females,"2,471","289,124",854.7,489.5,1.14,619,25.1,163,"8,505",32.8,292,47.2,78.9,83.9
+PHN701,Primary Health Network (PHN),Northern Territory,2023,Females,540,"124,701",433,601.4,1.39,340,63,301.3,"7,127",59,198,58.2,172.3,69.4
+PHN801,Primary Health Network (PHN),Australian Capital Territory,2023,Females,"1,147","236,245",485.5,398.1,0.92,305,26.6,130.2,"5,678",25.8,137,44.9,59.8,83.8
+PHN888,Primary Health Network (PHN),Unknown/missing,2023,Females,262,,,,,,,,,,,,,
+PHN999,Primary Health Network (PHN),Australia (total),2023,Females,"86,951","13,420,187",647.9,430.9,1,"22,513",25.9,147.5,"341,630",27.8,"10,307",45.8,69.2,84.6
+PHN101,Primary Health Network (PHN),Central and Eastern Sydney,2023,Persons,"9,262","1,605,760",576.8,451,0.88,"2,578",27.8,161.5,"39,097",26.2,"1,148",44.5,72.4,83.8
+PHN102,Primary Health Network (PHN),Northern Sydney,2023,Persons,"5,647","948,341",595.5,381.9,0.74,"1,221",21.6,118.5,"19,094",22,527,43.2,52.6,85.7
+PHN103,Primary Health Network (PHN),Western Sydney,2023,Persons,"5,071","1,118,985",453.2,478.7,0.93,"1,761",34.7,167.8,"28,594",26.9,818,46.4,77.6,80.6
+PHN104,Primary Health Network (PHN),Nepean Blue Mountains,2023,Persons,"2,557","392,372",651.7,540.3,1.05,957,37.4,215.1,"14,340",39.3,443,46.3,101.4,79.8
+PHN105,Primary Health Network (PHN),South Western Sydney,2023,Persons,"6,401","1,107,357",578,520.8,1.02,"2,223",34.7,192.9,"34,362",33,"1,079",48.6,94.7,80.8
+PHN106,Primary Health Network (PHN),South Eastern NSW,2023,Persons,"5,883","655,649",897.3,547.8,1.07,"1,724",29.3,205.4,"24,441",41.3,791,45.9,97.9,82.5
+PHN107,Primary Health Network (PHN),Western NSW,2023,Persons,"3,088","314,615",981.6,640.9,1.25,"1,078",34.9,285.6,"15,658",55,544,50.4,148.5,81
+PHN108,Primary Health Network (PHN),Hunter New England and Central Coast,2023,Persons,"12,541","1,339,854",936,576.1,1.12,"3,745",29.9,227.7,"54,071",44.8,"1,745",46.6,110,82.3
+PHN109,Primary Health Network (PHN),North Coast,2023,Persons,"5,805","551,753",1052.1,552,1.08,"1,762",30.3,229.9,"23,145",47.6,803,45.6,111.7,82.5
+PHN110,Primary Health Network (PHN),Murrumbidgee,2023,Persons,"2,519","250,467",1005.8,607.2,1.18,781,31,249.6,"11,632",51.6,371,47.5,123.7,82.2
+PHN201,Primary Health Network (PHN),North Western Melbourne,2023,Persons,"9,530","1,973,066",483,505.3,0.99,"3,382",35.5,191.2,"59,830",32,"1,687",49.9,94.8,80.9
+PHN202,Primary Health Network (PHN),Eastern Melbourne,2023,Persons,"10,461","1,584,358",660.3,452.5,0.88,"2,720",26,157.9,"43,419",29.9,"1,242",45.7,74.2,84.5
+PHN203,Primary Health Network (PHN),South Eastern Melbourne,2023,Persons,"10,219","1,649,721",619.4,467.7,0.91,"3,006",29.4,171.2,"47,690",31.3,"1,477",49.1,85.8,82.8
+PHN204,Primary Health Network (PHN),Gippsland,2023,Persons,"3,139","307,807",1019.8,590.1,1.15,"1,084",34.5,254.4,"14,659",53.5,539,49.7,134.1,81
+PHN205,Primary Health Network (PHN),Murray,2023,Persons,"6,074","649,337",935.5,558.5,1.09,"1,877",30.9,226.9,"27,223",46.7,918,48.9,119.3,82
+PHN206,Primary Health Network (PHN),Western Victoria,2023,Persons,"6,251","708,573",882.2,551.8,1.08,"1,924",30.8,215.6,"26,993",42.1,920,47.8,108,82.3
+PHN301,Primary Health Network (PHN),Brisbane North,2023,Persons,"6,818","1,118,725",609.5,497.5,0.97,"2,166",31.8,184.9,"35,173",33.9,"1,049",48.4,91.4,81.8
+PHN302,Primary Health Network (PHN),Brisbane South,2023,Persons,"7,367","1,275,973",577.3,522,1.02,"2,446",33.2,187.8,"40,409",33.8,"1,264",51.7,97.8,81.3
+PHN303,Primary Health Network (PHN),Gold Coast,2023,Persons,"4,319","682,392",632.9,465.4,0.91,"1,304",30.2,169.3,"20,482",32.7,626,48,83.2,82.3
+PHN304,Primary Health Network (PHN),Darling Downs and West Moreton,2023,Persons,"4,449","636,785",698.6,553.1,1.08,"1,682",37.8,240.2,"29,127",49.5,853,50.7,124.3,79.3
+PHN305,Primary Health Network (PHN),Western Queensland,2023,Persons,462,"63,981",722.5,684.1,1.33,217,46.9,324.3,"4,163",69,125,57.5,188.5,76.3
+PHN306,Primary Health Network (PHN),"Central Queensland, Wide Bay, Sunshine Coast",2023,Persons,"7,966","950,171",838.4,522.1,1.02,"2,653",33.3,216.3,"39,950",46.8,"1,293",48.8,111.2,81.1
+PHN307,Primary Health Network (PHN),Northern Queensland,2023,Persons,"5,081","734,559",691.7,579.4,1.13,"2,056",40.5,241.5,"32,409",47.3,"1,040",50.6,125.5,78.7
+PHN401,Primary Health Network (PHN),Adelaide,2023,Persons,"10,575","1,321,484",800.2,527.6,1.03,"3,025",28.6,201,"44,356",36.8,"1,313",43.4,89.4,83.3
+PHN402,Primary Health Network (PHN),Country SA,2023,Persons,"4,869","530,799",917.3,538.2,1.05,"1,537",31.6,215.5,"22,001",46.4,676,44,101,81.7
+PHN501,Primary Health Network (PHN),Perth North,2023,Persons,"6,623","1,189,593",556.7,443.2,0.86,"2,052",31,161.7,"33,388",30.2,987,48.1,79.1,82.6
+PHN502,Primary Health Network (PHN),Perth South,2023,Persons,"6,835","1,127,348",606.3,488,0.95,"2,178",31.9,181.4,"34,771",33.2,"1,028",47.2,87.4,82.4
+PHN503,Primary Health Network (PHN),Country WA,2023,Persons,"3,897","566,736",687.6,549.4,1.07,"1,655",42.5,253.2,"28,905",55,895,54.1,142.4,78.4
+PHN601,Primary Health Network (PHN),Tasmania,2023,Persons,"5,054","573,156",881.8,560.3,1.09,"1,567",31,214.4,"21,926",42.3,766,48.9,108.2,81.6
+PHN701,Primary Health Network (PHN),Northern Territory,2023,Persons,"1,207","252,514",477.9,651.5,1.27,816,67.6,352.6,"17,109",69.9,459,56.2,195.2,67.4
+PHN801,Primary Health Network (PHN),Australian Capital Territory,2023,Persons,"2,395","466,566",513.3,471.3,0.92,733,30.6,163,"13,887",31.7,341,46.5,76.1,81.6
+PHN888,Primary Health Network (PHN),Unknown/missing,2023,Persons,765,,,,,,,,,,,,,
+PHN999,Primary Health Network (PHN),Australia (total),2023,Persons,"183,131","26,652,777",687.1,512.7,1,"58,468",31.9,197.2,"913,179",37.2,"28,112",48.1,97.1,82
+SA4101,Statistical Area Level 4 (SA4),Capital Region,2023,Males,"1,150","122,499",938.8,629.6,1.04,438,38.1,264.6,"6,080",54.6,227,51.8,142.4,78.9
+SA4102,Statistical Area Level 4 (SA4),Central Coast,2023,Males,"1,770","171,340",1033,678.8,1.12,594,33.6,288.3,"8,564",55.4,294,49.5,145.3,80.5
+SA4103,Statistical Area Level 4 (SA4),Central West,2023,Males,"1,151","107,986",1065.9,749.5,1.24,450,39.1,337.9,"6,235",63.4,226,50.2,175,78.9
+SA4104,Statistical Area Level 4 (SA4),Coffs Harbour - Grafton,2023,Males,829,"73,805",1123.2,669.3,1.11,299,36.1,300.2,"4,136",62.8,137,45.8,149.5,80
+SA4105,Statistical Area Level 4 (SA4),Far West and Orana,2023,Males,622,"59,097",1052.5,778.5,1.29,284,45.7,407.1,"4,235",78.2,146,51.4,213.8,76.2
+SA4106,Statistical Area Level 4 (SA4),Hunter Valley exc Newcastle,2023,Males,"1,254","153,210",818.5,642.1,1.06,491,39.2,274.9,"7,575",53.7,237,48.3,138.1,78.6
+SA4107,Statistical Area Level 4 (SA4),Illawarra,2023,Males,"1,402","159,543",878.8,646.5,1.07,441,31.5,244.9,"6,610",45.1,187,42.4,107.4,81.1
+SA4108,Statistical Area Level 4 (SA4),Mid North Coast,2023,Males,"1,586","115,156",1377.3,707.5,1.17,566,35.7,341,"7,238",72.7,241,42.6,163.6,79.8
+SA4109,Statistical Area Level 4 (SA4),Murray,2023,Males,688,"62,809",1095.4,704.8,1.17,245,35.6,313.8,"3,743",66.4,119,48.6,165.2,80
+SA4110,Statistical Area Level 4 (SA4),New England and North West,2023,Males,974,"94,026",1035.9,722.6,1.2,366,37.6,327.4,"5,904",69.1,195,53.3,182,79.2
+SA4111,Statistical Area Level 4 (SA4),Newcastle and Lake Macquarie,2023,Males,"1,890","198,789",950.8,705.4,1.17,627,33.2,278.2,"8,992",49.3,299,47.7,135.3,80.7
+SA4112,Statistical Area Level 4 (SA4),Richmond - Tweed,2023,Males,"1,338","127,344",1050.7,634.7,1.05,480,35.9,280.7,"6,455",56.5,242,50.4,149.3,80.8
+SA4113,Statistical Area Level 4 (SA4),Riverina,2023,Males,791,"82,943",953.7,701.5,1.16,302,38.2,315.2,"4,707",61.8,148,49,158.2,79
+SA4114,Statistical Area Level 4 (SA4),Southern Highlands and Shoalhaven,2023,Males,920,"80,575",1141.8,609,1.01,285,31,256.8,"3,697",52.5,129,45.3,132,81.1
+SA4115,Statistical Area Level 4 (SA4),Sydney - Baulkham Hills and Hawkesbury,2023,Males,738,"139,187",530.2,468.2,0.77,221,29.9,148.9,"3,683",28.3,90,40.7,61.6,81.2
+SA4116,Statistical Area Level 4 (SA4),Sydney - Blacktown,2023,Males,"1,065","215,818",493.5,663,1.1,511,48,272.3,"8,645",41.7,253,49.5,134,76
+SA4117,Statistical Area Level 4 (SA4),Sydney - City and Inner South,2023,Males,825,"184,731",446.6,577.6,0.96,409,49.6,272.4,"6,414",36.2,204,49.9,133.4,75.2
+SA4118,Statistical Area Level 4 (SA4),Sydney - Eastern Suburbs,2023,Males,823,"132,892",619.3,513.8,0.85,234,28.4,187,"3,701",29.9,116,49.6,92.6,83.2
+SA4119,Statistical Area Level 4 (SA4),Sydney - Inner South West,2023,Males,"2,036","312,829",650.8,546.6,0.9,680,33.4,213.6,"9,858",33.8,331,48.7,105.3,81.7
+SA4120,Statistical Area Level 4 (SA4),Sydney - Inner West,2023,Males,854,"154,876",551.4,493.1,0.82,283,33.1,188.6,"3,895",26.8,124,43.8,82.4,82.2
+SA4121,Statistical Area Level 4 (SA4),Sydney - North Sydney and Hornsby,2023,Males,"1,143","211,757",539.8,402.3,0.67,303,26.5,135.4,"4,748",24.3,136,44.9,61.8,84
+SA4122,Statistical Area Level 4 (SA4),Sydney - Northern Beaches,2023,Males,925,"131,820",701.7,499,0.83,235,25.4,165.1,"3,787",31.3,105,44.7,75.7,83.1
+SA4123,Statistical Area Level 4 (SA4),Sydney - Outer South West,2023,Males,900,"154,028",584.3,647.6,1.07,417,46.3,274.1,"6,584",45,223,53.5,147.2,76.1
+SA4124,Statistical Area Level 4 (SA4),Sydney - Outer West and Blue Mountains,2023,Males,"1,107","168,831",655.7,632.6,1.05,463,41.8,255.7,"7,056",44.5,207,44.7,116,78.1
+SA4125,Statistical Area Level 4 (SA4),Sydney - Parramatta,2023,Males,"1,375","264,376",520.1,576.7,0.95,528,38.4,223.4,"8,612",34.3,251,47.5,105.2,78.7
+SA4126,Statistical Area Level 4 (SA4),Sydney - Ryde,2023,Males,546,"103,828",525.9,440.5,0.73,183,33.5,175.2,"3,127",32.2,81,44.3,78.4,82.7
+SA4127,Statistical Area Level 4 (SA4),Sydney - South West,2023,Males,"1,448","249,780",579.7,617.5,1.02,604,41.7,243.9,"10,225",43.1,286,47.4,115.5,77.9
+SA4128,Statistical Area Level 4 (SA4),Sydney - Sutherland,2023,Males,872,"115,266",756.5,532.2,0.88,226,25.9,171.1,"3,437",32.5,87,38.5,67,82.8
+SA4201,Statistical Area Level 4 (SA4),Ballarat,2023,Males,808,"87,915",919.1,643.8,1.07,324,40.1,288.3,"4,186",52.2,161,49.7,145.4,78
+SA4202,Statistical Area Level 4 (SA4),Bendigo,2023,Males,783,"83,728",935.2,626.7,1.04,296,37.8,282.5,"4,195",55.2,148,50,150,79.3
+SA4203,Statistical Area Level 4 (SA4),Geelong,2023,Males,"1,429","167,827",851.5,647.9,1.07,507,35.5,260.8,"7,630",49.4,262,51.7,141.5,79.8
+SA4204,Statistical Area Level 4 (SA4),Hume,2023,Males,937,"92,738",1010.4,641.4,1.06,308,32.9,250.4,"4,671",55.9,151,49,141.6,80.3
+SA4205,Statistical Area Level 4 (SA4),Latrobe - Gippsland,2023,Males,"1,734","151,839",1142,710.1,1.17,665,38.4,325.3,"9,346",68.8,331,49.8,173.7,79.1
+SA4206,Statistical Area Level 4 (SA4),Melbourne - Inner,2023,Males,"1,582","330,852",478.2,557.5,0.92,609,38.5,219.7,"10,920",34.6,319,52.4,111.6,79.9
+SA4207,Statistical Area Level 4 (SA4),Melbourne - Inner East,2023,Males,"1,310","189,729",690.5,458.1,0.76,293,22.4,146.3,"4,528",26.1,132,45.1,67.9,85.2
+SA4208,Statistical Area Level 4 (SA4),Melbourne - Inner South,2023,Males,"1,472","212,423",693,513.7,0.85,410,27.9,175.5,"6,246",31.9,204,49.8,89.1,82.5
+SA4209,Statistical Area Level 4 (SA4),Melbourne - North East,2023,Males,"1,705","282,050",604.5,566.4,0.94,636,37.3,224.9,"10,399",39.2,299,47,106.8,80.1
+SA4210,Statistical Area Level 4 (SA4),Melbourne - North West,2023,Males,"1,281","224,830",569.8,587,0.97,479,37.4,231.8,"7,755",36.4,236,49.3,114.3,79.5
+SA4211,Statistical Area Level 4 (SA4),Melbourne - Outer East,2023,Males,"1,785","259,266",688.5,534.3,0.88,610,34.2,210.2,"9,937",41.5,299,49,106.6,80.7
+SA4212,Statistical Area Level 4 (SA4),Melbourne - South East,2023,Males,"2,578","460,176",560.2,556,0.92,893,34.6,209.5,"15,549",35.8,450,50.4,105.5,81
+SA4213,Statistical Area Level 4 (SA4),Melbourne - West,2023,Males,"2,270","464,232",489,629.6,1.04,"1,028",45.3,250.4,"19,583",43.9,528,51.4,127.3,76.6
+SA4214,Statistical Area Level 4 (SA4),Mornington Peninsula,2023,Males,"1,426","152,721",933.7,596.8,0.99,482,33.8,266.4,"7,750",56.5,251,52.1,146.3,80.4
+SA4215,Statistical Area Level 4 (SA4),North West,2023,Males,872,"77,711",1122.1,715.3,1.18,343,39.3,345.7,"4,943",70.5,169,49.3,179.1,78.8
+SA4216,Statistical Area Level 4 (SA4),Shepparton,2023,Males,747,"68,870",1084.7,692.3,1.15,268,35.9,317.1,"4,139",66.9,138,51.5,182.6,80.4
+SA4217,Statistical Area Level 4 (SA4),Warrnambool and South West,2023,Males,634,"63,485",998.7,628.3,1.04,221,34.9,255.4,"2,968",51.9,112,50.7,137,80.7
+SA4301,Statistical Area Level 4 (SA4),Brisbane - East,2023,Males,978,"123,064",794.7,612.6,1.01,321,32.8,217.9,"4,973",43.9,167,52,118.5,81
+SA4302,Statistical Area Level 4 (SA4),Brisbane - North,2023,Males,827,"115,603",715.4,633.7,1.05,281,34,243.8,"4,583",42.3,134,47.7,116.2,80.5
+SA4303,Statistical Area Level 4 (SA4),Brisbane - South,2023,Males,"1,036","196,205",528,571.2,0.95,351,33.9,197.1,"5,930",31.8,200,57,112.4,80.8
+SA4304,Statistical Area Level 4 (SA4),Brisbane - West,2023,Males,535,"97,835",546.8,489.2,0.81,141,26.4,144.5,"1,953",21.4,67,47.5,69.3,83
+SA4305,Statistical Area Level 4 (SA4),Brisbane Inner City,2023,Males,597,"159,782",373.6,475.5,0.79,264,44.2,190.4,"4,941",32.2,149,56.4,106.2,77.1
+SA4306,Statistical Area Level 4 (SA4),Cairns,2023,Males,"1,101","132,056",833.7,662.1,1.1,512,46.5,314.8,"7,838",64.1,255,49.8,168.5,76.4
+SA4307,Statistical Area Level 4 (SA4),Darling Downs - Maranoa,2023,Males,672,"66,555",1009.7,706.2,1.17,285,42.4,352.3,"4,678",77.5,153,53.7,199.9,77.1
+SA4308,Statistical Area Level 4 (SA4),Central Queensland,2023,Males,927,"120,408",769.9,695.5,1.15,432,46.6,307,"6,477",57.3,233,53.9,169.3,76.2
+SA4309,Statistical Area Level 4 (SA4),Gold Coast,2023,Males,"2,288","333,447",686.2,550.9,0.91,827,36.1,227.1,"13,943",45.3,419,50.7,117.5,79.9
+SA4310,Statistical Area Level 4 (SA4),Ipswich,2023,Males,"1,170","199,174",587.4,634.9,1.05,581,49.7,299.6,"11,365",60.1,303,52.2,156.5,75.1
+SA4311,Statistical Area Level 4 (SA4),Logan - Beaudesert,2023,Males,"1,238","195,263",634,694.1,1.15,589,47.6,309.3,"10,299",55.6,317,53.8,167.5,75.8
+SA4312,Statistical Area Level 4 (SA4),Mackay - Isaac - Whitsunday,2023,Males,666,"97,443",683.5,666,1.1,299,44.9,266,"4,638",50.4,170,56.9,153.9,77.1
+SA4313,Statistical Area Level 4 (SA4),Moreton Bay - North,2023,Males,"1,344","139,504",963.4,675.1,1.12,489,36.4,288.3,"7,619",60.3,246,50.3,153.3,79.1
+SA4314,Statistical Area Level 4 (SA4),Moreton Bay - South,2023,Males,531,"114,722",462.9,520.9,0.86,224,42.2,202.4,"3,704",34,108,48.2,98.1,77.7
+SA4315,Statistical Area Level 4 (SA4),Queensland - Outback,2023,Males,285,"42,620",668.7,766,1.27,142,49.8,324.2,"2,569",63.2,80,56.3,187.1,75.1
+SA4316,Statistical Area Level 4 (SA4),Sunshine Coast,2023,Males,"1,729","205,136",842.9,539.5,0.89,553,32,215,"8,333",45.1,262,47.4,108.3,81.4
+SA4317,Statistical Area Level 4 (SA4),Toowoomba,2023,Males,682,"82,736",824.3,647.6,1.07,238,34.9,271.4,"4,295",56.4,129,54.2,151.7,79.9
+SA4318,Statistical Area Level 4 (SA4),Townsville,2023,Males,961,"122,600",783.8,708.3,1.17,428,44.5,318.2,"7,122",62,215,50.2,163.9,76.6
+SA4319,Statistical Area Level 4 (SA4),Wide Bay,2023,Males,"1,948","160,050",1217.1,705.3,1.17,756,38.8,342.9,"10,952",77.9,383,50.7,189.2,78.5
+SA4401,Statistical Area Level 4 (SA4),Adelaide - Central and Hills,2023,Males,"1,205","159,477",755.6,529.9,0.88,345,28.6,193.6,"5,442",37.3,157,45.5,88.6,83.1
+SA4402,Statistical Area Level 4 (SA4),Adelaide - North,2023,Males,"1,777","236,641",750.9,671.5,1.11,669,37.6,277,"11,096",50.1,300,44.8,126.6,79.5
+SA4403,Statistical Area Level 4 (SA4),Adelaide - South,2023,Males,"1,622","187,840",863.5,603.3,1,535,33,236.7,"7,406",43.2,229,42.8,104.3,81
+SA4404,Statistical Area Level 4 (SA4),Adelaide - West,2023,Males,"1,126","124,557",904,663.9,1.1,400,35.5,284.2,"6,061",52.8,183,45.8,133,81.1
+SA4405,Statistical Area Level 4 (SA4),Barossa - Yorke - Mid North,2023,Males,716,"60,339",1186.6,696.9,1.15,269,37.6,307.5,"3,536",65.9,139,51.7,167.8,79.6
+SA4406,Statistical Area Level 4 (SA4),South Australia - Outback,2023,Males,439,"44,491",986.7,764.3,1.26,195,44.4,364.9,"3,219",78.4,84,43.1,165.3,77.4
+SA4407,Statistical Area Level 4 (SA4),South Australia - South East,2023,Males,"1,138","102,654",1108.6,618.8,1.02,401,35.2,272.7,"5,451",60.2,165,41.1,122.3,79.5
+SA4501,Statistical Area Level 4 (SA4),Bunbury,2023,Males,795,"100,328",792.4,587.5,0.97,306,38.5,251.3,"5,067",55.2,156,51,139.7,79.4
+SA4502,Statistical Area Level 4 (SA4),Mandurah,2023,Males,547,"57,453",952.1,563.8,0.93,210,38.4,296.1,"3,045",60.3,101,48.1,157.1,79
+SA4503,Statistical Area Level 4 (SA4),Perth - Inner,2023,Males,624,"100,167",623,512.9,0.85,197,31.6,183.6,"2,812",30.2,100,50.8,92.7,81.9
+SA4504,Statistical Area Level 4 (SA4),Perth - North East,2023,Males,916,"152,788",599.5,592.5,0.98,391,42.7,251.3,"6,775",47,221,56.5,143.5,78.1
+SA4505,Statistical Area Level 4 (SA4),Perth - North West,2023,Males,"1,703","309,055",551,499,0.83,614,36.1,189.5,"10,087",34.8,295,48,92.7,80
+SA4506,Statistical Area Level 4 (SA4),Perth - South East,2023,Males,"1,742","291,607",597.4,596.2,0.99,675,38.7,234,"11,415",41.5,316,46.8,110.1,79.7
+SA4507,Statistical Area Level 4 (SA4),Perth - South West,2023,Males,"1,496","241,088",620.5,556.3,0.92,521,34.8,208.5,"8,611",38.2,251,48.2,102.6,80.9
+SA4509,Statistical Area Level 4 (SA4),Western Australia - Wheat Belt,2023,Males,721,"73,705",978.2,650,1.08,305,42.3,326.4,"4,752",71.4,172,56.4,197.4,77.7
+SA4510,Statistical Area Level 4 (SA4),Western Australia - Outback (North),2023,Males,209,"53,498",390.7,812,1.34,168,80.4,381,"3,876",73.3,96,57.1,204.4,60.9
+SA4511,Statistical Area Level 4 (SA4),Western Australia - Outback (South),2023,Males,500,"65,562",762.6,681.9,1.13,269,53.8,368.2,"4,836",78.7,162,60.2,227.1,73.9
+SA4601,Statistical Area Level 4 (SA4),Hobart,2023,Males,"1,002","123,941",808.4,634.9,1.05,360,35.9,260,"5,474",47.8,184,51.1,137.4,79.8
+SA4602,Statistical Area Level 4 (SA4),Launceston and North East,2023,Males,741,"77,793",952.5,624.8,1.03,255,34.4,251.5,"3,214",45.6,134,52.5,137.4,79.7
+SA4603,Statistical Area Level 4 (SA4),South East,2023,Males,197,"22,785",864.6,537.2,0.89,83,42.1,234.7,961,47,38,45.8,108.5,78.1
+SA4604,Statistical Area Level 4 (SA4),West and North West,2023,Males,643,"59,513",1080.4,693.9,1.15,250,38.9,320.6,"3,772",70.5,118,47.2,155.4,78.7
+SA4701,Statistical Area Level 4 (SA4),Darwin,2023,Males,371,"77,111",481.1,611.4,1.01,231,62.3,313.1,"3,789",51,112,48.5,149.7,70.9
+SA4702,Statistical Area Level 4 (SA4),Northern Territory - Outback,2023,Males,296,"50,710",583.7,833.3,1.38,245,82.8,542.7,"6,196",124.8,149,60.8,325.9,59.2
+SA4801,Statistical Area Level 4 (SA4),Australian Capital Territory,2023,Males,"1,248","230,321",541.9,559.9,0.93,428,34.3,198.8,"8,209",37.7,204,47.7,94.1,80.1
+SA4901,Statistical Area Level 4 (SA4),Other Territories,2023,Males,13,"2,624",495.4,,,3,23.1,,23,9.5,1,,,81.5
+SA8888,Statistical Area Level 4 (SA4),Unknown/missing,2023,Males,503,,,,,,,,,,,,,
+SA9999,Statistical Area Level 4 (SA4),Australia (total),2023,Males,"96,180","13,232,590",726.8,604.8,1,"35,955",37.4,249.2,"571,549",46.5,"17,805",49.5,126.2,79.6
+SA4101,Statistical Area Level 4 (SA4),Capital Region,2023,Females,"1,016","120,596",842.5,483.3,1.12,289,28.4,175.1,"4,248",39.2,138,47.8,86.2,84
+SA4102,Statistical Area Level 4 (SA4),Central Coast,2023,Females,"1,702","180,594",942.4,462.1,1.07,355,20.9,149.2,"4,625",29.1,147,41.4,66.5,85.5
+SA4103,Statistical Area Level 4 (SA4),Central West,2023,Females,959,"106,867",897.4,496.1,1.15,227,23.7,171,"2,995",31.3,120,52.9,94.6,85
+SA4104,Statistical Area Level 4 (SA4),Coffs Harbour - Grafton,2023,Females,684,"75,238",909.1,459.4,1.07,188,27.5,189.3,"2,745",41.5,86,45.7,90.6,84.5
+SA4105,Statistical Area Level 4 (SA4),Far West and Orana,2023,Females,574,"58,802",976.2,576.5,1.34,185,32.2,258.9,"2,642",50.1,87,47,123.8,83.1
+SA4106,Statistical Area Level 4 (SA4),Hunter Valley exc Newcastle,2023,Females,"1,131","151,905",744.5,484.1,1.12,329,29.1,178.2,"4,987",36.1,150,45.6,82.3,83.1
+SA4107,Statistical Area Level 4 (SA4),Illawarra,2023,Females,"1,290","162,264",795,450.9,1.05,277,21.5,142.2,"3,819",26.1,109,39.4,55.9,85.8
+SA4108,Statistical Area Level 4 (SA4),Mid North Coast,2023,Females,"1,395","119,132",1171,487.8,1.13,317,22.7,172.3,"4,088",40.2,138,43.5,77.4,84.8
+SA4109,Statistical Area Level 4 (SA4),Murray,2023,Females,608,"63,206",961.9,521.8,1.21,169,27.8,208.2,"2,600",46.4,82,48.5,109.8,83.5
+SA4110,Statistical Area Level 4 (SA4),New England and North West,2023,Females,834,"95,305",875.1,490.5,1.14,211,25.3,176.3,"2,871",33.7,94,44.5,78.7,84
+SA4111,Statistical Area Level 4 (SA4),Newcastle and Lake Macquarie,2023,Females,"1,781","203,103",876.9,486.5,1.13,415,23.3,172,"5,719",31.4,177,42.7,75.8,85.4
+SA4112,Statistical Area Level 4 (SA4),Richmond - Tweed,2023,Females,"1,182","133,108",888,423.6,0.98,270,22.8,143.8,"3,330",28.4,112,41.5,63.6,85.4
+SA4113,Statistical Area Level 4 (SA4),Riverina,2023,Females,733,"82,288",890.8,508.4,1.18,174,23.7,178.8,"2,600",35.1,79,45.4,84.2,85.1
+SA4114,Statistical Area Level 4 (SA4),Southern Highlands and Shoalhaven,2023,Females,854,"82,193",1039,472.8,1.1,186,21.8,162.4,"2,516",35.5,80,43,74.3,85.2
+SA4115,Statistical Area Level 4 (SA4),Sydney - Baulkham Hills and Hawkesbury,2023,Females,717,"140,901",508.9,352.8,0.82,136,19,86.5,"1,922",14.8,65,47.8,43.6,86.8
+SA4116,Statistical Area Level 4 (SA4),Sydney - Blacktown,2023,Females,851,"214,719",396.3,430.1,1,270,31.7,134.7,"4,237",20.7,123,45.6,60.9,81.8
+SA4117,Statistical Area Level 4 (SA4),Sydney - City and Inner South,2023,Females,562,"171,457",327.8,359.7,0.83,199,35.4,144.3,"3,410",20.9,97,48.7,69.4,81.4
+SA4118,Statistical Area Level 4 (SA4),Sydney - Eastern Suburbs,2023,Females,828,"140,247",590.4,378.8,0.88,150,18.1,109.3,"1,992",15.5,57,38,42,87
+SA4119,Statistical Area Level 4 (SA4),Sydney - Inner South West,2023,Females,"1,867","310,646",601,383.1,0.89,397,21.3,118.6,"6,018",21.1,169,42.6,51.1,86.7
+SA4120,Statistical Area Level 4 (SA4),Sydney - Inner West,2023,Females,882,"159,900",551.6,369.3,0.86,198,22.4,117.6,"3,217",21.8,78,39.4,46.5,86
+SA4121,Statistical Area Level 4 (SA4),Sydney - North Sydney and Hornsby,2023,Females,"1,180","225,603",523,304.3,0.71,205,17.4,81.4,"3,066",15,90,43.9,37,88
+SA4122,Statistical Area Level 4 (SA4),Sydney - Northern Beaches,2023,Females,874,"136,101",642.2,345.4,0.8,143,16.4,91.3,"1,993",16.3,56,39.2,36.4,87.5
+SA4123,Statistical Area Level 4 (SA4),Sydney - Outer South West,2023,Females,880,"157,326",559.3,515.7,1.2,297,33.8,179.5,"4,402",29.7,134,45.1,82,81.4
+SA4124,Statistical Area Level 4 (SA4),Sydney - Outer West and Blue Mountains,2023,Females,"1,059","172,348",614.5,473.5,1.1,340,32.1,174.4,"5,165",32.4,162,47.6,84.2,82.4
+SA4125,Statistical Area Level 4 (SA4),Sydney - Parramatta,2023,Females,"1,149","250,549",458.6,397.4,0.92,299,26,123.8,"4,720",20.1,131,43.8,53.6,85
+SA4126,Statistical Area Level 4 (SA4),Sydney - Ryde,2023,Females,605,"107,231",564.2,340.4,0.79,105,17.4,92.7,"1,647",16.7,42,40,39.7,87.6
+SA4127,Statistical Area Level 4 (SA4),Sydney - South West,2023,Females,"1,168","252,323",462.9,411.5,0.95,332,28.4,126.9,"5,139",21.6,155,46.7,60.2,83.8
+SA4128,Statistical Area Level 4 (SA4),Sydney - Sutherland,2023,Females,902,"119,192",756.8,403.7,0.94,162,18,112.9,"2,267",21.2,76,46.9,55.5,87.8
+SA4201,Statistical Area Level 4 (SA4),Ballarat,2023,Females,743,"90,903",817.4,475.5,1.1,192,25.8,167.4,"2,784",34,78,40.6,70.6,85.4
+SA4202,Statistical Area Level 4 (SA4),Bendigo,2023,Females,688,"87,141",789.5,427.6,0.99,152,22.1,130.6,"1,907",24.4,73,48,65.7,85.5
+SA4203,Statistical Area Level 4 (SA4),Geelong,2023,Females,"1,306","174,107",750.1,443.9,1.03,299,22.9,139.9,"4,217",26.8,128,42.8,64.2,85.1
+SA4204,Statistical Area Level 4 (SA4),Hume,2023,Females,845,"94,899",890.4,467.2,1.08,216,25.6,164.6,"2,863",34,93,43.1,73.9,83.9
+SA4205,Statistical Area Level 4 (SA4),Latrobe - Gippsland,2023,Females,"1,405","155,968",900.8,478.8,1.11,419,29.8,186.6,"5,313",38.4,208,49.6,95.7,83.6
+SA4206,Statistical Area Level 4 (SA4),Melbourne - Inner,2023,Females,"1,369","344,699",397.2,367.7,0.85,395,28.9,136.1,"6,856",21.1,189,47.8,64.5,84.1
+SA4207,Statistical Area Level 4 (SA4),Melbourne - Inner East,2023,Females,"1,493","202,553",737.1,359.4,0.83,237,15.9,103.4,"3,433",19,103,43.5,46.5,87.8
+SA4208,Statistical Area Level 4 (SA4),Melbourne - Inner South,2023,Females,"1,643","227,771",721.3,382.9,0.89,277,16.9,104.3,"3,733",18.2,126,45.5,48.6,87.5
+SA4209,Statistical Area Level 4 (SA4),Melbourne - North East,2023,Females,"1,650","286,790",575.3,424.7,0.98,417,25.3,136.8,"6,993",26.3,189,45.3,62.9,85
+SA4210,Statistical Area Level 4 (SA4),Melbourne - North West,2023,Females,"1,141","225,992",504.9,394.3,0.91,285,25,125.1,"4,054",19.3,122,42.8,53.8,84.9
+SA4211,Statistical Area Level 4 (SA4),Melbourne - Outer East,2023,Females,"1,786","268,631",664.9,401.7,0.93,436,24.4,135,"6,518",26.8,193,44.3,63.1,86
+SA4212,Statistical Area Level 4 (SA4),Melbourne - South East,2023,Females,"2,423","455,558",531.9,411.3,0.95,619,25.5,137,"9,795",23.1,291,47,65.2,84.9
+SA4213,Statistical Area Level 4 (SA4),Melbourne - West,2023,Females,"1,930","458,524",420.9,438.5,1.02,677,35.1,157.8,"12,610",29,330,48.7,77.3,81.4
+SA4214,Statistical Area Level 4 (SA4),Mornington Peninsula,2023,Females,"1,366","160,348",851.9,432.4,1,325,23.8,154.2,"4,280",30.3,145,44.6,72,84.8
+SA4215,Statistical Area Level 4 (SA4),North West,2023,Females,781,"77,091",1013.1,508.7,1.18,204,26.1,205.3,"2,900",42.6,92,45.1,96.6,84.9
+SA4216,Statistical Area Level 4 (SA4),Shepparton,2023,Females,619,"69,314",893,468.3,1.09,171,27.6,190.6,"2,310",37.6,84,49.1,95.6,84.2
+SA4217,Statistical Area Level 4 (SA4),Warrnambool and South West,2023,Females,619,"64,760",955.8,470.6,1.09,140,22.6,159.6,"2,010",35.1,64,45.7,76.6,85.9
+SA4301,Statistical Area Level 4 (SA4),Brisbane - East,2023,Females,876,"127,141",689,410.6,0.95,199,22.7,122.7,"2,711",23.6,94,47.2,58.3,85.5
+SA4302,Statistical Area Level 4 (SA4),Brisbane - North,2023,Females,877,"120,020",730.7,452.5,1.05,219,25,174.4,"3,448",31.5,100,45.7,81.7,86.5
+SA4303,Statistical Area Level 4 (SA4),Brisbane - South,2023,Females,"1,033","199,492",517.8,415.8,0.96,227,22,118.3,"3,945",21.2,102,44.9,53.7,86
+SA4304,Statistical Area Level 4 (SA4),Brisbane - West,2023,Females,564,"100,730",559.9,372.6,0.86,104,18.4,96.7,"1,391",15,43,41.3,41.9,86.6
+SA4305,Statistical Area Level 4 (SA4),Brisbane Inner City,2023,Females,595,"159,882",372.1,398.5,0.92,175,29.4,127.3,"3,072",20.2,78,44.6,55.5,83.5
+SA4306,Statistical Area Level 4 (SA4),Cairns,2023,Females,823,"133,310",617.4,452.9,1.05,278,33.8,170.5,"4,271",34.8,146,52.5,90.6,81.9
+SA4307,Statistical Area Level 4 (SA4),Darling Downs - Maranoa,2023,Females,544,"65,936",825,486.8,1.13,147,27,174.8,"2,220",37.4,75,51,94.3,83.3
+SA4308,Statistical Area Level 4 (SA4),Central Queensland,2023,Females,762,"117,823",646.7,516.8,1.2,265,34.8,204.6,"4,731",43.2,130,49.1,99.7,82.4
+SA4309,Statistical Area Level 4 (SA4),Gold Coast,2023,Females,"2,031","349,041",581.9,389.1,0.9,477,23.5,116,"6,542",20.5,207,43.4,51.5,84.6
+SA4310,Statistical Area Level 4 (SA4),Ipswich,2023,Females,992,"198,149",500.6,465.2,1.08,364,36.7,183.2,"6,086",32.7,169,46.4,85.1,81.2
+SA4311,Statistical Area Level 4 (SA4),Logan - Beaudesert,2023,Females,"1,040","198,182",524.8,495.9,1.15,380,36.5,188.2,"6,244",33.5,187,49.2,92.7,80.3
+SA4312,Statistical Area Level 4 (SA4),Mackay - Isaac - Whitsunday,2023,Females,583,"92,200",632.3,536.8,1.24,173,29.7,166,"2,468",28.6,80,46.2,76.5,83.3
+SA4313,Statistical Area Level 4 (SA4),Moreton Bay - North,2023,Females,"1,170","144,887",807.5,480.5,1.11,326,27.9,175.2,"4,927",37.9,151,46.3,85.7,83.6
+SA4314,Statistical Area Level 4 (SA4),Moreton Bay - South,2023,Females,502,"117,331",427.8,408.6,0.95,161,32.1,134.8,"2,879",26.1,79,49.1,67.2,82
+SA4315,Statistical Area Level 4 (SA4),Queensland - Outback,2023,Females,183,"39,538",462.8,499.6,1.16,101,55.2,257.8,"1,958",52,56,55.4,142.9,73.5
+SA4316,Statistical Area Level 4 (SA4),Sunshine Coast,2023,Females,"1,482","219,173",676.2,370.9,0.86,331,22.3,119,"5,311",27.2,143,43.2,56.2,85
+SA4317,Statistical Area Level 4 (SA4),Toowoomba,2023,Females,614,"88,056",697.3,421,0.98,155,25.2,152.6,"2,292",28.9,73,47.1,71.8,83.8
+SA4318,Statistical Area Level 4 (SA4),Townsville,2023,Females,794,"121,198",655.1,497.2,1.15,275,34.6,200.5,"4,506",40.2,124,45.1,92.5,81.7
+SA4319,Statistical Area Level 4 (SA4),Wide Bay,2023,Females,"1,468","164,128",894.4,463.2,1.07,450,30.7,193.6,"6,398",44.5,221,49.1,103.3,81.7
+SA4401,Statistical Area Level 4 (SA4),Adelaide - Central and Hills,2023,Females,"1,305","167,965",776.9,395.4,0.92,217,16.6,108.2,"2,977",19.9,85,39.2,45.3,87.2
+SA4402,Statistical Area Level 4 (SA4),Adelaide - North,2023,Females,"1,626","239,497",678.9,478.5,1.11,489,30.1,187.8,"7,830",35.6,215,44,84.1,82.6
+SA4403,Statistical Area Level 4 (SA4),Adelaide - South,2023,Females,"1,658","199,547",830.9,444.6,1.03,371,22.4,142.7,"4,578",25.6,149,40.2,59.8,86.5
+SA4404,Statistical Area Level 4 (SA4),Adelaide - West,2023,Females,"1,046","130,856",799.4,428.7,0.99,236,22.6,147.7,"2,949",25.1,97,41.1,62.9,86.2
+SA4405,Statistical Area Level 4 (SA4),Barossa - Yorke - Mid North,2023,Females,572,"58,417",979.2,476.9,1.11,136,23.8,158.2,"1,754",34.3,60,44.1,73.4,84.6
+SA4406,Statistical Area Level 4 (SA4),South Australia - Outback,2023,Females,305,"41,271",739,476.7,1.11,96,31.5,187.6,"1,410",37.6,50,52.1,101.2,81.6
+SA4407,Statistical Area Level 4 (SA4),South Australia - South East,2023,Females,909,"98,732",920.7,428.5,0.99,203,22.3,144.9,"2,648",30.9,76,37.4,59.3,85.3
+SA4501,Statistical Area Level 4 (SA4),Bunbury,2023,Females,655,"101,716",643.9,400.2,0.93,169,25.8,128.3,"2,355",25.5,73,43.2,58.6,85.1
+SA4502,Statistical Area Level 4 (SA4),Mandurah,2023,Females,447,"60,885",734.2,367.5,0.85,113,25.3,139.7,"1,526",28.7,50,44.2,68.2,84.2
+SA4503,Statistical Area Level 4 (SA4),Perth - Inner,2023,Females,657,"99,826",658.1,403.9,0.94,122,18.6,116.1,"1,941",21.2,55,45.1,53.9,88
+SA4504,Statistical Area Level 4 (SA4),Perth - North East,2023,Females,714,"150,580",474.2,376.5,0.87,223,31.2,140.4,"3,832",27.4,97,43.5,62,83.2
+SA4505,Statistical Area Level 4 (SA4),Perth - North West,2023,Females,"1,625","314,508",516.7,361.1,0.84,390,24,112.2,"5,990",20.7,170,43.6,49.7,85.4
+SA4506,Statistical Area Level 4 (SA4),Perth - South East,2023,Females,"1,594","286,965",555.5,433.5,1.01,426,26.7,142.8,"6,805",25.5,193,45.3,65.7,84.8
+SA4507,Statistical Area Level 4 (SA4),Perth - South West,2023,Females,"1,334","244,416",545.8,393.6,0.91,327,24.5,122.4,"5,117",22.7,156,47.7,59.1,84.7
+SA4509,Statistical Area Level 4 (SA4),Western Australia - Wheat Belt,2023,Females,525,"71,066",738.7,436.6,1.01,185,35.2,196.8,"2,780",43.6,90,48.6,99.2,82.1
+SA4510,Statistical Area Level 4 (SA4),Western Australia - Outback (North),2023,Females,161,"45,852",351.1,752.7,1.75,112,69.6,316.9,"2,763",61.1,66,58.9,182.7,64.2
+SA4511,Statistical Area Level 4 (SA4),Western Australia - Outback (South),2023,Females,379,"60,162",630,511.6,1.19,160,42.2,235.6,"2,668",47.6,90,56.3,132.6,78.7
+SA4601,Statistical Area Level 4 (SA4),Hobart,2023,Females,"1,081","129,713",833.4,500.6,1.16,271,25.1,170.1,"3,543",30.2,127,46.9,82.7,84
+SA4602,Statistical Area Level 4 (SA4),Launceston and North East,2023,Females,708,"78,101",906.5,496.4,1.15,164,23.2,157.8,"2,265",32.5,78,47.6,74.3,84.6
+SA4603,Statistical Area Level 4 (SA4),South East,2023,Females,125,"21,033",594.3,374.8,0.87,38,30.4,122.8,525,27.6,18,47.4,,83.1
+SA4604,Statistical Area Level 4 (SA4),West and North West,2023,Females,557,"60,277",924.1,502.7,1.17,146,26.2,177.3,"2,172",40.5,69,47.3,87.3,82.7
+SA4701,Statistical Area Level 4 (SA4),Darwin,2023,Females,257,"73,625",349.1,472.2,1.1,118,45.9,172.6,"2,340",33,61,51.7,87.6,76.2
+SA4702,Statistical Area Level 4 (SA4),Northern Territory - Outback,2023,Females,283,"51,083",554,813.9,1.89,222,78.4,504.9,"4,788",95.9,137,61.7,302.2,64.3
+SA4801,Statistical Area Level 4 (SA4),Australian Capital Territory,2023,Females,"1,147","236,245",485.5,398.1,0.92,305,26.6,130.2,"5,678",25.8,137,44.9,59.8,83.8
+SA4901,Statistical Area Level 4 (SA4),Other Territories,2023,Females,12,"2,346",511.5,,,4,33.3,,94,43.5,2,,,83
+SA8888,Statistical Area Level 4 (SA4),Unknown/missing,2023,Females,262,,,,,,,,,,,,,
+SA9999,Statistical Area Level 4 (SA4),Australia (total),2023,Females,"86,951","13,420,187",647.9,430.9,1,"22,513",25.9,147.5,"341,630",27.8,"10,307",45.8,69.2,84.6
+SA4101,Statistical Area Level 4 (SA4),Capital Region,2023,Persons,"2,166","243,095",891,555.8,1.08,727,33.6,219.9,"10,328",47,365,50.2,114.6,81
+SA4102,Statistical Area Level 4 (SA4),Central Coast,2023,Persons,"3,472","351,934",986.5,561.4,1.09,949,27.3,215.3,"13,189",42,441,46.5,103.8,82.9
+SA4103,Statistical Area Level 4 (SA4),Central West,2023,Persons,"2,110","214,853",982.1,618.4,1.21,677,32.1,254.8,"9,230",47.6,346,51.1,135.1,81.7
+SA4104,Statistical Area Level 4 (SA4),Coffs Harbour - Grafton,2023,Persons,"1,513","149,043",1015.1,559.2,1.09,487,32.2,243.6,"6,881",52.1,223,45.8,119.5,81.6
+SA4105,Statistical Area Level 4 (SA4),Far West and Orana,2023,Persons,"1,196","117,899",1014.4,676.4,1.32,469,39.2,333.7,"6,877",64.3,233,49.7,169.2,79.7
+SA4106,Statistical Area Level 4 (SA4),Hunter Valley exc Newcastle,2023,Persons,"2,385","305,115",781.7,560.4,1.09,820,34.4,226,"12,562",45,387,47.2,110,80.4
+SA4107,Statistical Area Level 4 (SA4),Illawarra,2023,Persons,"2,692","321,807",836.5,542.4,1.06,718,26.7,192.1,"10,429",35.6,296,41.2,81.2,83.4
+SA4108,Statistical Area Level 4 (SA4),Mid North Coast,2023,Persons,"2,981","234,288",1272.4,593.4,1.16,883,29.6,254,"11,326",56.3,379,42.9,119.4,82.2
+SA4109,Statistical Area Level 4 (SA4),Murray,2023,Persons,"1,296","126,015",1028.4,607.5,1.18,414,31.9,260.3,"6,343",56.4,201,48.6,137.3,82
+SA4110,Statistical Area Level 4 (SA4),New England and North West,2023,Persons,"1,808","189,331",954.9,602.8,1.18,577,31.9,251.2,"8,775",51.4,289,50.1,129.8,81.4
+SA4111,Statistical Area Level 4 (SA4),Newcastle and Lake Macquarie,2023,Persons,"3,671","401,892",913.4,586.7,1.14,"1,042",28.4,223.5,"14,711",40.4,476,45.7,104.7,82.9
+SA4112,Statistical Area Level 4 (SA4),Richmond - Tweed,2023,Persons,"2,520","260,452",967.5,522.4,1.02,750,29.8,210.4,"9,785",42.2,354,47.2,105.3,83.2
+SA4113,Statistical Area Level 4 (SA4),Riverina,2023,Persons,"1,524","165,231",922.3,602.5,1.17,476,31.2,247,"7,307",48.6,227,47.7,121.3,82
+SA4114,Statistical Area Level 4 (SA4),Southern Highlands and Shoalhaven,2023,Persons,"1,774","162,768",1089.9,538.6,1.05,471,26.6,207.9,"6,213",44,209,44.4,102.4,83.1
+SA4115,Statistical Area Level 4 (SA4),Sydney - Baulkham Hills and Hawkesbury,2023,Persons,"1,455","280,088",519.5,408.2,0.8,357,24.5,117.2,"5,605",21.6,155,43.4,52.5,84
+SA4116,Statistical Area Level 4 (SA4),Sydney - Blacktown,2023,Persons,"1,916","430,537",445,538.1,1.05,781,40.8,201.1,"12,882",31.3,376,48.1,96.3,78.4
+SA4117,Statistical Area Level 4 (SA4),Sydney - City and Inner South,2023,Persons,"1,387","356,188",389.4,467.9,0.91,608,43.8,210.9,"9,824",28.9,301,49.5,102.8,77.4
+SA4118,Statistical Area Level 4 (SA4),Sydney - Eastern Suburbs,2023,Persons,"1,651","273,139",604.5,440.6,0.86,384,23.3,146.6,"5,693",22.6,173,45.1,66.3,85.2
+SA4119,Statistical Area Level 4 (SA4),Sydney - Inner South West,2023,Persons,"3,903","623,475",626,459.5,0.9,"1,077",27.6,164.5,"15,876",27.5,500,46.4,77.5,84.1
+SA4120,Statistical Area Level 4 (SA4),Sydney - Inner West,2023,Persons,"1,736","314,776",551.5,424.3,0.83,481,27.7,150.3,"7,112",24.3,202,42,63,84
+SA4121,Statistical Area Level 4 (SA4),Sydney - North Sydney and Hornsby,2023,Persons,"2,323","437,360",531.1,348.6,0.68,508,21.9,106.9,"7,814",19.5,226,44.5,48.8,85.8
+SA4122,Statistical Area Level 4 (SA4),Sydney - Northern Beaches,2023,Persons,"1,799","267,921",671.5,416.1,0.81,378,21,127.2,"5,780",23.8,161,42.6,55.5,85
+SA4123,Statistical Area Level 4 (SA4),Sydney - Outer South West,2023,Persons,"1,780","311,354",571.7,579.2,1.13,714,40.1,225,"10,986",37.3,357,50,113.6,78.3
+SA4124,Statistical Area Level 4 (SA4),Sydney - Outer West and Blue Mountains,2023,Persons,"2,166","341,179",634.9,546.4,1.07,803,37.1,213.5,"12,221",38.4,369,46,99.5,79.9
+SA4125,Statistical Area Level 4 (SA4),Sydney - Parramatta,2023,Persons,"2,524","514,925",490.2,484.3,0.94,827,32.8,173,"13,332",27.4,382,46.2,79.3,81.5
+SA4126,Statistical Area Level 4 (SA4),Sydney - Ryde,2023,Persons,"1,151","211,059",545.3,387.5,0.76,288,25,132.2,"4,774",24.4,123,42.7,58.3,85.7
+SA4127,Statistical Area Level 4 (SA4),Sydney - South West,2023,Persons,"2,616","502,103",521,508.8,0.99,936,35.8,183.9,"15,364",32.4,441,47.1,87.3,80.5
+SA4128,Statistical Area Level 4 (SA4),Sydney - Sutherland,2023,Persons,"1,774","234,458",756.6,462.9,0.9,388,21.9,141,"5,704",26.8,163,42,60.9,85.3
+SA4201,Statistical Area Level 4 (SA4),Ballarat,2023,Persons,"1,551","178,818",867.4,557.3,1.09,516,33.3,225.6,"6,970",43,239,46.3,106.6,81.4
+SA4202,Statistical Area Level 4 (SA4),Bendigo,2023,Persons,"1,471","170,869",860.9,523.1,1.02,448,30.5,203.9,"6,102",39.6,221,49.3,106.4,82.5
+SA4203,Statistical Area Level 4 (SA4),Geelong,2023,Persons,"2,735","341,934",799.9,537.9,1.05,806,29.5,198.1,"11,847",38,390,48.4,101.6,82.5
+SA4204,Statistical Area Level 4 (SA4),Hume,2023,Persons,"1,782","187,637",949.7,550.3,1.07,524,29.4,207.8,"7,534",44.9,244,46.6,108.1,81.9
+SA4205,Statistical Area Level 4 (SA4),Latrobe - Gippsland,2023,Persons,"3,139","307,807",1019.8,590.1,1.15,"1,084",34.5,254.4,"14,659",53.5,539,49.7,134.1,81
+SA4206,Statistical Area Level 4 (SA4),Melbourne - Inner,2023,Persons,"2,951","675,551",436.8,452.7,0.88,"1,004",34,176.6,"17,776",27.8,508,50.6,87.4,81.9
+SA4207,Statistical Area Level 4 (SA4),Melbourne - Inner East,2023,Persons,"2,803","392,282",714.5,402.8,0.79,530,18.9,123.5,"7,961",22.5,235,44.3,56.5,86.7
+SA4208,Statistical Area Level 4 (SA4),Melbourne - Inner South,2023,Persons,"3,115","440,194",707.6,442.2,0.86,687,22.1,138,"9,979",24.9,330,48,67.9,85.6
+SA4209,Statistical Area Level 4 (SA4),Melbourne - North East,2023,Persons,"3,355","568,840",589.8,490.9,0.96,"1,053",31.4,178.9,"17,392",32.8,488,46.3,84,82.5
+SA4210,Statistical Area Level 4 (SA4),Melbourne - North West,2023,Persons,"2,422","450,822",537.2,482.8,0.94,764,31.5,176.4,"11,809",27.9,358,46.9,83.2,82
+SA4211,Statistical Area Level 4 (SA4),Melbourne - Outer East,2023,Persons,"3,571","527,897",676.5,463.8,0.9,"1,046",29.3,171.1,"16,455",34.1,492,47,84.1,83.3
+SA4212,Statistical Area Level 4 (SA4),Melbourne - South East,2023,Persons,"5,001","915,734",546.1,478.5,0.93,"1,512",30.2,172.3,"25,344",29.6,741,49,84.9,83
+SA4213,Statistical Area Level 4 (SA4),Melbourne - West,2023,Persons,"4,200","922,756",455.2,526.6,1.03,"1,705",40.6,203,"32,193",36.5,858,50.3,101.9,78.9
+SA4214,Statistical Area Level 4 (SA4),Mornington Peninsula,2023,Persons,"2,792","313,069",891.8,510,0.99,807,28.9,208.5,"12,030",43.2,396,49.1,108.2,82.4
+SA4215,Statistical Area Level 4 (SA4),North West,2023,Persons,"1,653","154,802",1067.8,609.5,1.19,547,33.1,276.1,"7,843",56.8,261,47.7,138.2,81.6
+SA4216,Statistical Area Level 4 (SA4),Shepparton,2023,Persons,"1,366","138,184",988.5,574.9,1.12,439,32.1,253.2,"6,449",52.3,222,50.6,138.6,81.7
+SA4217,Statistical Area Level 4 (SA4),Warrnambool and South West,2023,Persons,"1,253","128,245",977,544.1,1.06,361,28.8,206.7,"4,978",43.5,176,48.8,106.5,83
+SA4301,Statistical Area Level 4 (SA4),Brisbane - East,2023,Persons,"1,854","250,205",741,502.5,0.98,520,28,168.8,"7,684",33.6,261,50.2,87.6,83
+SA4302,Statistical Area Level 4 (SA4),Brisbane - North,2023,Persons,"1,704","235,623",723.2,531.6,1.04,500,29.3,207.5,"8,031",36.9,234,46.8,98,83.5
+SA4303,Statistical Area Level 4 (SA4),Brisbane - South,2023,Persons,"2,069","395,697",522.9,486.3,0.95,578,27.9,156.1,"9,875",26.5,302,52.2,81.7,83.4
+SA4304,Statistical Area Level 4 (SA4),Brisbane - West,2023,Persons,"1,099","198,565",553.5,424.3,0.83,245,22.3,119.2,"3,344",18.2,110,44.9,54.7,84.7
+SA4305,Statistical Area Level 4 (SA4),Brisbane Inner City,2023,Persons,"1,192","319,664",372.9,436.4,0.85,439,36.8,158.8,"8,013",26.2,227,51.7,80.8,80.1
+SA4306,Statistical Area Level 4 (SA4),Cairns,2023,Persons,"1,924","265,366",725,556,1.08,790,41.1,242.7,"12,109",49.4,401,50.8,129.2,78.7
+SA4307,Statistical Area Level 4 (SA4),Darling Downs - Maranoa,2023,Persons,"1,216","132,491",917.8,595.7,1.16,432,35.5,263.9,"6,898",57.6,228,52.8,147.4,80
+SA4308,Statistical Area Level 4 (SA4),Central Queensland,2023,Persons,"1,689","238,231",709,604.7,1.18,697,41.3,257.3,"11,208",50.4,363,52.1,135.3,78.8
+SA4309,Statistical Area Level 4 (SA4),Gold Coast,2023,Persons,"4,319","682,488",632.8,465.4,0.91,"1,304",30.2,169.3,"20,485",32.7,626,48,83.2,82.3
+SA4310,Statistical Area Level 4 (SA4),Ipswich,2023,Persons,"2,162","397,323",544.1,547.9,1.07,945,43.7,240.9,"17,451",46.5,472,49.9,120.6,77.6
+SA4311,Statistical Area Level 4 (SA4),Logan - Beaudesert,2023,Persons,"2,278","393,445",579,590.3,1.15,969,42.5,247,"16,543",44.5,504,52,129.2,77.6
+SA4312,Statistical Area Level 4 (SA4),Mackay - Isaac - Whitsunday,2023,Persons,"1,249","189,643",658.6,603.4,1.18,472,37.8,218,"7,106",39.9,250,53,116.6,79.6
+SA4313,Statistical Area Level 4 (SA4),Moreton Bay - North,2023,Persons,"2,514","284,391",884,571.7,1.11,815,32.4,229.2,"12,546",48.9,397,48.7,118.1,81.1
+SA4314,Statistical Area Level 4 (SA4),Moreton Bay - South,2023,Persons,"1,033","232,053",445.2,462.4,0.9,385,37.3,167,"6,583",30,187,48.6,82.1,79.8
+SA4315,Statistical Area Level 4 (SA4),Queensland - Outback,2023,Persons,468,"82,158",569.6,632.2,1.23,243,51.9,292.4,"4,527",57.8,136,56,165.3,73.9
+SA4316,Statistical Area Level 4 (SA4),Sunshine Coast,2023,Persons,"3,211","424,309",756.8,448.6,0.87,884,27.5,164.5,"13,644",35.9,405,45.8,81,82.9
+SA4317,Statistical Area Level 4 (SA4),Toowoomba,2023,Persons,"1,296","170,792",758.8,521.3,1.02,393,30.3,209.4,"6,587",42.3,202,51.4,109.9,81.9
+SA4318,Statistical Area Level 4 (SA4),Townsville,2023,Persons,"1,755","243,798",719.9,599.4,1.17,703,40.1,259.3,"11,628",51.2,339,48.2,128.3,78.5
+SA4319,Statistical Area Level 4 (SA4),Wide Bay,2023,Persons,"3,416","324,178",1053.7,579.5,1.13,"1,206",35.3,266.8,"17,350",61,604,50.1,145.4,79.8
+SA4401,Statistical Area Level 4 (SA4),Adelaide - Central and Hills,2023,Persons,"2,510","327,442",766.5,456.5,0.89,562,22.4,149.1,"8,419",28.5,242,43.1,65.8,85.3
+SA4402,Statistical Area Level 4 (SA4),Adelaide - North,2023,Persons,"3,403","476,138",714.7,565.7,1.1,"1,158",34,230.9,"18,926",42.9,515,44.5,104.9,81
+SA4403,Statistical Area Level 4 (SA4),Adelaide - South,2023,Persons,"3,280","387,387",846.7,517.6,1.01,906,27.6,187.3,"11,984",34.2,378,41.7,81,83.6
+SA4404,Statistical Area Level 4 (SA4),Adelaide - West,2023,Persons,"2,172","255,413",850.4,533.9,1.04,636,29.3,213.2,"9,010",38.8,280,44,96.6,83.8
+SA4405,Statistical Area Level 4 (SA4),Barossa - Yorke - Mid North,2023,Persons,"1,288","118,756",1084.6,585.8,1.14,405,31.4,234.3,"5,290",50.4,199,49.1,121.5,81.7
+SA4406,Statistical Area Level 4 (SA4),South Australia - Outback,2023,Persons,744,"85,762",867.5,620.5,1.21,291,39.1,279.8,"4,629",58.9,134,46,134.4,79.6
+SA4407,Statistical Area Level 4 (SA4),South Australia - South East,2023,Persons,"2,047","201,386",1016.5,524.1,1.02,604,29.5,209.7,"8,099",45.9,241,39.9,91.4,82.4
+SA4501,Statistical Area Level 4 (SA4),Bunbury,2023,Persons,"1,450","202,044",717.7,490.8,0.96,475,32.8,188.9,"7,422",40.3,229,48.2,98.6,81.9
+SA4502,Statistical Area Level 4 (SA4),Mandurah,2023,Persons,994,"118,338",840,460.8,0.9,323,32.5,214.5,"4,571",44.1,151,46.7,110.6,81.7
+SA4503,Statistical Area Level 4 (SA4),Perth - Inner,2023,Persons,"1,281","199,993",640.5,457.1,0.89,319,24.9,149.4,"4,753",25.7,155,48.6,73.1,85.1
+SA4504,Statistical Area Level 4 (SA4),Perth - North East,2023,Persons,"1,630","303,368",537.3,477.4,0.93,614,37.7,195,"10,607",37.3,318,51.8,102.3,80.3
+SA4505,Statistical Area Level 4 (SA4),Perth - North West,2023,Persons,"3,328","623,563",533.7,425.1,0.83,"1,004",30.2,149.6,"16,077",27.7,465,46.3,70.7,82.7
+SA4506,Statistical Area Level 4 (SA4),Perth - South East,2023,Persons,"3,336","578,572",576.6,509.9,0.99,"1,101",33,187.7,"18,220",33.6,509,46.2,87.6,82.3
+SA4507,Statistical Area Level 4 (SA4),Perth - South West,2023,Persons,"2,830","485,504",582.9,468.4,0.91,848,30,164,"13,728",30.4,407,48,80.4,82.8
+SA4509,Statistical Area Level 4 (SA4),Western Australia - Wheat Belt,2023,Persons,"1,246","144,771",860.7,543.2,1.06,490,39.3,262.7,"7,532",57.8,262,53.5,149.3,79.4
+SA4510,Statistical Area Level 4 (SA4),Western Australia - Outback (North),2023,Persons,370,"99,350",372.4,773.7,1.51,280,75.7,352.5,"6,639",67.7,162,57.9,194.3,61.8
+SA4511,Statistical Area Level 4 (SA4),Western Australia - Outback (South),2023,Persons,879,"125,724",699.2,601.4,1.17,429,48.8,305.1,"7,504",63.9,252,58.7,182,75.6
+SA4601,Statistical Area Level 4 (SA4),Hobart,2023,Persons,"2,083","253,654",821.2,562.2,1.1,631,30.3,213.2,"9,017",38.9,311,49.3,109,82.2
+SA4602,Statistical Area Level 4 (SA4),Launceston and North East,2023,Persons,"1,449","155,894",929.5,559.5,1.09,419,28.9,203.7,"5,479",39.1,212,50.6,105.1,82.1
+SA4603,Statistical Area Level 4 (SA4),South East,2023,Persons,322,"43,818",734.9,461.7,0.9,121,37.6,181.1,"1,486",37.6,56,46.3,85,79.1
+SA4604,Statistical Area Level 4 (SA4),West and North West,2023,Persons,"1,200","119,790",1001.8,595.9,1.16,396,33,247.9,"5,944",55.5,187,47.2,120.6,80.8
+SA4701,Statistical Area Level 4 (SA4),Darwin,2023,Persons,628,"150,736",416.6,546.4,1.07,349,55.6,245.5,"6,129",42.2,173,49.6,119.9,73.2
+SA4702,Statistical Area Level 4 (SA4),Northern Territory - Outback,2023,Persons,579,"101,793",568.8,821.9,1.6,467,80.7,522.5,"10,984",110.3,286,61.2,313.6,60.8
+SA4801,Statistical Area Level 4 (SA4),Australian Capital Territory,2023,Persons,"2,395","466,566",513.3,471.3,0.92,733,30.6,163,"13,887",31.7,341,46.5,76.1,81.6
+SA4901,Statistical Area Level 4 (SA4),Other Territories,2023,Persons,25,"4,970",503,365.9,0.71,7,28,,117,25.5,3,,,82.5
+SA8888,Statistical Area Level 4 (SA4),Unknown/missing,2023,Persons,765,,,,,,,,,,,,,
+SA9999,Statistical Area Level 4 (SA4),Australia (total),2023,Persons,"183,131","26,652,777",687.1,512.7,1,"58,468",31.9,197.2,"913,179",37.2,"28,112",48.1,97.1,82
+SA310102,Statistical Area Level 3 (SA3),Queanbeyan,2023,Males,180,"34,070",528.3,583.2,0.96,70,38.9,190.3,"1,232",38,42,60,118.6,78.6
+SA310103,Statistical Area Level 3 (SA3),Snowy Mountains,2023,Males,78,"10,961",711.6,495.3,0.82,30,38.5,208.7,403,40.2,20,66.7,141.7,78
+SA310104,Statistical Area Level 3 (SA3),South Coast,2023,Males,468,"38,426",1217.9,629.8,1.04,177,37.8,305.9,"2,295",68.9,95,53.7,165.7,78.9
+SA310105,Statistical Area Level 3 (SA3),Goulburn - Mulwaree,2023,Males,224,"19,926",1124.2,760.1,1.26,91,40.6,345.2,"1,253",69.2,39,42.9,150.4,78.6
+SA310106,Statistical Area Level 3 (SA3),Young - Yass,2023,Males,200,"19,116",1046.2,714.7,1.18,70,35,269.8,897,51.5,31,44.3,128.3,80.5
+SA310201,Statistical Area Level 3 (SA3),Gosford,2023,Males,840,"87,709",957.7,601.1,0.99,271,32.3,249.4,"3,679",46.7,132,48.7,124.6,81
+SA310202,Statistical Area Level 3 (SA3),Wyong,2023,Males,930,"83,631",1112,766.3,1.27,323,34.7,330.9,"4,885",64.4,162,50.2,167.5,80.1
+SA310301,Statistical Area Level 3 (SA3),Bathurst,2023,Males,227,"25,561",888.1,698.5,1.16,97,42.7,341.8,"1,554",66,43,44.3,155.9,77.6
+SA310302,Statistical Area Level 3 (SA3),Lachlan Valley,2023,Males,367,"27,315",1343.6,821.6,1.36,120,32.7,337.6,"1,784",72.8,71,59.2,215.1,80.3
+SA310303,Statistical Area Level 3 (SA3),Lithgow - Mudgee,2023,Males,261,"24,338",1072.4,706.2,1.17,112,42.9,323.1,"1,228",55.8,55,49.1,161,77.5
+SA310304,Statistical Area Level 3 (SA3),Orange,2023,Males,296,"30,772",961.9,744.6,1.23,121,40.9,347.1,"1,669",58.9,57,47.1,164.8,78.9
+SA310401,Statistical Area Level 3 (SA3),Clarence Valley,2023,Males,369,"27,771",1328.7,727.9,1.2,134,36.3,327.8,"1,675",68.4,62,46.3,163.5,80.4
+SA310402,Statistical Area Level 3 (SA3),Coffs Harbour,2023,Males,460,"46,034",999.3,629.5,1.04,165,35.9,281.4,"2,461",59.4,75,45.5,140,79.6
+SA310501,Statistical Area Level 3 (SA3),Bourke - Cobar - Coonamble,2023,Males,167,"11,160",1496.4,1152.2,1.91,86,51.5,658.6,"1,419",138.5,51,59.3,407.2,74.5
+SA310502,Statistical Area Level 3 (SA3),Broken Hill and Far West,2023,Males,102,"9,851",1035.4,706.1,1.17,45,44.1,344.2,594,66.3,22,48.9,166.7,76
+SA310503,Statistical Area Level 3 (SA3),Dubbo,2023,Males,353,"38,086",926.8,691.9,1.14,153,43.3,349.9,"2,222",63.6,73,47.7,168.9,77.3
+SA310601,Statistical Area Level 3 (SA3),Lower Hunter,2023,Males,424,"52,557",806.7,740.1,1.22,177,41.7,299.1,"2,873",58.4,91,51.4,159.9,77.5
+SA310602,Statistical Area Level 3 (SA3),Maitland,2023,Males,287,"45,679",628.3,601.8,1,126,43.9,273.3,"2,061",48.1,65,51.6,139.1,77.1
+SA310603,Statistical Area Level 3 (SA3),Port Stephens,2023,Males,420,"39,042",1075.8,592.2,0.98,137,32.6,252.1,"1,808",52.9,61,44.5,126.9,80.4
+SA310604,Statistical Area Level 3 (SA3),Upper Hunter,2023,Males,123,"15,932",772,642,1.06,51,41.5,275.2,833,56.3,20,39.2,117.4,79.6
+SA310701,Statistical Area Level 3 (SA3),Dapto - Port Kembla,2023,Males,410,"40,494",1012.5,743.9,1.23,128,31.2,284.6,"1,842",49.6,50,39.1,115.4,80.7
+SA310702,Statistical Area Level 3 (SA3),Illawarra Catchment Reserve,2023,Males,0,1,,,,,,,,,,,,
+SA310703,Statistical Area Level 3 (SA3),Kiama - Shellharbour,2023,Males,402,"50,476",796.4,561.8,0.93,132,32.8,217.5,"2,015",43.7,52,39.4,89.8,80.9
+SA310704,Statistical Area Level 3 (SA3),Wollongong,2023,Males,590,"68,572",860.4,657.4,1.09,181,30.7,245.3,"2,753",43.5,85,47,118.3,81.4
+SA310801,Statistical Area Level 3 (SA3),Great Lakes,2023,Males,272,"16,405",1658,778.3,1.29,81,29.8,372.2,"1,149",83.6,37,45.7,211.1,80.3
+SA310802,Statistical Area Level 3 (SA3),Kempsey - Nambucca,2023,Males,362,"26,225",1380.4,780.4,1.29,151,41.7,396,"1,928",83.4,63,41.7,189,78.2
+SA310803,Statistical Area Level 3 (SA3),Lord Howe Island,2023,Males,3,199,1507.5,,,1,,,13,69.5,1,,,
+SA310804,Statistical Area Level 3 (SA3),Port Macquarie,2023,Males,563,"43,486",1294.7,650.8,1.08,187,33.2,310.8,"2,357",62.9,81,43.3,141.6,80.8
+SA310805,Statistical Area Level 3 (SA3),Taree - Gloucester,2023,Males,386,"28,841",1338.4,696,1.15,146,37.8,330.7,"1,791",71.4,59,40.4,157.5,79.1
+SA310901,Statistical Area Level 3 (SA3),Albury,2023,Males,323,"33,839",954.5,728.1,1.2,124,38.4,321,"2,039",65.7,58,46.8,160.5,79.4
+SA310902,Statistical Area Level 3 (SA3),Lower Murray,2023,Males,82,"6,874",1192.9,844.3,1.4,35,42.7,443,655,105.2,16,45.7,,76.3
+SA310903,Statistical Area Level 3 (SA3),Upper Murray exc. Albury,2023,Males,283,"22,096",1280.8,631.9,1.05,86,30.4,258.1,"1,049",54.8,45,52.3,143.1,81.9
+SA311001,Statistical Area Level 3 (SA3),Armidale,2023,Males,207,"18,511",1118.3,824.1,1.36,77,37.2,351.1,"1,209",71.6,40,51.9,183.1,80.5
+SA311002,Statistical Area Level 3 (SA3),Inverell - Tenterfield,2023,Males,252,"19,497",1292.5,747.1,1.24,94,37.3,361.1,"1,357",79,57,60.6,232.9,79
+SA311003,Statistical Area Level 3 (SA3),Moree - Narrabri,2023,Males,124,"12,652",980.1,765.1,1.27,48,38.7,326.1,875,74.9,25,52.1,177.5,77.5
+SA311004,Statistical Area Level 3 (SA3),Tamworth - Gunnedah,2023,Males,391,"43,366",901.6,662.1,1.1,147,37.6,301.8,"2,463",62.1,73,49.7,158.1,78.8
+SA311101,Statistical Area Level 3 (SA3),Lake Macquarie - East,2023,Males,583,"63,224",922.1,628.3,1.04,201,34.5,262.3,"2,565",44.7,95,47.3,124.6,80.2
+SA311102,Statistical Area Level 3 (SA3),Lake Macquarie - West,2023,Males,475,"43,634",1088.6,709.5,1.17,156,32.8,291.6,"2,387",60.6,78,50,151.2,80.5
+SA311103,Statistical Area Level 3 (SA3),Newcastle,2023,Males,832,"91,931",905,770,1.27,270,32.5,282.1,"4,040",47.2,126,46.7,134.5,81.2
+SA311201,Statistical Area Level 3 (SA3),Richmond Valley - Coastal,2023,Males,423,"43,743",967,619.7,1.03,156,36.9,260.1,"2,049",51.8,77,49.4,138.7,80.2
+SA311202,Statistical Area Level 3 (SA3),Richmond Valley - Hinterland,2023,Males,339,"35,503",954.8,645.8,1.07,137,40.4,290.6,"1,900",58.6,79,57.7,178,79.1
+SA311203,Statistical Area Level 3 (SA3),Tweed Valley,2023,Males,576,"48,098",1197.6,644.7,1.07,187,32.5,295.6,"2,506",59.3,86,46,140.1,82
+SA311301,Statistical Area Level 3 (SA3),Griffith - Murrumbidgee (West),2023,Males,249,"25,138",990.5,777.7,1.29,105,42.2,376.4,"2,004",86.1,52,49.5,189.9,78.4
+SA311302,Statistical Area Level 3 (SA3),Tumut - Tumbarumba,2023,Males,90,"7,561",1190.3,684.7,1.13,26,28.9,228.9,308,45.5,12,46.2,,81.5
+SA311303,Statistical Area Level 3 (SA3),Wagga Wagga,2023,Males,452,"50,244",899.6,663.9,1.1,171,37.8,297.5,"2,395",51.9,84,49.1,149.1,79.1
+SA311401,Statistical Area Level 3 (SA3),Shoalhaven,2023,Males,649,"54,748",1185.4,635.9,1.05,205,31.6,262.3,"2,599",54.2,96,46.8,137.7,81.1
+SA311402,Statistical Area Level 3 (SA3),Southern Highlands,2023,Males,271,"25,827",1049.3,553.8,0.92,80,29.5,242.8,"1,098",49.1,33,41.3,118.2,81.1
+SA311501,Statistical Area Level 3 (SA3),Baulkham Hills,2023,Males,462,"77,788",593.9,473.2,0.78,114,24.7,132.6,"1,743",24.2,40,35.1,48.8,82.3
+SA311502,Statistical Area Level 3 (SA3),Dural - Wisemans Ferry,2023,Males,95,"14,258",666.3,422.4,0.7,19,20,,348,27.1,7,36.8,,84.3
+SA311503,Statistical Area Level 3 (SA3),Hawkesbury,2023,Males,70,"12,929",541.4,469.9,0.78,33,47.1,200.5,466,38.7,14,42.4,,76
+SA311504,Statistical Area Level 3 (SA3),Rouse Hill - McGraths Hill,2023,Males,111,"34,212",324.4,468.9,0.78,55,49.5,195.4,"1,126",34.1,29,52.7,102.3,76.2
+SA311601,Statistical Area Level 3 (SA3),Blacktown,2023,Males,455,"73,656",617.7,657.4,1.09,205,45.1,285.9,"3,705",53,87,42.4,121.4,76.8
+SA311602,Statistical Area Level 3 (SA3),Blacktown - North,2023,Males,216,"84,137",256.7,510.8,0.85,111,51.4,191.2,"1,925",23.5,58,52.3,99.3,74.3
+SA311603,Statistical Area Level 3 (SA3),Mount Druitt,2023,Males,394,"58,025",679,839.2,1.39,195,49.5,355.5,"3,015",54.3,108,55.4,197.2,75.3
+SA311701,Statistical Area Level 3 (SA3),Botany,2023,Males,165,"31,366",526,603.6,1,60,36.4,228.4,964,32.3,22,36.7,80.3,78.5
+SA311702,Statistical Area Level 3 (SA3),Marrickville - Sydenham - Petersham,2023,Males,175,"28,222",620.1,645.1,1.07,71,40.6,273.7,"1,065",39.8,37,52.1,138,77.9
+SA311703,Statistical Area Level 3 (SA3),Sydney Inner City,2023,Males,485,"125,143",387.6,543.4,0.9,278,57.3,286,"4,385",36.3,145,52.2,148.5,71.6
+SA311801,Statistical Area Level 3 (SA3),Eastern Suburbs - North,2023,Males,350,"63,111",554.6,434.2,0.72,87,24.9,141.1,"1,089",18.6,41,47.1,67.1,83.8
+SA311802,Statistical Area Level 3 (SA3),Eastern Suburbs - South,2023,Males,473,"69,781",677.8,590.1,0.98,147,31.1,228.5,"2,612",40,75,51,115.4,82.6
+SA311901,Statistical Area Level 3 (SA3),Bankstown,2023,Males,624,"94,634",659.4,585,0.97,241,38.6,248.2,"3,418",38.5,127,52.7,131.5,80.2
+SA311902,Statistical Area Level 3 (SA3),Canterbury,2023,Males,431,"74,539",578.2,518,0.86,151,35,214.7,"1,932",27.7,72,47.7,103.7,80.1
+SA311903,Statistical Area Level 3 (SA3),Hurstville,2023,Males,458,"67,535",678.2,513.8,0.85,136,29.7,182.2,"2,087",33.4,66,48.5,91.8,83.6
+SA311904,Statistical Area Level 3 (SA3),Kogarah - Rockdale,2023,Males,523,"76,121",687.1,562.5,0.93,152,29.1,203.7,"2,421",34.2,66,43.4,89.4,83.2
+SA312001,Statistical Area Level 3 (SA3),Canada Bay,2023,Males,260,"43,035",604.2,471,0.78,77,29.6,168.7,"1,105",27.8,33,42.9,73.4,82.6
+SA312002,Statistical Area Level 3 (SA3),Leichhardt,2023,Males,140,"27,647",506.4,505.3,0.84,56,40,190.8,760,29.1,29,51.8,97.9,80
+SA312003,Statistical Area Level 3 (SA3),Strathfield - Burwood - Ashfield,2023,Males,454,"84,194",539.2,508.4,0.84,150,33,203.6,"2,030",25.6,62,41.3,84,82.6
+SA312101,Statistical Area Level 3 (SA3),Chatswood - Lane Cove,2023,Males,269,"59,378",453,400.7,0.66,74,27.5,127.3,"1,289",23.2,33,44.6,57.6,83.4
+SA312102,Statistical Area Level 3 (SA3),Hornsby,2023,Males,278,"44,359",626.7,541.7,0.9,79,28.4,168.6,"1,112",26.9,33,41.8,71,83.4
+SA312103,Statistical Area Level 3 (SA3),Ku-ring-gai,2023,Males,377,"61,694",611.1,379,0.63,94,24.9,141.3,"1,421",25.4,45,47.9,69.8,85.5
+SA312104,Statistical Area Level 3 (SA3),North Sydney - Mosman,2023,Males,219,"46,326",472.7,339,0.56,56,25.6,112.9,926,21.9,25,44.6,52.2,82.8
+SA312201,Statistical Area Level 3 (SA3),Manly,2023,Males,97,"21,744",446.1,360.8,0.6,35,36.1,151,586,29,17,48.6,,81.4
+SA312202,Statistical Area Level 3 (SA3),Pittwater,2023,Males,239,"31,464",759.6,453.8,0.75,53,22.2,131.9,738,26.2,22,41.5,58.7,81.9
+SA312203,Statistical Area Level 3 (SA3),Warringah,2023,Males,589,"78,612",749.2,553.2,0.92,147,25,184.1,"2,463",34,66,44.9,83.8,83.7
+SA312301,Statistical Area Level 3 (SA3),Camden,2023,Males,199,"37,369",532.5,670.7,1.11,71,35.7,210.3,959,26.8,35,49.3,103.9,79.6
+SA312302,Statistical Area Level 3 (SA3),Campbelltown (NSW),2023,Males,541,"92,194",586.8,667.8,1.1,270,49.9,295.6,"4,430",50.4,148,54.8,161.7,75
+SA312303,Statistical Area Level 3 (SA3),Wollondilly,2023,Males,160,"24,465",654,580.6,0.96,76,47.5,291.4,"1,195",52.3,40,52.6,160.3,75.8
+SA312401,Statistical Area Level 3 (SA3),Blue Mountains,2023,Males,293,"38,160",767.8,535.8,0.89,95,32.4,183.3,"1,300",37.4,34,35.8,75,80.4
+SA312402,Statistical Area Level 3 (SA3),Blue Mountains - South,2023,Males,0,4,,,,,,,,,,,,
+SA312403,Statistical Area Level 3 (SA3),Penrith,2023,Males,488,"82,030",594.9,674.4,1.12,216,44.3,280.1,"3,410",43.7,105,48.6,134.9,77.1
+SA312404,Statistical Area Level 3 (SA3),Richmond - Windsor,2023,Males,165,"19,427",849.3,719.3,1.19,58,35.2,275.6,857,47.3,20,34.5,102.6,80.5
+SA312405,Statistical Area Level 3 (SA3),St Marys,2023,Males,161,"29,210",551.2,627.1,1.04,94,58.4,309.3,"1,489",53.4,48,51.1,159,72.7
+SA312501,Statistical Area Level 3 (SA3),Auburn,2023,Males,207,"58,322",354.9,491.7,0.81,86,41.5,178.9,"1,524",27.1,44,51.2,88.5,77.8
+SA312502,Statistical Area Level 3 (SA3),Carlingford,2023,Males,188,"38,393",489.7,416,0.69,64,34,158.5,821,22.9,33,51.6,83.3,81.4
+SA312503,Statistical Area Level 3 (SA3),Merrylands - Guildford,2023,Males,534,"86,380",618.2,648.7,1.07,212,39.7,262.5,"3,623",44.3,92,43.4,114.2,78
+SA312504,Statistical Area Level 3 (SA3),Parramatta,2023,Males,446,"81,281",548.7,650.1,1.08,166,37.2,252.2,"2,644",34.1,82,49.4,121.1,79.8
+SA312601,Statistical Area Level 3 (SA3),Pennant Hills - Epping,2023,Males,121,"27,615",438.2,350.9,0.58,35,28.9,115.1,444,17.3,15,42.9,,82.6
+SA312602,Statistical Area Level 3 (SA3),Ryde - Hunters Hill,2023,Males,425,"76,213",557.6,473.8,0.78,148,34.8,197.9,"2,683",37.6,66,44.6,89,82.8
+SA312701,Statistical Area Level 3 (SA3),Bringelly - Green Valley,2023,Males,326,"80,670",404.1,571.1,0.94,153,46.9,222.4,"3,112",40,74,48.4,106.2,75.8
+SA312702,Statistical Area Level 3 (SA3),Fairfield,2023,Males,708,"97,037",729.6,609.6,1.01,291,41.1,259.6,"4,067",44.9,129,44.3,115.4,78.2
+SA312703,Statistical Area Level 3 (SA3),Liverpool,2023,Males,414,"72,073",574.4,681.4,1.13,160,38.6,241.1,"3,046",44.3,83,51.9,123.7,78.8
+SA312801,Statistical Area Level 3 (SA3),Cronulla - Miranda - Caringbah,2023,Males,499,"59,546",838,545,0.9,120,24,173.2,"1,843",34,40,33.3,58.3,83.1
+SA312802,Statistical Area Level 3 (SA3),Sutherland - Menai - Heathcote,2023,Males,373,"55,720",669.4,517.3,0.86,106,28.4,168.5,"1,594",30.9,47,44.3,76.1,82.2
+SA320101,Statistical Area Level 3 (SA3),Ballarat,2023,Males,478,"58,496",817.1,648.6,1.07,182,38.1,281.3,"2,518",46.6,86,47.3,133.4,78.7
+SA320102,Statistical Area Level 3 (SA3),Creswick - Daylesford - Ballan,2023,Males,136,"15,560",874,537.8,0.89,54,39.7,211.4,560,39.9,27,50,117.6,78
+SA320103,Statistical Area Level 3 (SA3),Maryborough - Pyrenees,2023,Males,194,"13,859",1399.8,755.2,1.25,88,45.4,407.7,"1,108",91.4,48,54.5,225.8,76.5
+SA320201,Statistical Area Level 3 (SA3),Bendigo,2023,Males,472,"50,493",934.8,676.8,1.12,168,35.6,291.7,"2,378",51.4,88,52.4,157.3,80.2
+SA320202,Statistical Area Level 3 (SA3),Heathcote - Castlemaine - Kyneton,2023,Males,251,"26,870",934.1,578.2,0.96,105,41.8,288,"1,516",63.1,47,44.8,144.6,77.7
+SA320203,Statistical Area Level 3 (SA3),Loddon - Elmore,2023,Males,60,"6,365",942.7,538.1,0.89,23,38.3,237.8,301,53.2,13,56.5,,77.3
+SA320301,Statistical Area Level 3 (SA3),Barwon - West,2023,Males,57,"11,976",476,433,0.72,30,52.6,207,424,37.5,15,50,,73.5
+SA320302,Statistical Area Level 3 (SA3),Geelong,2023,Males,962,"107,655",893.6,724.2,1.2,357,37.1,315.4,"5,728",57.4,187,52.4,169.9,79.5
+SA320303,Statistical Area Level 3 (SA3),Surf Coast - Bellarine Peninsula,2023,Males,410,"48,196",850.7,545.8,0.9,120,29.3,175.7,"1,478",34,60,50,99.8,81
+SA320401,Statistical Area Level 3 (SA3),Upper Goulburn Valley,2023,Males,349,"30,766",1134.4,692.1,1.15,117,33.5,265.6,"1,557",56.6,49,41.9,131.1,80

@@ -1,0 +1,76 @@
+name: publish
+
+# Tag-driven release to PyPI via Trusted Publishing (OIDC).
+# No long-lived API token in the repo — PyPI verifies the GitHub OIDC claim
+# against the trusted publisher registered under
+# https://pypi.org/manage/project/aihw-mcp/settings/publishing/
+# (PyPI project: aihw-mcp, owner: Bigred97, repo: aihw-mcp, workflow: publish.yml,
+# environment: pypi).
+#
+# Release flow:
+#   1. Bump version in pyproject.toml + CHANGELOG.md, commit, push to main.
+#   2. Tag the commit: `git tag -a vX.Y.Z -m "..."` then `git push origin vX.Y.Z`.
+#   3. This workflow fires, verifies tag == pyproject version, builds, publishes.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Verify tag matches pyproject version
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          PROJ_VERSION=$(uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          if [ "$TAG_VERSION" != "$PROJ_VERSION" ]; then
+            echo "::error::tag v$TAG_VERSION does not match pyproject version $PROJ_VERSION"
+            exit 1
+          fi
+          echo "OK — tag v$TAG_VERSION matches pyproject version"
+      - name: Build wheel + sdist
+        run: uv build
+      - name: Smoke-test the built wheel
+        run: |
+          uv run --isolated --with ./dist/*.whl python -c "
+          import aihw_mcp.server as s
+          ids = s.list_curated()
+          assert len(ids) >= 6, f'expected >=6 curated, got {len(ids)}'
+          print(f'OK ({len(ids)} curated datasets)')
+          "
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/aihw-mcp
+    permissions:
+      id-token: write   # required for PyPI Trusted Publishing (OIDC)
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

@@ -88,3 +88,39 @@ Use the bug-report issue template. Bugs filed via the template get triaged withi
 ## Code of conduct
 
 This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). Be kind.
+
+## Releasing (maintainers)
+
+Releases publish to PyPI via [Trusted Publishing](https://docs.pypi.org/trusted-publishers/) — no long-lived API token in the repo. PyPI verifies the GitHub OIDC claim against the publisher registered at [pypi.org/manage/project/aihw-mcp/settings/publishing/](https://pypi.org/manage/project/aihw-mcp/settings/publishing/) (workflow `publish.yml`, environment `pypi`).
+
+To cut a release:
+
+```bash
+# 1. Bump version
+#    - pyproject.toml: version = "X.Y.Z"
+#    - CHANGELOG.md: new section under [Unreleased]
+git add pyproject.toml CHANGELOG.md
+git commit -m "Bump to X.Y.Z"
+git push origin main
+
+# 2. Tag and push
+git tag -a vX.Y.Z -m "vX.Y.Z — short summary"
+git push origin vX.Y.Z
+
+# 3. Watch .github/workflows/publish.yml run.
+#    It will:
+#    - Verify the tag matches pyproject version
+#    - uv build
+#    - Smoke-test the wheel
+#    - Publish to PyPI via OIDC
+```
+
+If the publish workflow fails because the tag doesn't match `pyproject.toml`'s version, delete the tag locally + remotely, fix the version, and re-tag:
+
+```bash
+git tag -d vX.Y.Z
+git push origin :refs/tags/vX.Y.Z
+# edit pyproject.toml + CHANGELOG.md, commit
+git tag -a vX.Y.Z -m "..."
+git push origin vX.Y.Z
+```

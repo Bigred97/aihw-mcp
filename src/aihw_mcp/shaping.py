@@ -542,5 +542,6 @@ def build_response(
         records=out_records,
         csv=csv_text,
         retrieved_at=datetime.now(timezone.utc),
+        source_url=cd.source_url,
         aihw_url=cd.source_url,
     )

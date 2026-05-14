@@ -241,6 +241,31 @@ def test_response_carries_metadata(grim_csv):
     assert resp.server_version
 
 
+def test_data_response_has_source_url_canonical_field(grim_csv):
+    """Wave-2 interop: both source_url and aihw_url are populated and equal."""
+    cd = curated.get("GRIM_DEATHS")
+    df = _parse_csv(cd, grim_csv)
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={}, measures="deaths",
+        start_period=None, end_period=None, fmt="records", user_query={},
+    )
+    assert resp.source_url is not None
+    assert resp.source_url == resp.aihw_url
+    assert resp.source_url == cd.source_url
+
+
+def test_data_response_source_url_present_on_csv_format(grim_csv):
+    """source_url is populated regardless of output format."""
+    cd = curated.get("GRIM_DEATHS")
+    df = _parse_csv(cd, grim_csv)
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={}, measures="deaths",
+        start_period=None, end_period=None, fmt="csv", user_query={},
+    )
+    assert resp.source_url == resp.aihw_url
+    assert resp.source_url.startswith("https://")
+
+
 def test_shape_wide_skips_nan_value_observations(grim_csv):
     """When age_standardised_rate is blank (e.g. Total age band), that
     measure observation should be omitted, not returned with value=None."""

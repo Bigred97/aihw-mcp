@@ -86,7 +86,19 @@ class DataResponse(BaseModel):
     source: str = "Australian Institute of Health and Welfare"
     attribution: str = _AIHW_ATTRIBUTION
     retrieved_at: datetime
-    aihw_url: str
+    source_url: str = Field(
+        description=(
+            "Canonical click-through URL. Same value as aihw_url; both populated "
+            "for backward compat."
+        )
+    )
+    aihw_url: str = Field(
+        description=(
+            "Click-through URL for this dataset's source page. aihw-mcp legacy "
+            "name — prefer source_url (canonical) for new code. Both fields are "
+            "populated identically."
+        )
+    )
     # Echoed in every response so testers can verify which wheel served the call;
     # uvx caches per-version and stale caches cause real "is this fixed?" confusion.
     server_version: str = Field(default_factory=lambda: _get_server_version())

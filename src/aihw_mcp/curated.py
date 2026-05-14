@@ -252,10 +252,12 @@ def translate_filter_value(
     valid = sorted(dv.values.keys())
     suggestion = _suggest(user_value, valid)
     suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
+    shown = valid[:10]
+    rest = f" ({len(valid)} total)" if len(valid) > len(shown) else ""
     raise ValueError(
         f"Unknown value {user_value!r} for filter {dim_key!r} on dataset {cd.id!r}. "
-        f"{suggest_msg}Try one of: {', '.join(valid[:15])}"
-        + ("..." if len(valid) > 15 else "")
+        f"{suggest_msg}Try one of: {', '.join(shown)}{rest}. "
+        f"Try describe_dataset({cd.id!r}) for the full list."
     )
 
 
@@ -336,8 +338,13 @@ def resolve_measure_keys(
     for v in items:
         v_str = v.strip()
         if not v_str:
+            valid_sorted = sorted(valid_keys)
+            shown = valid_sorted[:10]
+            rest = f" ({len(valid_sorted)} total)" if len(valid_sorted) > len(shown) else ""
             raise ValueError(
-                f"Empty measure key. Try one of: {', '.join(sorted(valid_keys)[:15])}"
+                f"Empty measure key for dataset {cd.id!r}. "
+                f"Try one of: {', '.join(shown)}{rest}. "
+                f"Try describe_dataset({cd.id!r}) for the full list."
             )
         if v_str in valid_keys:
             out.append(v_str)
@@ -345,13 +352,19 @@ def resolve_measure_keys(
             out.append(source_to_key[v_str])
         else:
             valid_sorted = sorted(valid_keys)
-            valid_hint = ", ".join(valid_sorted[:15]) if valid_keys else "(none — dataset has no curated measures)"
+            shown = valid_sorted[:10]
+            rest = f" ({len(valid_sorted)} total)" if len(valid_sorted) > len(shown) else ""
+            valid_hint = (
+                f"{', '.join(shown)}{rest}"
+                if valid_keys
+                else "(none — dataset has no curated measures)"
+            )
             suggestion = _suggest(v_str, valid_sorted) if valid_keys else None
             suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
             raise ValueError(
                 f"Unknown measure {v!r} for dataset {cd.id!r}. "
-                f"{suggest_msg}Try one of: {valid_hint}"
-                + ("..." if len(valid_keys) > 15 else "")
+                f"{suggest_msg}Try one of: {valid_hint}. "
+                f"Try describe_dataset({cd.id!r}) for the full list."
             )
     # Dedupe while preserving order.
     seen: set[str] = set()

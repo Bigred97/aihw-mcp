@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] — 2026-05-15
+
+Error-message sweep — rejection messages now suggest the correction, not just
+describe the rejection. No behavioural changes; same exception types, same
+inputs accepted, same inputs rejected.
+
+### Changed
+- **Every `ValueError` carries an actionable hint.** Per the Quality Dimension
+  #5 contract: every rejection message now says either "Did you mean X?"
+  (fuzzy match on the rejected token), "Valid options: a, b, c" (capped at
+  10 for token economy), or a worked example, plus a pointer at
+  `describe_dataset`, `list_curated`, or `search_datasets` so the agent
+  knows the next call to make. Affected paths:
+  - **Unknown dataset_id** (describe_dataset / get_data / latest / top_n) —
+    surfaces a `'Did you mean X?'` hint via fuzzy match against the curated
+    ID list, plus the truncated list and a `list_curated()` pointer.
+  - **Bad period format** (start_period / end_period) — adds a concrete
+    worked example: `start_period='2020'` or `'2020-07'` for financial-year
+    ranges, alongside the existing YYYY / YYYY-MM / YYYY-YY guidance.
+  - **Bad format value** (get_data / latest format=) — adds a fuzzy
+    `'Did you mean'` for typos like `'recordz'` → `'records'`.
+  - **end_period before start_period** — now shows the swapped values
+    inline: `Try swapping them: start_period='2020', end_period='2024'`.
+  - **measures list with empty string / wrong type** — adds an
+    `Example: measures='deaths'` and a `describe_dataset` pointer.
+  - **search_datasets limit too small / too big** — explicit valid range
+    `1-50` and a default-value hint.
+  - **top_n n / direction errors** — adds valid-range hint and a fuzzy
+    `'Did you mean'` for direction typos.
+  - **Unknown filter / unknown value / unknown measure** — list now capped
+    at 10 with a `(N total)` count and a `describe_dataset(<id>)` pointer
+    instead of unbounded enumeration.
+
+### Tests
+- **266 total** (260 unit + 6 live) — up from 262 in v0.1.2.
+- 10 consecutive zero-flake full-suite runs before tagging.
+- 4 new regression tests in `tests/test_server_validation.py` covering the
+  rewritten paths: dataset-id `'Did you mean'` typo correction, valid-
+  options enumeration when no close match exists, period worked example,
+  and format `'Did you mean'` typo correction.
+
 ## [0.1.2] — 2026-05-15
 
 Reliability pass — graceful degradation when data.gov.au is unreachable.

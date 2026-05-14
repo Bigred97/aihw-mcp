@@ -141,16 +141,21 @@ def _apply_filters(
             valid = sorted(valid_dim_keys)
             suggestion = _suggest(user_key, valid)
             suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
+            shown = valid[:10]
+            rest = f" ({len(valid)} total)" if len(valid) > len(shown) else ""
             raise ValueError(
                 f"Unknown filter {user_key!r} for dataset {cd.id!r}. "
-                f"{suggest_msg}Try one of: {', '.join(valid[:15])}"
+                f"{suggest_msg}Try one of: {', '.join(shown)}{rest}. "
+                f"Try describe_dataset({cd.id!r}) for the full list."
             )
         # Lists mean "OR" across values.
         if isinstance(user_val, list):
             if not user_val:
                 raise ValueError(
-                    f"Filter {user_key!r} has an empty list. "
-                    "Pass at least one value, or omit the filter."
+                    f"Filter {user_key!r} has an empty list on dataset {cd.id!r}. "
+                    f"Pass at least one value (e.g. {{{user_key!r}: 'value'}}) "
+                    "or omit the filter entirely. "
+                    f"Try describe_dataset({cd.id!r}) to see valid values."
                 )
             resolved = [translate_filter_value(cd, user_key, str(v).strip()) for v in user_val]
             mask = out[user_key].astype("string").isin(resolved)

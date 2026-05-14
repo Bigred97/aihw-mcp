@@ -27,6 +27,7 @@ from pydantic import Field
 
 from . import catalog, curated
 from .client import AIHWAPIError, AIHWClient, get_stale_signal, reset_stale_signal
+from .curated import _suggest as _fuzzy_suggest
 from .discovery import DiscoveryError, DiscoverySpec, resolve_latest_url
 from .models import DataResponse, DatasetDetail, DatasetSummary, ColumnDetail, Observation
 from .parsing import drop_blank_rows, read_csv, read_xlsx
@@ -77,6 +78,22 @@ async def reset_client_for_tests() -> None:
         _client = None
 
 
+def _unknown_dataset_msg(dataset_id: str) -> str:
+    """Build a 'not curated' error message with a 'Did you mean' hint and a
+    truncated list of valid IDs."""
+    ids = curated.list_ids()
+    norm = dataset_id.strip().upper()
+    suggestion = _fuzzy_suggest(norm, ids)
+    suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
+    shown = ids[:10]
+    rest = f" ({len(ids)} total)" if len(ids) > len(shown) else ""
+    return (
+        f"Dataset {dataset_id!r} is not a curated aihw-mcp dataset. "
+        f"{suggest_msg}Valid options: {', '.join(shown)}{rest}. "
+        "Try list_curated() to enumerate, or search_datasets('<topic>') to find by keyword."
+    )
+
+
 def _normalize_dataset_id(dataset_id: Any) -> str:
     if not isinstance(dataset_id, str):
         raise ValueError(
@@ -114,7 +131,8 @@ def _validate_period(value: Any, field_name: str) -> str | None:
     if not isinstance(value, str):
         raise ValueError(
             f"{field_name} must be a string like '2023' or '2023-06', "
-            f"got {type(value).__name__}."
+            f"got {type(value).__name__}. "
+            f"Example: {field_name}='2020'."
         )
     s = value.strip()
     if not s:
@@ -122,8 +140,10 @@ def _validate_period(value: Any, field_name: str) -> str | None:
     if not _PERIOD_PATTERN.match(s):
         raise ValueError(
             f"{field_name} {value!r} has invalid format. "
-            "Use 'YYYY' (e.g. '2023'), 'YYYY-MM' (e.g. '2023-06'), or "
-            "an AIHW financial year like '2022-23'."
+            "Use 'YYYY' (e.g. '2023'), 'YYYY-MM' (e.g. '2023-06'), or an AIHW "
+            "financial year like '2022-23'. "
+            f"Worked example: {field_name}='2020' "
+            "(or start_period='2020-07', end_period='2024-06' for a financial-year range)."
         )
     return s
 
@@ -149,15 +169,23 @@ def _validate_measures(measures: Any) -> str | list[str] | None:
         for m in measures:
             if not isinstance(m, str):
                 raise ValueError(
-                    f"measures list entries must be strings, got {type(m).__name__}."
+                    f"measures list entries must be strings, got {type(m).__name__}. "
+                    "Example: measures=['deaths', 'crude_rate_per_100000']. "
+                    "Try describe_dataset(<id>) to see available measure keys."
                 )
             s = m.strip()
             if not s:
-                raise ValueError("measures list contains an empty string.")
+                raise ValueError(
+                    "measures list contains an empty string. "
+                    "Drop the empty entry, or pass measures=['deaths'] (or similar). "
+                    "Try describe_dataset(<id>) to see available measure keys."
+                )
             out.append(s)
         return out
     raise ValueError(
-        f"measures must be a string or list of strings, got {type(measures).__name__}."
+        f"measures must be a string or list of strings, got {type(measures).__name__}. "
+        "Example: measures='deaths' or measures=['deaths', 'crude_rate_per_100000']. "
+        "Try describe_dataset(<id>) to see available measure keys."
     )
 
 
@@ -303,10 +331,19 @@ async def search_datasets(
         )
     if isinstance(limit, bool) or not isinstance(limit, int):
         raise ValueError(
-            f"limit must be a positive integer, got {limit!r} ({type(limit).__name__})."
+            f"limit must be a positive integer (1-50), got {limit!r} "
+            f"({type(limit).__name__}). Try limit=10 (default) or limit=5."
         )
     if limit < 1:
-        raise ValueError(f"limit must be >= 1, got {limit}.")
+        raise ValueError(
+            f"limit must be >= 1, got {limit}. "
+            "Try limit=10 (default) or limit=5. Valid range: 1-50."
+        )
+    if limit > 50:
+        raise ValueError(
+            f"limit must be <= 50, got {limit}. "
+            "Try limit=10 (default) or limit=50. Valid range: 1-50."
+        )
     return catalog.search(query, limit=limit)
 
 
@@ -345,10 +382,7 @@ async def describe_dataset(
     norm_id = _normalize_dataset_id(dataset_id)
     cd = curated.get(norm_id)
     if cd is None:
-        raise ValueError(
-            f"Dataset {dataset_id!r} is not a curated aihw-mcp dataset. "
-            "Try list_curated() to see available IDs."
-        )
+        raise ValueError(_unknown_dataset_msg(dataset_id))
     dims_out = [
         ColumnDetail(
             key=c.key,
@@ -400,10 +434,7 @@ async def _get_data_impl(
     norm_id = _normalize_dataset_id(dataset_id)
     cd = curated.get(norm_id)
     if cd is None:
-        raise ValueError(
-            f"Dataset {dataset_id!r} is not a curated aihw-mcp dataset. "
-            "Try list_curated() to see available IDs."
-        )
+        raise ValueError(_unknown_dataset_msg(dataset_id))
     filters_d = _validate_filters(filters)
     measures_v = _validate_measures(measures)
     start_v = _validate_period(start_period, "start_period")
@@ -415,16 +446,22 @@ async def _get_data_impl(
     else:
         raise ValueError(
             f"format must be a string, got {type(fmt).__name__}. "
-            f"Valid options: {sorted(_VALID_FORMATS)}"
+            f"Valid options: {sorted(_VALID_FORMATS)}. "
+            "Try format='records' (default), 'series', or 'csv'."
         )
     if fmt_norm not in _VALID_FORMATS:
+        valid_sorted = sorted(_VALID_FORMATS)
+        suggestion = _fuzzy_suggest(fmt_norm, valid_sorted)
+        suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
         raise ValueError(
-            f"Unknown format {fmt!r}. Valid options: {sorted(_VALID_FORMATS)}"
+            f"Unknown format {fmt!r}. {suggest_msg}"
+            f"Valid options: {valid_sorted}. "
+            "Try format='records' (default), 'series', or 'csv'."
         )
     if start_v and end_v and start_v > end_v:
         raise ValueError(
             f"end_period ({end_v}) is before start_period ({start_v}). "
-            "Try swapping them."
+            f"Try swapping them: start_period={end_v!r}, end_period={start_v!r}."
         )
 
     user_query: dict[str, Any] = {}
@@ -685,17 +722,28 @@ async def top_n(
     if not isinstance(measure, str) or not measure.strip():
         raise ValueError(
             "measure is required and must be a non-empty string. "
-            "Use describe_dataset() to see available measure keys."
+            "Example: top_n('GRIM_DEATHS', 'deaths', n=10). "
+            "Try describe_dataset(<id>) to see available measure keys."
         )
     if isinstance(n, bool) or not isinstance(n, int):
         raise ValueError(
-            f"n must be a positive integer, got {n!r} ({type(n).__name__})."
+            f"n must be a positive integer (1-500), got {n!r} ({type(n).__name__}). "
+            "Try n=10 (default) or n=5. Valid range: 1-500."
         )
     if n < 1:
-        raise ValueError(f"n must be >= 1, got {n}.")
-    if direction not in ("top", "bottom"):
         raise ValueError(
-            f"direction must be 'top' or 'bottom', got {direction!r}."
+            f"n must be >= 1, got {n}. "
+            "Try n=10 (default) or n=5. Valid range: 1-500."
+        )
+    if direction not in ("top", "bottom"):
+        valid = ["top", "bottom"]
+        suggestion = _fuzzy_suggest(str(direction).lower(), valid)
+        suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
+        raise ValueError(
+            f"direction must be 'top' or 'bottom', got {direction!r}. "
+            f"{suggest_msg}"
+            "Try direction='top' (default, largest values first) or direction='bottom' "
+            "(smallest values first)."
         )
 
     # Run a full get_data first, then rank + slice. The parsed-DataFrame cache

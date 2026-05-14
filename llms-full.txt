@@ -1,0 +1,237 @@
+# aihw-mcp — full reference
+
+> MCP server exposing Australian Institute of Health and Welfare statistics through 6 plain-English tools.
+
+aihw-mcp fetches AIHW XLSX/CSV resources from data.gov.au's CKAN, resolving the freshest resource URL at fetch time. 6 curated datasets cover the most machine-readable AIHW publications. This document is a self-contained integration reference.
+
+---
+
+## Install
+
+```bash
+uvx --upgrade aihw-mcp
+```
+
+### Claude Desktop
+
+```json
+{
+  "mcpServers": {
+    "aihw": { "command": "uvx", "args": ["--upgrade", "aihw-mcp"] }
+  }
+}
+```
+
+### Claude Code
+
+```bash
+claude mcp add aihw --command uvx --args -- --upgrade aihw-mcp
+```
+
+---
+
+## Trust contract
+
+Every `DataResponse` carries:
+
+```
+source             "Australian Institute of Health and Welfare (AIHW), via data.gov.au"
+source_url         the data.gov.au organisation page or specific dataset page
+attribution        full CC-BY 3.0 Australia attribution string with licence URL
+retrieved_at       UTC timestamp
+server_version     importlib.metadata.version("aihw-mcp")
+stale              True when serving cached fallback after upstream error
+stale_reason       human-readable when stale=True
+truncated_at       int | None — set when latest() caps a large response
+```
+
+Cache TTLs: 7-day data (annual AIHW cadence), 1-hour CKAN catalogue, 15-minute `latest`. Graceful degradation: data.gov.au is intermittent — when it fails we serve the last cached payload with `stale=True`.
+
+CC-BY 3.0 Australia (NOT 4.0 International — AIHW-specific, matches APRA / ATO / ASIC).
+
+---
+
+## Tools
+
+### search_datasets(query, limit=10)
+
+Fuzzy-search the 6 curated AIHW datasets.
+
+```python
+await search_datasets("mortality cause of death")
+# → [{id: 'GRIM_DEATHS', name: 'GRIM — long-term mortality', ...}]
+```
+
+### describe_dataset(dataset_id)
+
+Returns `DatasetDetail` with id, name, description, period_coverage, dimensions, measures, source_url, download_url.
+
+```python
+await describe_dataset("GRIM_DEATHS")
+# → dimensions: [{key: 'cause_of_death', source_column: '...', ...},
+#                {key: 'sex', ...}, {key: 'age_group', ...}]
+# → measures: [{key: 'deaths', unit: 'count', ...},
+#              {key: 'age_standardised_rate_per_100000', unit: 'per 100,000', ...}]
+```
+
+### get_data(dataset_id, filters=None, measures=None, start_period=None, end_period=None, format="records")
+
+Query a curated dataset. Plain-English filter keys + aliased values. `measures` is a single key or a list. Period format: `YYYY` / `YYYY-MM` / AIHW financial year `YYYY-YY` (e.g. `"2022-23"`).
+
+```python
+# Deaths from diabetes, all years and sexes
+await get_data("GRIM_DEATHS",
+               filters={"cause_of_death": "Diabetes"},
+               measures="deaths")
+
+# Breast cancer incidence in females over time
+await get_data("CANCER_INCIDENCE_MORTALITY",
+               filters={"cancer_type": "Breast cancer", "sex": "Female", "type": "Incidence"})
+
+# Principal referral hospitals in NSW
+await get_data("PUBLIC_HOSPITALS",
+               filters={"state": "NSW", "peer_group_name": "Principal referral"})
+```
+
+### latest(dataset_id, filters=None, measures=None)
+
+For transposed time-series tables (GRIM, MORT, ACIM): trims to the most-recent period. For wide single-year tables (most AIHW datasets): returns the same shape as get_data.
+
+```python
+await latest("GRIM_DEATHS", filters={"cause_of_death": "All causes combined"})
+```
+
+### top_n(dataset_id, measure, n=10, filters=None, direction="top")
+
+Rank rows by a measure server-side. The single most common agent workflow ("top X by Y") — saves an LLM round-trip of fetching, sorting, slicing.
+
+```python
+# Top 10 causes of death in 2023 (Persons)
+await top_n("GRIM_DEATHS", "deaths", n=10,
+            filters={"sex": "Persons", "year": "2023"})
+
+# 20 SA3 regions with highest age-standardised mortality
+await top_n("MORT_GEOGRAPHY", "age_standardised_rate_per_100000",
+            filters={"category": "Statistical Area Level 3 (SA3)",
+                     "sex": "Persons", "YEAR": "2023"}, n=20)
+
+# 5 lowest-funded expenditure areas in NSW
+await top_n("HEALTH_EXPENDITURE", "real_expenditure_millions",
+            filters={"state": "NSW", "financial_year": "2022-23"},
+            n=5, direction="bottom")
+```
+
+### list_curated()
+
+```python
+list_curated()
+# → ['CANCER_INCIDENCE_MORTALITY', 'GRIM_DEATHS', 'HEALTH_EXPENDITURE',
+#    'MORT_GEOGRAPHY', 'PUBLIC_HOSPITALS', 'YOUTH_JUSTICE_DETENTION']
+```
+
+---
+
+## Curated datasets (6)
+
+### GRIM_DEATHS
+
+National long-term mortality: deaths × cause × year × sex × age band.
+
+- period_coverage: 1907 → present
+- coverage: ~370k rows, 3 measures
+- filters: cause_of_death, sex, age_group, year
+- measures: deaths (count), crude_rate_per_100000 (rate), age_standardised_rate_per_100000 (rate)
+- update_frequency: annual
+- gotcha: GRIM goes back to 1907 — watch for series breaks (1996 ICD reclassification)
+- source: AIHW General Record of Incidence of Mortality (GRIM)
+
+### MORT_GEOGRAPHY
+
+Regional mortality: deaths + premature/avoidable deaths × geography (State / SA3 / SA4 / PHN / Remoteness / SES).
+
+- period_coverage: 2019 → present
+- coverage: ~15k rows, 15 measures
+- filters: category (Statistical Area Level 3 (SA3) / SA4 / Primary Health Network / etc), region_name, sex, YEAR
+- measures: deaths, age_standardised_rate_per_100000, premature_deaths, potentially_avoidable_deaths, ...
+- update_frequency: annual
+
+### CANCER_INCIDENCE_MORTALITY
+
+Cancer incidence + mortality counts × year × sex × type × 5-year age band.
+
+- period_coverage: 1968 → present
+- coverage: ~9k rows, 19 age columns
+- filters: cancer_type, type (Incidence / Mortality), sex, year
+- update_frequency: annual
+
+### HEALTH_EXPENDITURE
+
+Real expenditure by financial year × state × area × source (Government / non-Government).
+
+- period_coverage: 1997-98 → present
+- coverage: ~7k rows; unit AUD millions
+- filters: state, financial_year, area, source
+- measures: real_expenditure_millions, ...
+- update_frequency: annual
+
+### YOUTH_JUSTICE_DETENTION
+
+Average nightly youth-detention population × quarter × state × sex × Indigenous status × legal status.
+
+- period_coverage: 2008 → present
+- coverage: ~42k rows
+- filters: state, sex, indigenous_status, legal_status, period
+- update_frequency: quarterly
+
+### PUBLIC_HOSPITALS
+
+Directory of every Australian public hospital — state × peer group × remoteness × Local Hospital Network.
+
+- period_coverage: 2016-17 reference period
+- coverage: ~700 hospitals
+- filters: state, peer_group_name, remoteness, lhn_name
+- update_frequency: ~annual
+
+---
+
+## Worked examples
+
+### Diabetes deaths trajectory
+
+```python
+resp = await get_data("GRIM_DEATHS",
+                      filters={"cause_of_death": "Diabetes", "sex": "Persons"},
+                      measures=["deaths", "age_standardised_rate_per_100000"],
+                      start_period="1980")
+# resp.records[0]: {period: '1980', value: 1234, measure: 'deaths',
+#                   dimensions: {cause_of_death: 'Diabetes', sex: 'Persons', age_group: 'All ages'}}
+```
+
+### Top 5 causes of death
+
+```python
+resp = await top_n("GRIM_DEATHS", "deaths", n=5,
+                   filters={"sex": "Persons", "year": "2023"})
+```
+
+### Hospital count by state
+
+```python
+resp = await get_data("PUBLIC_HOSPITALS",
+                      filters={"peer_group_name": "Principal referral"})
+# Aggregate len(records) grouped by dimensions['state']
+```
+
+---
+
+## Cross-source pairings
+
+- [abs-mcp](https://pypi.org/project/abs-mcp/) for state population denominators (ABS_ANNUAL_ERP_ASGS2021) to compute per-capita rates
+- [ato-mcp](https://pypi.org/project/ato-mcp/) for per-postcode income data joined against regional mortality
+- [aus-identity](https://pypi.org/project/aus-identity/) for cross-source `state` filter compatibility
+
+---
+
+## License
+
+aihw-mcp server code is MIT-licensed. AIHW data carries CC-BY 3.0 Australia; the attribution is echoed on every response.

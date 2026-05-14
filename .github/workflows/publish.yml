@@ -52,7 +52,7 @@ jobs:
           print(f'OK ({len(ids)} curated datasets)')
           "
       - name: Upload distributions
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: python-package-distributions
           path: dist/

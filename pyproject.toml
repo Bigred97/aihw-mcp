@@ -10,7 +10,12 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Harry Vass" }]
-keywords = ["mcp", "aihw", "australia", "health", "healthcare", "mortality", "cancer", "public-health", "claude", "fastmcp", "health-tech", "epidemiology"]
+keywords = [
+    "mcp", "model-context-protocol", "claude", "fastmcp",
+    "aihw", "health", "healthcare", "mortality", "cancer", "public-health",
+    "australia", "australian", "public-data", "government-data", "data-gov-au",
+    "health-tech", "epidemiology",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -46,7 +51,11 @@ aihw-mcp = "aihw_mcp.server:main"
 
 [project.urls]
 Homepage = "https://github.com/Bigred97/aihw-mcp"
+Documentation = "https://github.com/Bigred97/aihw-mcp#readme"
+Repository = "https://github.com/Bigred97/aihw-mcp"
 Issues = "https://github.com/Bigred97/aihw-mcp/issues"
+Changelog = "https://github.com/Bigred97/aihw-mcp/blob/main/CHANGELOG.md"
+PyPI = "https://pypi.org/project/aihw-mcp/"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/aihw_mcp"]

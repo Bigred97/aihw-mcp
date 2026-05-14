@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] — 2026-05-15
+
+Reliability pass — graceful degradation when data.gov.au is unreachable.
+No breaking changes; v0.1.1 callers keep working unchanged.
+
+### Added
+- **Stale-cache fallback.** When data.gov.au returns 5xx or the connection
+  fails (timeout, DNS, connection refused, etc.), `fetch_resource()` /
+  `fetch_package()` now fall back to the most-recent cached payload —
+  regardless of its TTL — instead of raising. The agent's chain of
+  reasoning keeps moving forward; the user sees the data with a
+  `stale=True` flag and a human-readable reason. Mirrors the abs-mcp
+  0.2.13 pattern. Behaviour when there is no cache to fall back to is
+  unchanged: `AIHWAPIError` propagates as before.
+- **`DataResponse.stale`** (bool), **`DataResponse.stale_reason`** (str | None),
+  and **`DataResponse.truncated_at`** (int | None) fields. `stale_reason`
+  format: `"AIHW API returned 503 for <url>; serving cached payload from
+  ~12 minute(s) ago"`. `truncated_at` is reserved for future register-style
+  caps and currently always `None`.
+- `Cache.get_stale(key)` returns `(payload, cached_at_epoch)` regardless
+  of TTL — the building block of the fallback path.
+- `client.reset_stale_signal()` / `client.get_stale_signal()` —
+  ContextVar-scoped so concurrent MCP tool calls each see their own state.
+  `_get_data_impl` resets at the start of each call and propagates to the
+  response at the end.
+
+### Tests
+- **262 total** (256 unit + 6 live) — up from 258 unit in v0.1.1.
+- 3 consecutive zero-flake full-suite runs before publish.
+- 4 new tests in `tests/test_client.py`: 5xx fallback serves cached payload
+  and sets stale signal, RequestError (DNS / connect) fallback, empty
+  cache still raises, `Cache.get_stale` round-trip with TTL miss.
+
 ## [0.1.1] — 2026-05-13
 
 Code review pass — two real bugs fixed, one UX polish across every tool. No

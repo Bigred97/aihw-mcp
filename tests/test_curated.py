@@ -86,6 +86,58 @@ def test_translate_filter_value_unknown_raises():
         curated.translate_filter_value(cd, "sex", "wakanda")
 
 
+# ---- aus-identity cross-source normalisation on state filter ----
+
+
+def test_state_filter_accepts_full_name():
+    """`state='New South Wales'` resolves to canonical 'NSW'."""
+    cd = curated.get("HEALTH_EXPENDITURE")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "New South Wales") == "NSW"
+
+
+def test_state_filter_accepts_lowercase_full_name():
+    """`state='queensland'` (lowercase) resolves to 'QLD'."""
+    cd = curated.get("HEALTH_EXPENDITURE")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "queensland") == "QLD"
+
+
+def test_state_filter_accepts_iso_3166_form():
+    """`state='AU-VIC'` resolves to 'VIC'."""
+    cd = curated.get("HEALTH_EXPENDITURE")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "AU-VIC") == "VIC"
+
+
+def test_state_filter_accepts_common_alias():
+    """`state='Tassie'` resolves to 'TAS'."""
+    cd = curated.get("HEALTH_EXPENDITURE")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "Tassie") == "TAS"
+
+
+def test_state_filter_accepts_postcode_routing():
+    """`state='2000'` (Sydney CBD) routes to 'NSW'."""
+    cd = curated.get("HEALTH_EXPENDITURE")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "2000") == "NSW"
+
+
+def test_state_filter_postcode_in_act_routes_correctly():
+    """`state='2600'` (Parliament House) resolves to 'ACT', not 'NSW'."""
+    cd = curated.get("HEALTH_EXPENDITURE")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "2600") == "ACT"
+
+
+def test_state_filter_public_hospitals_accepts_full_name():
+    """Verify aus_identity works on PUBLIC_HOSPITALS too — different YAML same dim."""
+    cd = curated.get("PUBLIC_HOSPITALS")
+    assert cd is not None
+    assert curated.translate_filter_value(cd, "state", "Victoria") == "VIC"
+
+
 def test_resolve_measure_keys_none_returns_all():
     cd = curated.get("GRIM_DEATHS")
     assert cd is not None

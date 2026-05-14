@@ -20,6 +20,18 @@ from pathlib import Path
 from typing import Literal
 
 import yaml
+from aus_identity import (
+    is_valid_postcode,
+    normalize_state,
+    postcode_to_state,
+)
+
+
+# Dim names whose values are state/region references. When `translate_filter_value`
+# encounters one of these, the user input is run through aus_identity first so
+# "NSW", "nsw", "New South Wales", "AU-NSW", "Tassie", and 4-digit postcodes
+# all resolve to the curated key.
+_STATE_LIKE_DIM_NAMES = frozenset({"state", "region", "state_territory"})
 
 
 Layout = Literal["wide", "transposed"]
@@ -230,6 +242,62 @@ def id_columns(cd: CuratedDataset) -> list[CuratedColumn]:
     return [c for c in cd.columns.values() if c.role == "id"]
 
 
+def _aus_identity_pass_through(user_value: str) -> str | None:
+    """Normalise a state-shaped value when there's no curated enum.
+
+    Returns the canonical short code ("NSW") or `None` if the input isn't
+    a state reference. Used for free-form state-shaped dims so postcode
+    routing + alias normalisation still kicks in.
+    """
+    s = user_value.strip()
+    if not s:
+        return None
+    if s.isdigit() and is_valid_postcode(s):
+        try:
+            return postcode_to_state(s)
+        except ValueError:
+            return None
+    try:
+        return normalize_state(s)
+    except ValueError:
+        return None
+
+
+def _normalise_state_like(
+    user_value: str, alias_to_canonical: dict[str, str]
+) -> str | None:
+    """Resolve a state-shaped user value to the source-column value.
+
+    Returns the source-column value from `alias_to_canonical.values()` if
+    the input maps to a known state via `aus_identity`, else `None`.
+    """
+    s = user_value.strip()
+    if not s:
+        return None
+    if s.isdigit() and is_valid_postcode(s):
+        try:
+            code = postcode_to_state(s)
+        except ValueError:
+            return None
+    else:
+        try:
+            code = normalize_state(s)
+        except ValueError:
+            return None
+    # Direct key match (uppercase / canonical).
+    if code in alias_to_canonical:
+        return alias_to_canonical[code]
+    # Lowercase key match (some YAMLs only enumerate lowercase aliases).
+    lower = code.lower()
+    if lower in alias_to_canonical:
+        return alias_to_canonical[lower]
+    # Match by canonical value (in case source-column form is the short code).
+    for v in alias_to_canonical.values():
+        if v.upper() == code:
+            return v
+    return None
+
+
 def translate_filter_value(
     cd: CuratedDataset, dim_key: str, user_value: str
 ) -> str:
@@ -240,15 +308,31 @@ def translate_filter_value(
     both resolve. If the dim is free-form (no enum), the raw value passes through.
     On miss, the error message includes a fuzzy "did you mean" hint when a
     close match exists (typo tolerance for high-traffic filters like state/sex).
+
+    State-shaped filters (`state`, `region`, `state_territory`) accept the
+    full cross-source menu via `aus_identity` — short codes, full names,
+    ISO 3166-2, aliases, and 4-digit postcodes all route through to the
+    curated alias / canonical value pair.
     """
     dv = cd.dimension_values.get(dim_key)
     if dv is None or dv.values is None:
+        # Free-form state-shaped dims (rare) still benefit from postcode
+        # routing: a user passing "2000" gets back "NSW" automatically.
+        if dim_key in _STATE_LIKE_DIM_NAMES:
+            normalised = _aus_identity_pass_through(user_value)
+            if normalised is not None:
+                return normalised
         return user_value
     if user_value in dv.values:
         return dv.values[user_value]
     # Maybe the user already passed the canonical value.
     if user_value in dv.values.values():
         return user_value
+    # Cross-source normalisation via aus_identity (state names, postcodes).
+    if dim_key in _STATE_LIKE_DIM_NAMES:
+        normalised = _normalise_state_like(user_value, dv.values)
+        if normalised is not None:
+            return normalised
     valid = sorted(dv.values.keys())
     suggestion = _suggest(user_value, valid)
     suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""

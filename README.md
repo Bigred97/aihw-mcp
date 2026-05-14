@@ -95,6 +95,14 @@ Adding a new dataset is a single YAML drop into `src/aihw_mcp/data/curated/` —
 
 ## Example queries (paste into Claude)
 
+> **Cross-source compatibility.** The `state` filter on
+> HEALTH_EXPENDITURE, PUBLIC_HOSPITALS, YOUTH_JUSTICE_DETENTION, and other
+> location-aware datasets accepts canonical state codes (`"NSW"`), full
+> names (`"New South Wales"`), case-insensitive variants (`"nsw"`), ISO
+> 3166-2 (`"AU-NSW"`), and 4-digit postcodes (`"2000"` → NSW). Powered by
+> [`aus-identity`](https://pypi.org/project/aus-identity/) — the same input
+> format works across abs-mcp, ato-mcp, apra-mcp, aihw-mcp, and asic-mcp.
+
 **Public-health research**: *"For GRIM_DEATHS, give me the deaths and age-standardised rate for 'Diabetes' for Persons every year from 1980 to the latest, so I can chart the trajectory."*
 
 **Health-tech / regional analysis**: *"Using MORT_GEOGRAPHY, list the 10 SA3 regions with the highest age-standardised mortality rate for Persons in the most recent year."*

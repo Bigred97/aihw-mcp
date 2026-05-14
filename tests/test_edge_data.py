@@ -14,7 +14,6 @@ from io import BytesIO
 
 import openpyxl
 import pandas as pd
-import pytest
 
 from aihw_mcp import curated, parsing, shaping
 

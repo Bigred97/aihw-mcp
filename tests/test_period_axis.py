@@ -131,7 +131,6 @@ async def test_latest_grim_per_measure_returns_most_recent(mocked_client):
 async def test_latest_works_with_shuffled_source_order(mocked_client):
     """latest() must NOT rely on source row order — even if AIHW shuffles rows."""
     # Build a synthetic shuffled fixture by sorting reverse
-    import pandas as pd
     cd = curated.get("GRIM_DEATHS")
     df = parsing.read_csv((FIXTURE_DIR / "grim_head.csv").read_bytes())
     # Reverse-sort by year so the oldest row comes last in source order

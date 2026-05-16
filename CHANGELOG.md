@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-05-16
+
+### Changed — stale dataset flagged in description
+
+- `PUBLIC_HOSPITALS` description now prominently warns the data is the
+  AIHW 2016-17 reference release and has not been refreshed. The dataset
+  remains queryable for trend / peer-group analysis but the description
+  now clearly flags it should NOT be used as a current registration
+  source. Hospital openings, closures, name changes, and LHN
+  reorganisations since 2017 are not reflected.
+- `period_coverage` updated to "2016-17 reference year (historical —
+  not refreshed)" to make this surface in `describe_dataset`.
+
+No data, code, or test changes. Description-only update.
+
 ## [0.4.0] - 2026-05-15
 
 ### Added

@@ -1,14 +1,23 @@
 id: PUBLIC_HOSPITALS
-name: Public Hospitals — AIHW Hospitals Databases
+name: Public Hospitals — AIHW Hospitals Databases (historical reference, 2016-17)
 description: |
+  ⚠️ HISTORICAL REFERENCE DATA ONLY — published 2016-17. AIHW has not
+  released a refreshed machine-readable hospital list since then (current
+  data is on the interactive MyHospitals dashboard, not data.gov.au).
+  Hospital openings, closures, name changes, and LHN reorganisations
+  since 2017 are NOT reflected. Use with that caveat for trend
+  analysis or peer-group studies; do NOT use as a current
+  registration source.
+
   AIHW directory of every public hospital included in the national
   hospitals databases. ~700 hospitals × state × peer group × remoteness
   × Local Hospital Network × Medicare provider number × IHPA funding
   designation × bed count. The named-entity table that powers "how many
-  public hospitals are in NSW?", "list all Principal referral hospitals
-  in Victoria", or "find hospitals in Remote Australia".
+  public hospitals were in NSW (as of 2016-17)?", "list all Principal
+  referral hospitals in Victoria", or "find hospitals in Remote
+  Australia".
   Source: AIHW Australian hospital statistics 2016-17 via data.gov.au.
-period_coverage: 2016-17 reference year
+period_coverage: 2016-17 reference year (historical — not refreshed)
 update_frequency: irregular
 source_url: https://data.gov.au/data/dataset/australian-hospital-statistics-public-hospitals
 download_url: https://data.gov.au/data/dataset/88a95824-c0e7-4ec0-bb78-b36223dd16a8/resource/43b9e4a4-0752-44c7-b825-bc32c46cf3b7/download/public_hospital_list.csv

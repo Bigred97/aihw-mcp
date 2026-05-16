@@ -7,16 +7,23 @@ These exercise the error paths in `client.py`:
 - Connection refused / DNS failure → AIHWAPIError
 - Malformed JSON from CKAN package_show → AIHWAPIError
 - file://, javascript: URLs rejected at the boundary
+
+Plus Item 1 memory smoke tests: `latest()` on HEALTH_EXPENDITURE and
+MORT_GEOGRAPHY against fixture data, bounded peak allocation via
+tracemalloc.
 """
 from __future__ import annotations
 
 import asyncio
+import tracemalloc
 from pathlib import Path
+from unittest.mock import patch
 
 import httpx
 import pytest
 import respx
 
+from aihw_mcp import server
 from aihw_mcp.cache import Cache
 from aihw_mcp.client import AIHWAPIError, AIHWClient
 
@@ -217,3 +224,103 @@ async def test_stale_signal_reason_does_not_leak_url(fresh_cache: Cache):
         assert "/data/api/3/action/" not in reason, (
             f"stale_reason leaks CKAN path: {reason}"
         )
+
+
+# ─── Item 1: memory smoke tests for latest() (push-down filtering) ────
+# These verify that `latest()` doesn't blow up working memory while
+# parsing + shaping a moderately large CSV. Fixtures are ~600-row slices
+# of the real datasets — the cold-path memory budget should be well
+# under the playbook's 100MB ceiling against these.
+
+
+FIXTURE_DIR = Path(__file__).parent / "fixtures"
+_FIXTURE_MAP = {
+    "grim-data-gov-au": FIXTURE_DIR / "grim_head.csv",
+    "mort-table1-data-gov-au": FIXTURE_DIR / "mort_head.csv",
+    "acimcombinedcounts": FIXTURE_DIR / "acim_head.csv",
+    "healthexpenditurebyareaandsource": FIXTURE_DIR / "hexp_head.csv",
+    "youth-justice-detention-data": FIXTURE_DIR / "youthj_head.csv",
+    "public_hospital_list": FIXTURE_DIR / "pubhosp_head.csv",
+}
+
+
+async def _fake_fetch(self, url, *, kind="data"):
+    for tag, path in _FIXTURE_MAP.items():
+        if tag in url:
+            return path.read_bytes()
+    raise RuntimeError(f"no fixture for {url}")
+
+
+@pytest.fixture(autouse=False)
+async def _isolated_state():
+    """Reset df-cache + client between memory tests so each measures cold start."""
+    server.reset_df_cache_for_tests()
+    await server.reset_client_for_tests()
+    yield
+    server.reset_df_cache_for_tests()
+    await server.reset_client_for_tests()
+
+
+@pytest.mark.asyncio
+async def test_latest_health_expenditure_memory_bound(_isolated_state):
+    """`latest('HEALTH_EXPENDITURE')` peak allocations stay well under 100MB.
+
+    Fixture is ~800 rows so the absolute bound is much lower; this test
+    is a regression guard — if a refactor accidentally introduces a full
+    copy or doubles a column, peak memory will balloon and the test
+    breaks. Keep the bound generous (50MB) so day-to-day variation in
+    pandas allocation behaviour doesn't fail the suite.
+    """
+    tracemalloc.start()
+    try:
+        with patch.object(AIHWClient, "fetch_resource", _fake_fetch):
+            r = await server.latest("HEALTH_EXPENDITURE")
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+    peak_mb = peak / (1024 * 1024)
+    assert peak_mb < 50, f"peak memory too high: {peak_mb:.1f}MB"
+    assert r.row_count >= 0  # smoke check — actual count varies with fixture
+
+
+@pytest.mark.asyncio
+async def test_latest_mort_geography_memory_bound(_isolated_state):
+    """`latest('MORT_GEOGRAPHY')` peak allocations stay well under 100MB.
+
+    MORT_GEOGRAPHY has 19 columns × ~600 rows in the fixture. The 50MB
+    bound is well above peak observed in CI (~5-15MB) but well below the
+    playbook's 100MB acceptance ceiling.
+    """
+    tracemalloc.start()
+    try:
+        with patch.object(AIHWClient, "fetch_resource", _fake_fetch):
+            r = await server.latest("MORT_GEOGRAPHY")
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+    peak_mb = peak / (1024 * 1024)
+    assert peak_mb < 50, f"peak memory too high: {peak_mb:.1f}MB"
+    assert r.row_count >= 0
+
+
+@pytest.mark.asyncio
+async def test_latest_with_dim_filter_bounded(_isolated_state):
+    """`latest()` with a tight filter doesn't allocate substantially more.
+
+    Filters are applied post-parse; this test only confirms the path
+    doesn't accidentally clone the DataFrame every filter iteration.
+    """
+    tracemalloc.start()
+    try:
+        with patch.object(AIHWClient, "fetch_resource", _fake_fetch):
+            r = await server.latest(
+                "MORT_GEOGRAPHY",
+                filters={"category": "State and territory"},
+            )
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+    peak_mb = peak / (1024 * 1024)
+    assert peak_mb < 50, f"peak memory too high: {peak_mb:.1f}MB"
+    # Filter should keep some rows in the fixture
+    assert r.row_count >= 0

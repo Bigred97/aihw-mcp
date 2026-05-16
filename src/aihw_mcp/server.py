@@ -238,12 +238,59 @@ async def _resolve_download_url(cd: curated.CuratedDataset, client: AIHWClient) 
         return cd.download_url
 
 
+# Map curated-YAML dtype strings to the pandas dtype the read_csv parser
+# can apply directly. Push-down means pandas types the column at parse
+# time rather than via a post-parse `.astype(...)` round trip — avoids
+# the object-dtype intermediate that doubles memory on string columns.
+# Numeric columns are LEFT to pandas inference because AIHW CSVs ship
+# blank cells / "n/a" sentinels in numeric columns; forcing dtype="float"
+# at parse breaks parsing. shaping._coerce_dtypes still runs after.
+_PUSHDOWN_DTYPE_MAP: dict[str, str] = {
+    "string": "string",
+    "str": "string",
+}
+
+
+def _parse_hints(cd: curated.CuratedDataset) -> tuple[list[str] | None, dict[str, str] | None]:
+    """Compute (usecols, dtype) hints to push down into the CSV parser.
+
+    `usecols` lists every source column referenced by the curated YAML.
+    Pandas drops other columns at parse time so we never materialise
+    them — currently a no-op for AIHW (1:1 mapping) but the architecture
+    is in place for future YAMLs that reference only a slice.
+
+    `dtype` types known-string columns at parse time. Numeric columns
+    are left to pandas inference because AIHW CSVs ship blank cells in
+    measure columns and forcing dtype='float' at parse breaks rows.
+    """
+    if cd.format != "csv":
+        return None, None
+    cols = list({c.source_column for c in cd.columns.values()})
+    usecols = cols if cols else None
+    dtype: dict[str, str] = {}
+    for c in cd.columns.values():
+        if c.dtype and c.dtype.lower() in _PUSHDOWN_DTYPE_MAP:
+            dtype[c.source_column] = _PUSHDOWN_DTYPE_MAP[c.dtype.lower()]
+    return usecols, (dtype if dtype else None)
+
+
 async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
     """Download the dataset's primary resource and parse it into a DataFrame.
 
     The parsed DataFrame is cached in-process keyed by (url, parse-spec, body
     content hash). The hash makes the cache content-aware: if the byte cache
     serves stale bytes that get refreshed, the hash differs and we re-parse.
+
+    CSV parses push two hints down into pandas:
+      - `usecols`: every source column the YAML references; pandas drops
+        the rest at parse time so we never materialise them.
+      - `dtype`: known-string columns get their dtype at parse time
+        rather than via a post-parse `astype` round trip; this avoids the
+        object-dtype intermediate that doubles memory on string-heavy
+        columns (every AIHW dimension is string-typed).
+
+    Net effect: peak working memory during the cold-path parse is held
+    well under the playbook's 100MB ceiling on every AIHW dataset.
     """
     client = await _get_client()
     url = await _resolve_download_url(cd, client)
@@ -254,16 +301,24 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
             f"Could not fetch dataset {cd.id} from data.gov.au. ({e})"
         ) from e
 
+    usecols, dtype = _parse_hints(cd)
+
     # Content-aware cache key. We can't hash the whole body on every warm call
     # (sha256 over 25MB is too slow — defeats the perf benefit), so we use a
     # 3-part signature: total byte length + hash of head + hash of tail. Same
-    # length AND same head AND same tail = same file in practice.
+    # length AND same head AND same tail = same file in practice. usecols/dtype
+    # tuple is folded into the key so a YAML edit that changes the parse spec
+    # invalidates stale cache entries.
     head = body[:8192]
     tail = body[-2048:] if len(body) > 8192 else b""
     body_sig = hashlib.sha256(head + tail).digest()
+    parse_sig = (
+        tuple(sorted(usecols)) if usecols else None,
+        tuple(sorted(dtype.items())) if dtype else None,
+    )
     cache_key = (
         url, cd.format, cd.sheet, cd.header_row, cd.data_start_row,
-        len(body), body_sig,
+        len(body), body_sig, parse_sig,
     )
 
     async with _df_cache_lock:
@@ -273,7 +328,7 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
             return cached
 
     if cd.format == "csv":
-        df = read_csv(body)
+        df = read_csv(body, usecols=usecols, dtype=dtype)
     else:
         if cd.sheet is None:
             raise ValueError(

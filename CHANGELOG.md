@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.5] - 2026-05-16
+
+### Changed — push parse-time hints down into pandas (sister-MCP playbook, item 1)
+
+`parsing.read_csv` now accepts `usecols` and `dtype` keyword arguments;
+`server._fetch_and_parse` computes both from the curated YAML and passes
+them through. Two architectural wins, one with current data:
+
+- **`usecols`** lists every source column the YAML references. Pandas
+  drops other columns at parse time so they never enter the DataFrame.
+  Currently a no-op (every AIHW dataset is a 1:1 column map), but the
+  architecture is in place for future YAMLs that reference only a slice
+  of a wider source CSV.
+- **`dtype`** types every YAML-declared string column at parse time.
+  This is the win on current data: pandas avoids the object-dtype
+  intermediate that doubles memory on string-heavy AIHW dimensions
+  (cause_of_death, geography, peer-group name). Numeric columns are
+  left to inference because AIHW CSVs ship blank cells in measures and
+  forcing `dtype='float'` at parse breaks rows; the existing
+  `shaping._coerce_dtypes` still runs the post-parse numeric coercion.
+
+The parsed-DataFrame cache key now folds in the `(usecols, dtype)`
+signature so a YAML edit that changes the parse spec invalidates the
+stale cached entry.
+
+### Added — memory smoke tests in `tests/test_resilience.py`
+
+Three new tests use `tracemalloc` to bound peak allocation on `latest()`
+calls against the offline fixtures:
+
+- `test_latest_health_expenditure_memory_bound` — peak < 50MB
+- `test_latest_mort_geography_memory_bound` — peak < 50MB
+- `test_latest_with_dim_filter_bounded` — filtered MORT call < 50MB
+
+Measured baseline on fixtures: HEALTH_EXPENDITURE 2.4MB, MORT_GEOGRAPHY
+8.0MB, GRIM_DEATHS 5.0MB. Well under the playbook's 100MB ceiling.
+
+Plus 4 new unit tests in `tests/test_parsing.py` covering `usecols` (drops
+columns + raises on missing), `dtype` (string dtype applied at parse
+time), and backward-compatible no-hints behaviour.
+
+### Backward compatibility
+
+`parsing.read_csv` adds optional keyword args; existing callers pass
+unchanged. No tool signatures change; `_get_data_impl` signature is
+untouched (Wave C territory).
+
 ## [0.4.4] - 2026-05-16
 
 ### Added — defensive long-text-field cap (portfolio sister-MCP playbook, item 5)

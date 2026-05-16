@@ -176,3 +176,48 @@ def test_drop_blank_rows_removes_only_all_nan_rows():
     out = drop_blank_rows(df, ["a", "b"])
     # Row 1 (None, None) dropped. Row 2 (z, None) kept. Row 3 (None, 2) kept.
     assert len(out) == 3
+
+
+# ─── Item 1: push-down filtering primitives in parsing.read_csv ────────
+# `read_csv` now accepts optional `usecols` and `dtype` hints so the
+# `_fetch_and_parse` orchestration can prune columns and avoid pandas'
+# object-dtype intermediates at parse time.
+
+
+def test_read_csv_with_usecols_drops_other_columns(grim_csv):
+    """`usecols` lets the orchestrator request only the columns it needs."""
+    df = read_csv(grim_csv, usecols=["grim", "cause_of_death", "deaths"])
+    assert set(df.columns) == {"grim", "cause_of_death", "deaths"}
+    assert "year" not in df.columns
+    assert "sex" not in df.columns
+
+
+def test_read_csv_with_dtype_hint_applies_at_parse_time(grim_csv):
+    """`dtype` hint avoids the object-dtype intermediate for known columns."""
+    df = read_csv(
+        grim_csv,
+        dtype={
+            "grim": "string",
+            "cause_of_death": "string",
+            "year": "string",
+            "sex": "string",
+            "age_group": "string",
+        },
+    )
+    # Strings come back as pandas StringDtype, not object
+    assert str(df["grim"].dtype) == "string"
+    assert str(df["sex"].dtype) == "string"
+
+
+def test_read_csv_usecols_with_missing_column_raises_parseerror(grim_csv):
+    """`usecols` referencing a column that isn't in the CSV must fail loudly."""
+    with pytest.raises(ParseError):
+        read_csv(grim_csv, usecols=["grim", "does_not_exist"])
+
+
+def test_read_csv_no_hints_behaviour_unchanged(grim_csv):
+    """Backward compat: calling without usecols/dtype returns the full df."""
+    df = read_csv(grim_csv)
+    assert "grim" in df.columns
+    assert "deaths" in df.columns
+    assert len(df) > 100

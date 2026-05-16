@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import zipfile
 from io import BytesIO
+from typing import Any
 
 import pandas as pd
 
@@ -111,24 +112,52 @@ def _normalize_header(c):
     return "\n".join(parts)
 
 
-def read_csv(body: bytes, *, encoding: str = "utf-8-sig") -> pd.DataFrame:
+def read_csv(
+    body: bytes,
+    *,
+    encoding: str = "utf-8-sig",
+    usecols: list[str] | None = None,
+    dtype: dict[str, str] | None = None,
+) -> pd.DataFrame:
     """Read a CSV body as a DataFrame.
 
     AIHW CSVs typically use UTF-8 with BOM and standard quoting — pandas
     handles it natively. We pass `low_memory=False` so mixed-dtype columns
     aren't silently coerced to `object` partway through parsing.
+
+    Args:
+        body: raw bytes of the .csv file.
+        encoding: text encoding (default UTF-8 with BOM).
+        usecols: optional list of source column names to parse. When set,
+            other columns are dropped at parse time — pandas never
+            materialises them, which caps working memory on wide tables.
+            Missing columns raise ParseError (loud failure beats silent
+            shape mismatch later in shaping).
+        dtype: optional column-name → dtype-string map. Passed to pandas
+            so dtypes are applied at parse time rather than via a
+            post-parse `astype` round trip. Avoids the object-dtype
+            intermediate that doubles memory on string-heavy columns.
     """
     if not body:
         raise ParseError("empty CSV body")
+    read_kwargs: dict[str, Any] = {
+        "encoding": encoding,
+        "low_memory": False,
+    }
+    if usecols is not None:
+        read_kwargs["usecols"] = usecols
+    if dtype is not None:
+        read_kwargs["dtype"] = dtype
     try:
-        df = pd.read_csv(
-            BytesIO(body),
-            encoding=encoding,
-            low_memory=False,
-        )
+        df = pd.read_csv(BytesIO(body), **read_kwargs)
     except UnicodeDecodeError as e:
         raise ParseError(f"CSV decode failed with encoding {encoding!r}: {e}") from e
     except pd.errors.ParserError as e:
+        raise ParseError(f"CSV parse failed: {e}") from e
+    except ValueError as e:
+        # `usecols` referencing a column not in the CSV raises ValueError
+        # ("Usecols do not match columns, columns expected but not found").
+        # Wrap as ParseError so callers see a uniform failure mode.
         raise ParseError(f"CSV parse failed: {e}") from e
 
     df.columns = [_normalize_header(c) for c in df.columns]

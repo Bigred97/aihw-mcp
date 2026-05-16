@@ -117,6 +117,15 @@ def _normalize_dataset_id(dataset_id: Any) -> str:
 def _validate_filters(filters: Any) -> dict[str, Any]:
     if filters is None:
         return {}
+    if isinstance(filters, str):
+        import json as _json
+        try:
+            filters = _json.loads(filters)
+        except _json.JSONDecodeError as exc:
+            raise ValueError(
+                f"filters must be a JSON object, got invalid JSON string: {exc}. "
+                "Example: {\"sex\": \"female\", \"year\": \"2023\"}."
+            ) from exc
     if not isinstance(filters, dict):
         raise ValueError(
             f"filters must be a dict, got {type(filters).__name__}. "

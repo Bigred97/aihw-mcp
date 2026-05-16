@@ -177,7 +177,7 @@ async def test_describe_every_curated_dataset():
     "not a dict", ["state", "nsw"], 42, 3.14, True,
 ])
 async def test_get_data_rejects_non_dict_filters(bad_filters):
-    with pytest.raises(ValueError, match="filters must be a dict"):
+    with pytest.raises(ValueError, match="filters must be"):
         await server.get_data("GRIM_DEATHS", filters=bad_filters)  # type: ignore[arg-type]
 
 
@@ -306,7 +306,7 @@ async def test_latest_unknown_dataset_raises():
 
 @pytest.mark.asyncio
 async def test_latest_passes_validation_through(mocked_client):
-    with pytest.raises(ValueError, match="filters must be a dict"):
+    with pytest.raises(ValueError, match="filters must be"):
         await server.latest("GRIM_DEATHS", filters="bad")  # type: ignore[arg-type]
 
 

@@ -21,7 +21,18 @@ format: csv
 header_row: 1
 layout: wide
 cache_kind: data
-period_dimension: YEAR
+period_dimension: year
+# Default-filter slice applied by latest() so the no-filter call returns
+# one canonical national-headline row per year rather than an arbitrary
+# (region category × geography × sex) cell. The MORT CSV publishes an
+# "Australia (total)" geography row under each region category that
+# carries the national rolled-up totals; we pin category to one of them
+# (Remoteness area, picked arbitrarily — Australia totals are identical
+# across categories) so the period-axis trim collapses to one row.
+headline_slice:
+  category: Remoteness area
+  geography: Australia (total)
+  sex: Persons
 search_keywords:
   - mortality
   - deaths by region
@@ -56,12 +67,12 @@ columns:
     description: Region name within the chosen category (e.g. 'Sydney - Inner West' for SA3).
     role: dimension
     dtype: string
-  YEAR:
+  year:
     source_column: "YEAR"
     description: Calendar year of death.
     role: dimension
     dtype: string
-  SEX:
+  sex:
     source_column: "SEX"
     description: Sex (Females, Males, or Persons).
     role: dimension
@@ -151,7 +162,7 @@ columns:
     role: measure
     dtype: float
 dimension_values:
-  SEX:
+  sex:
     female: Females
     male: Males
     persons: Persons

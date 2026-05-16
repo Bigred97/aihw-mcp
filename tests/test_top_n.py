@@ -72,7 +72,7 @@ async def test_top_n_with_filter(mocked_client):
     """MORT geography: top 10 by deaths in NSW state category."""
     r = await server.top_n(
         "MORT_GEOGRAPHY", "deaths", n=10,
-        filters={"category": "state", "SEX": "Persons"},
+        filters={"category": "state", "sex": "Persons"},
     )
     assert r.row_count <= 10
     assert all(rec.dimensions.get("category") == "State and territory" for rec in r.records)

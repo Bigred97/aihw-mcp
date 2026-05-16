@@ -5,6 +5,89 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.6] - 2026-05-17
+
+### Fixed — `latest()` no longer returns a random cell from multi-dim cross-tabs
+
+Curated datasets that ship a cross-tab (HEALTH_EXPENDITURE is the worst
+offender — financial_year × state × area × broad source × detailed
+source) had a `latest()` bug where the no-filter call returned whichever
+cell happened to be last in source order. For HEALTH_EXPENDITURE that
+landed on NT × Research × Non-government × Other non-government = $1M,
+which is the smallest cell in the table, not a "latest national
+headline."
+
+Five curated YAMLs now declare a `headline_slice:` block — a default
+filter `latest()` applies when the caller omits filters, so the no-arg
+call collapses to one canonical row per period. User filters override
+per-key, so `latest("HEALTH_EXPENDITURE", filters={"state": "VIC"})`
+keeps the area/source defaults and returns VIC's latest-year headline.
+
+Slices chosen per dataset:
+- **HEALTH_EXPENDITURE** — NSW × Public hospitals × Government × State
+  and local. AIHW's CSV does NOT publish a single national-aggregate
+  row, so the headline is the largest single component (~$6.4B
+  state-government public-hospital spend). Customers wanting national
+  totals across all states/areas/sources must call `get_data()` and
+  sum client-side.
+- **MORT_GEOGRAPHY** — Remoteness area × Australia (total) × Persons.
+  AIHW publishes an `Australia (total)` geography row under each
+  category carrying the rolled-up national figures; we pin to
+  Remoteness area (the choice is arbitrary — totals are identical
+  across categories).
+- **GRIM_DEATHS** — All causes combined × Persons × Total age group.
+  The headline national mortality number.
+- **CANCER_INCIDENCE_MORTALITY** — Bowel cancer × Persons × Incidence.
+  ACIM does not aggregate cancers; we pick Bowel as a representative
+  high-incidence site. Customers wanting another cancer override
+  `filters={"cancer_type": "Breast cancer"}`.
+- **YOUTH_JUSTICE_DETENTION** — Aust × Total sex × Total legal status
+  × Total Indigenous × 10 to 17 age group. The national-aggregate
+  detention population per quarter.
+
+`PUBLIC_HOSPITALS` is a register without a meaningful single-row
+headline (every row is a distinct hospital), so it ships without
+`headline_slice`. Mirrors `rba-mcp 0.7.2`'s `headline_series` pattern
+adapted for dim-keyed cross-tabs instead of flat F-tables.
+
+### Fixed — dim-key case drift on MORT_GEOGRAPHY
+
+Pre-0.4.6, `MORT_GEOGRAPHY` responses surfaced uppercase dim keys
+(`YEAR`, `SEX`) because the curated YAML preserved AIHW's CSV header
+casing. Portfolio convention is snake_case lowercase across every
+sister, so cross-source joins on `dimensions["year"]` /
+`dimensions["sex"]` worked everywhere except MORT.
+
+Fix is in three layers:
+- `MORT_GEOGRAPHY.yaml`: keys renamed `YEAR` → `year`, `SEX` → `sex`
+  (source_column stays uppercase to match the CSV header).
+  `period_dimension` and `dimension_values` keys updated to match.
+- `shaping.shape_wide`: defensive `.lower()` when building
+  `dimensions[...]` so any future YAML drift toward uppercase keys
+  is corrected at the response boundary rather than propagating.
+- `tests/test_curated.py`: new `test_all_dim_keys_are_lowercase_snake_case`
+  asserts the portfolio convention across every curated YAML.
+
+**Breaking change for callers passing `filters={"SEX": ...}` or
+`filters={"YEAR": ...}` to MORT_GEOGRAPHY**: the lowercase form is now
+required. The error message includes a "Did you mean 'sex'?" hint so
+callers see the correction immediately.
+
+### Test coverage
+
+11 new tests in `tests/test_curated.py` and `tests/test_period_axis.py`
+covering:
+- portfolio convention (all dim keys lowercase across 6 datasets)
+- `headline_slice` loads + validates for every multi-dim dataset
+- invalid `headline_slice` key fails at YAML load time, not at query
+- `latest()` returns the headline slice when no filters supplied
+- user filters override `headline_slice` per-key
+- `MORT_GEOGRAPHY` filter input accepts lowercase keys
+
+Plus updates to existing tests (`test_shaping.py`, `test_concurrency.py`,
+`test_customer_flows.py`, `test_top_n.py`, `test_integration.py`,
+`test_period_axis.py`) that previously asserted the uppercase keys.
+
 ## [0.4.5] - 2026-05-16
 
 ### Changed — push parse-time hints down into pandas (sister-MCP playbook, item 1)

@@ -63,14 +63,14 @@ def test_mort_state_filter(mort_csv):
     df = _parse_csv(cd, mort_csv)
     resp = shaping.build_response(
         cd=cd, df=df,
-        filters={"category": "state", "SEX": "Persons"},
+        filters={"category": "state", "sex": "Persons"},
         measures="deaths",
         start_period=None, end_period=None, fmt="records", user_query={},
     )
     assert resp.row_count > 0
     for r in resp.records:
         assert r.dimensions["category"] == "State and territory"
-        assert r.dimensions["SEX"] == "Persons"
+        assert r.dimensions["sex"] == "Persons"
 
 
 def test_mort_multiple_measures(mort_csv):
@@ -78,7 +78,7 @@ def test_mort_multiple_measures(mort_csv):
     df = _parse_csv(cd, mort_csv)
     resp = shaping.build_response(
         cd=cd, df=df,
-        filters={"category": "state", "SEX": "Persons"},
+        filters={"category": "state", "sex": "Persons"},
         measures=["deaths", "median_age", "potentially_avoidable_deaths"],
         start_period=None, end_period=None, fmt="records", user_query={},
     )

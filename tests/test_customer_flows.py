@@ -85,13 +85,13 @@ async def test_flow_regional_mortality(mocked_client):
     """Customer: 'Mortality rates by Australian state in 2023.'"""
     data = await server.get_data(
         "MORT_GEOGRAPHY",
-        filters={"category": "state", "SEX": "Persons"},
+        filters={"category": "state", "sex": "Persons"},
         measures="age_standardised_rate_per_100000",
     )
     assert data.row_count > 0
     for r in data.records:
         assert r.dimensions["category"] == "State and territory"
-        assert r.dimensions["SEX"] == "Persons"
+        assert r.dimensions["sex"] == "Persons"
 
 
 @pytest.mark.asyncio

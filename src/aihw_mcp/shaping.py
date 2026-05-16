@@ -218,7 +218,11 @@ def shape_wide(
             raw = row[k]
             v = _safe_str(raw)
             if v is not None:
-                dim_vals[k] = truncate_text(v)
+                # Portfolio convention: dim keys are snake_case lowercase.
+                # Defensive .lower() guards against a future YAML drifting to
+                # uppercase source-column names (e.g. AIHW's CSV headers like
+                # YEAR / SEX) being preserved through to the response.
+                dim_vals[k.lower()] = truncate_text(v)
         for mk in measures:
             mc = measure_by_key.get(mk)
             if mc is None:

@@ -715,13 +715,48 @@ async def latest(
     For wide single-year tables (most AIHW datasets) it returns the same
     shape as get_data — there is only one period in those tables.
 
+    When the curated YAML declares a `headline_slice`, those filter values
+    are applied automatically so the no-filter call returns ONE canonical
+    headline row (e.g. HEALTH_EXPENDITURE → national total, all areas, all
+    sources). User-supplied filters override the headline_slice per-key —
+    `latest("HEALTH_EXPENDITURE", filters={"state": "NSW"})` keeps the
+    area/source defaults and returns the NSW latest-year total.
+
     Examples:
         # Latest year of GRIM data for All causes combined
         resp = await latest("GRIM_DEATHS", filters={"cause_of_death": "All causes combined"})
     """
+    merged_filters = _merge_headline_slice(dataset_id, filters)
     return await _get_data_impl(
-        dataset_id, filters, measures, None, None, "records", last_n=1
+        dataset_id, merged_filters, measures, None, None, "records", last_n=1
     )
+
+
+def _merge_headline_slice(
+    dataset_id: Any, user_filters: Any
+) -> dict[str, Any] | None:
+    """Layer headline_slice defaults under user_filters (user wins per-key).
+
+    Returns the merged dict, or `user_filters` unchanged when:
+      - the dataset isn't curated (the impl will raise a useful error),
+      - the curated YAML doesn't declare a headline_slice,
+      - the headline_slice references dims that are already user-filtered.
+
+    Skips merging when input validation would fail downstream — we don't
+    want to mask "dataset_id must be a string" with a less-helpful error.
+    """
+    if not isinstance(dataset_id, str):
+        return user_filters
+    norm = dataset_id.strip().upper()
+    if not norm or not _DATASET_ID_PATTERN.match(norm):
+        return user_filters
+    cd = curated.get(norm)
+    if cd is None or not cd.headline_slice:
+        return user_filters
+    user_d = _validate_filters(user_filters)
+    merged: dict[str, Any] = dict(cd.headline_slice)
+    merged.update(user_d)
+    return merged
 
 
 @mcp.tool
@@ -790,7 +825,7 @@ async def top_n(
         # 20 SA3 regions with the highest age-standardised mortality
         top_n("MORT_GEOGRAPHY", "age_standardised_rate_per_100000",
               filters={"category": "Statistical Area Level 3 (SA3)",
-                       "sex": "Persons", "YEAR": "2023"}, n=20)
+                       "sex": "Persons", "year": "2023"}, n=20)
 
         # 5 lowest-funded health expenditure areas in NSW
         top_n("HEALTH_EXPENDITURE", "real_expenditure_millions",

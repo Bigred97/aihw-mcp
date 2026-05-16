@@ -96,6 +96,22 @@ class CuratedDataset:
     # Leave unset for register-style datasets without a meaningful time axis
     # (e.g. PUBLIC_HOSPITALS, where every row is one current establishment).
     period_dimension: str | None = None
+    # Optional default-filter slice applied by `latest()` so the no-filter call
+    # returns ONE canonical headline row rather than an arbitrary cell from a
+    # multi-dim cross-tab. For HEALTH_EXPENDITURE — a 5-dim table
+    # (financial_year × state × area × broad source × detailed source) — the
+    # pre-0.4.6 `latest()` returned whichever cell happened to be last in
+    # source order (e.g. NT × Research × Non-government × $1M). With
+    # `headline_slice: {state: Australia, area_of_expenditure: Total,
+    # broad_source_of_funding: Total, detailed_source_of_funding: Total}`,
+    # `latest()` collapses to one row per financial_year so the
+    # period-axis sort+trim returns the canonical national total. User
+    # filters override headline_slice entries per-key — passing
+    # `filters={state: NSW}` to `latest()` keeps the area/source defaults
+    # and surfaces the NSW latest-year total. Mirrors rba-mcp's
+    # `headline_series` pattern (which is series-keyed because F-tables
+    # are flat); aihw is dim-keyed because AIHW tables are cross-tabs.
+    headline_slice: dict[str, str] | None = None
 
 
 _REGISTRY: dict[str, CuratedDataset] | None = None
@@ -166,6 +182,22 @@ def _load_one(path: Path) -> CuratedDataset:
     if period_dim_raw is not None and not isinstance(period_dim_raw, str):
         raise ValueError(f"{path.name}: period_dimension must be a string if provided")
 
+    headline_raw = raw.get("headline_slice")
+    headline_slice: dict[str, str] | None = None
+    if headline_raw is not None:
+        if not isinstance(headline_raw, dict):
+            raise ValueError(
+                f"{path.name}: headline_slice must be a mapping if provided"
+            )
+        valid_keys = {key for key in columns}
+        bad = [k for k in headline_raw if k not in valid_keys]
+        if bad:
+            raise ValueError(
+                f"{path.name}: headline_slice references unknown column(s) "
+                f"{bad!r}. Valid column keys: {sorted(valid_keys)}"
+            )
+        headline_slice = {str(k): str(v) for k, v in headline_raw.items()}
+
     return CuratedDataset(
         id=str(raw["id"]),
         name=str(raw["name"]),
@@ -187,6 +219,7 @@ def _load_one(path: Path) -> CuratedDataset:
         unit_column=raw.get("unit_column"),
         discovery=discovery_raw,
         period_dimension=period_dim_raw,
+        headline_slice=headline_slice,
     )
 
 

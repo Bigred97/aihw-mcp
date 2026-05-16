@@ -20,6 +20,14 @@ header_row: 1
 layout: wide
 cache_kind: data
 period_dimension: year
+# Default-filter slice applied by latest() so the no-filter call returns
+# one canonical headline row per year — total deaths from all causes for
+# both sexes combined, all age groups rolled up. Without this, latest()
+# would return an arbitrary (cause × sex × age_group) cell.
+headline_slice:
+  cause_of_death: All causes combined
+  sex: Persons
+  age_group: Total
 search_keywords:
   - mortality
   - deaths

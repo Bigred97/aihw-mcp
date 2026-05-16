@@ -20,6 +20,17 @@ header_row: 1
 layout: wide
 cache_kind: data
 period_dimension: year
+# Default-filter slice applied by latest() so the no-filter call returns
+# one canonical row per (year × quarter) — national-aggregate detention
+# population across all states, both sexes, all legal statuses, both
+# Indigenous and non-Indigenous youth aged 10-17. AIHW publishes an
+# 'Aust' state code with 'Total' aggregates that line up cleanly.
+headline_slice:
+  state: Aust
+  sex: Total
+  legal_status: Total
+  indigenous_status: Total
+  age_group: 10 to 17
 search_keywords:
   - youth justice
   - youth detention
@@ -116,3 +127,9 @@ dimension_values:
     Tas: Tas
     NT: NT
     ACT: ACT
+    # AIHW's national-aggregate row uses 'Aust' as the state code. Needed
+    # for the headline_slice (latest() defaults to the national total).
+    aust: Aust
+    australia: Aust
+    Aust: Aust
+    Australia: Aust

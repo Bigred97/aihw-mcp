@@ -47,7 +47,7 @@ async def test_live_mort_state_breakdown():
     curated.reset_registry()
     r = await server.get_data(
         "MORT_GEOGRAPHY",
-        filters={"category": "state", "SEX": "Persons", "YEAR": "2023"},
+        filters={"category": "state", "sex": "Persons", "year": "2023"},
         measures="age_standardised_rate_per_100000",
     )
     assert r.row_count >= 8  # 8 states/territories + maybe national total

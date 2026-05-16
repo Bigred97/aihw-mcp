@@ -20,6 +20,17 @@ header_row: 1
 layout: wide
 cache_kind: data
 period_dimension: year
+# Default-filter slice applied by latest() so the no-filter call returns
+# one canonical headline row per year. ACIM does NOT publish an
+# "All cancers combined" aggregate row — every Cancer_Type is a distinct
+# site. We default to Bowel cancer (one of the most diagnosed cancers
+# in Australia and a long-running AIHW headline series) with sex=Persons
+# and type=Incidence so latest() collapses to a single row per year.
+# Customers wanting a different cancer override via filters.
+headline_slice:
+  cancer_type: Bowel cancer
+  sex: Persons
+  type: Incidence
 search_keywords:
   - cancer
   - cancer incidence

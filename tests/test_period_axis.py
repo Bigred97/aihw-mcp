@@ -64,7 +64,7 @@ def mocked_client():
 def test_period_dimension_set_on_time_series_datasets():
     expected = {
         "GRIM_DEATHS": "year",
-        "MORT_GEOGRAPHY": "YEAR",
+        "MORT_GEOGRAPHY": "year",
         "CANCER_INCIDENCE_MORTALITY": "year",
         "HEALTH_EXPENDITURE": "financial_year",
         "YOUTH_JUSTICE_DETENTION": "year",
@@ -314,4 +314,111 @@ async def test_top_n_with_period_filter_in_filters_dict(mocked_client):
     )
     assert r.row_count <= 3
     for rec in r.records:
+        assert rec.dimensions["year"] == "2023"
+
+
+# ---------------------------------------------------------------------------
+# v0.4.6 Bug 1: latest() applies the curated headline_slice when no filters
+# are given, so the no-arg call returns one canonical row per period instead
+# of an arbitrary cell from a multi-dim cross-tab.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.asyncio
+async def test_latest_hexp_returns_headline_slice_with_no_filters(mocked_client):
+    """Pre-0.4.6: latest() on HEALTH_EXPENDITURE returned a random cell from
+    the 5-dim cross-tab (e.g. NT × Research × Non-government × $1M).
+    Post-0.4.6: returns the headline slice (NSW × Public hospitals ×
+    Government × State and local) for the latest financial year."""
+    r = await server.latest("HEALTH_EXPENDITURE")
+    assert r.row_count == 1
+    rec = r.records[0]
+    assert rec.dimensions["state"] == "NSW"
+    assert rec.dimensions["area_of_expenditure"] == "Public hospitals"
+    assert rec.dimensions["broad_source_of_funding"] == "Government"
+    assert rec.dimensions["detailed_source_of_funding"] == "State and local"
+    # Fixture only carries NSW × Public hospitals × Government × State and
+    # local through 2010-11 (full live CSV reaches 2011-12); latest must
+    # be the most-recent year present in the headline cell.
+    assert rec.dimensions["financial_year"] == "2010-11"
+    # And the value should be the real-data figure (~$6.4B for the headline cell).
+    assert rec.value is not None and rec.value > 5000
+
+
+@pytest.mark.asyncio
+async def test_latest_hexp_user_filter_overrides_per_key(mocked_client):
+    """latest(filters={"state": "VIC"}) keeps the area/source defaults and
+    surfaces VIC's latest-year headline — not NSW's, and not a random VIC cell."""
+    r = await server.latest("HEALTH_EXPENDITURE", filters={"state": "VIC"})
+    assert r.row_count == 1
+    rec = r.records[0]
+    assert rec.dimensions["state"] == "VIC"
+    # Per-key merge: area/source/detail defaults still apply
+    assert rec.dimensions["area_of_expenditure"] == "Public hospitals"
+    assert rec.dimensions["broad_source_of_funding"] == "Government"
+    assert rec.dimensions["detailed_source_of_funding"] == "State and local"
+
+
+@pytest.mark.asyncio
+async def test_latest_mort_geography_returns_national_aggregate(mocked_client):
+    """Pre-0.4.6: latest() on MORT_GEOGRAPHY surfaced an arbitrary region row.
+    Post-0.4.6: defaults to the Australia (total) Persons row."""
+    r = await server.latest("MORT_GEOGRAPHY")
+    assert r.row_count >= 1
+    rec = r.records[0]
+    assert rec.dimensions["geography"] == "Australia (total)"
+    assert rec.dimensions["sex"] == "Persons"
+    assert rec.dimensions["category"] == "Remoteness area"
+
+
+@pytest.mark.asyncio
+async def test_latest_grim_uses_headline_slice_with_no_filters(mocked_client):
+    """Pre-0.4.6: latest("GRIM_DEATHS") returned an arbitrary
+    (cause × sex × age_group) cell. Post-0.4.6: defaults to All causes
+    combined × Persons × Total — the headline national mortality number."""
+    r = await server.latest("GRIM_DEATHS")
+    # Three measures (deaths, crude_rate, age_standardised_rate)
+    assert r.row_count >= 1
+    for rec in r.records:
+        assert rec.dimensions["cause_of_death"] == "All causes combined"
+        assert rec.dimensions["sex"] == "Persons"
+        assert rec.dimensions["age_group"] == "Total"
+
+
+# ---------------------------------------------------------------------------
+# v0.4.6 Bug 2: dim-key case drift on MORT_GEOGRAPHY
+# Pre-0.4.6 returned dimensions={"YEAR": "2023", "SEX": "Persons", ...}.
+# Portfolio convention is snake_case lowercase everywhere.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.asyncio
+async def test_mort_geography_dim_keys_are_lowercase(mocked_client):
+    """Output dim keys must follow the portfolio snake_case convention."""
+    r = await server.latest("MORT_GEOGRAPHY")
+    assert r.row_count >= 1
+    dim_keys = set(r.records[0].dimensions.keys())
+    # Pre-0.4.6 these were 'YEAR' and 'SEX'.
+    assert "year" in dim_keys
+    assert "sex" in dim_keys
+    # And NO uppercase variants leak through.
+    assert "YEAR" not in dim_keys
+    assert "SEX" not in dim_keys
+
+
+@pytest.mark.asyncio
+async def test_mort_geography_accepts_lowercase_filter_keys(mocked_client):
+    """Filter input matches the lowercase YAML keys (portfolio convention).
+
+    Uses age_standardised_rate (numeric, no thousands separators in the
+    fixture) instead of deaths (which carries comma-formatted strings that
+    pandas rejects post-coercion, an unrelated fixture artefact).
+    """
+    r = await server.get_data(
+        "MORT_GEOGRAPHY",
+        filters={"category": "state", "sex": "Persons", "year": "2023"},
+        measures="age_standardised_rate_per_100000",
+    )
+    # 8 states + ACT + NT + Other Territories + Australia (total) → 10+ rows
+    assert r.row_count >= 8
+    for rec in r.records:
+        assert rec.dimensions["sex"] == "Persons"
         assert rec.dimensions["year"] == "2023"

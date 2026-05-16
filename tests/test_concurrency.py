@@ -82,7 +82,7 @@ async def test_parallel_different_datasets(counting_fetch_patch):
                         filters={"cause_of_death": "Diabetes", "sex": "persons"},
                         measures="deaths"),
         server.get_data("MORT_GEOGRAPHY",
-                        filters={"category": "state", "SEX": "Persons"},
+                        filters={"category": "state", "sex": "Persons"},
                         measures="deaths"),
         server.get_data("CANCER_INCIDENCE_MORTALITY",
                         filters={"cancer_type": "Breast cancer", "sex": "female"},

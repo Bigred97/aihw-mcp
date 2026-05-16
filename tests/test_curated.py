@@ -200,3 +200,97 @@ def test_discovery_block_shape():
         # Must declare either resource_name or resource_name_pattern
         has_res = bool(cd.discovery.get("resource_name") or cd.discovery.get("resource_name_pattern"))
         assert has_res, f"{cd.id}: discovery needs resource_name or resource_name_pattern"
+
+
+# ---- v0.4.6: portfolio dim-key convention + headline_slice ----
+
+
+def test_all_dim_keys_are_lowercase_snake_case():
+    """Portfolio convention — every curated column key must be lowercase
+    snake_case so response.dimensions[...] reads the same across all sister
+    MCPs. Pre-0.4.6 MORT_GEOGRAPHY shipped uppercase 'YEAR' / 'SEX' which
+    surfaced as uppercase keys in the response dict and broke uniformity.
+    """
+    for cd in curated.list_all():
+        for col in cd.columns.values():
+            assert col.key == col.key.lower(), (
+                f"{cd.id}: column key {col.key!r} must be lowercase "
+                "(portfolio convention; source CSV header stays in source_column)"
+            )
+
+
+def test_headline_slice_loads_when_declared():
+    """Each declared headline_slice round-trips into the curated dataclass."""
+    expected_keys = {
+        "HEALTH_EXPENDITURE": {"state", "area_of_expenditure",
+                               "broad_source_of_funding",
+                               "detailed_source_of_funding"},
+        "MORT_GEOGRAPHY": {"category", "geography", "sex"},
+        "GRIM_DEATHS": {"cause_of_death", "sex", "age_group"},
+        "CANCER_INCIDENCE_MORTALITY": {"cancer_type", "sex", "type"},
+        "YOUTH_JUSTICE_DETENTION": {"state", "sex", "legal_status",
+                                    "indigenous_status", "age_group"},
+    }
+    for ds_id, expected in expected_keys.items():
+        cd = curated.get(ds_id)
+        assert cd is not None
+        assert cd.headline_slice is not None, f"{ds_id} missing headline_slice"
+        assert set(cd.headline_slice) == expected, (
+            f"{ds_id} headline_slice keys: {set(cd.headline_slice)} != {expected}"
+        )
+
+
+def test_headline_slice_unset_on_register_dataset():
+    """PUBLIC_HOSPITALS is a register without a meaningful single-row headline."""
+    cd = curated.get("PUBLIC_HOSPITALS")
+    assert cd is not None
+    assert cd.headline_slice is None
+
+
+def test_headline_slice_keys_reference_real_columns():
+    """Every headline_slice key must be a curated column on the same dataset."""
+    for cd in curated.list_all():
+        if cd.headline_slice is None:
+            continue
+        col_keys = {c.key for c in cd.columns.values()}
+        for slice_key in cd.headline_slice:
+            assert slice_key in col_keys, (
+                f"{cd.id}: headline_slice key {slice_key!r} not in columns "
+                f"({sorted(col_keys)})"
+            )
+
+
+def test_headline_slice_invalid_key_raises_at_load(tmp_path, monkeypatch):
+    """A YAML whose headline_slice references an undefined column must fail
+    at load — silent failures here would manifest as 'unknown filter' errors
+    deep in a user's get_data call, far from the broken config.
+    """
+    import yaml as _yaml
+    from aihw_mcp.curated import _load_one
+    bogus = {
+        "id": "BOGUS",
+        "name": "Bogus",
+        "description": "test",
+        "source_url": "https://example.com/",
+        "download_url": "https://example.com/x.csv",
+        "format": "csv",
+        "layout": "wide",
+        "header_row": 1,
+        "columns": {
+            "year": {
+                "source_column": "year",
+                "role": "dimension",
+                "dtype": "string",
+            },
+            "value": {
+                "source_column": "value",
+                "role": "measure",
+                "dtype": "float",
+            },
+        },
+        "headline_slice": {"not_a_real_column": "x"},
+    }
+    p = tmp_path / "BOGUS.yaml"
+    p.write_text(_yaml.safe_dump(bogus), encoding="utf-8")
+    with pytest.raises(ValueError, match="headline_slice references unknown column"):
+        _load_one(p)

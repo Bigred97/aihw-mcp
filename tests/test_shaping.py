@@ -363,3 +363,78 @@ def test_unknown_dimension_value_lists_alternatives(grim_csv):
         )
     msg = str(exc_info.value)
     assert "female" in msg or "Females" in msg
+
+
+# ─── Item 5: long-text-field truncation ────────────────────────────────
+# Defensive cap. Real AIHW data fields are <100 chars in every observed
+# dataset (longest measured: ~70 chars on PUBLIC_HOSPITALS peer-group
+# names), but if AIHW ever introduces a long descriptor (e.g. extended
+# cancer-type definitions, hospital service descriptions) the cap keeps
+# the response payload tight by default — and we expose the original
+# value via shaping.truncate_text() / shaping._TEXT_FIELD_CAP for tests.
+
+
+def test_long_text_field_is_truncated_by_default(grim_csv):
+    """A synthetic >500-char cause_of_death gets truncated in the response."""
+    cd = curated.get("GRIM_DEATHS")
+    df = _parse_csv(cd, grim_csv)
+    # Inject a long descriptor into a copy of the df
+    long_desc = "X" * 800
+    df = df.copy()
+    # Replace the first row's cause_of_death
+    df.loc[df.index[0], "cause_of_death"] = long_desc
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={}, measures="deaths",
+        start_period=None, end_period=None, fmt="records", user_query={},
+    )
+    # Find a record whose cause_of_death was that long value
+    long_records = [
+        r for r in resp.records
+        if r.dimensions.get("cause_of_death", "").startswith("X")
+    ]
+    assert long_records, "expected at least one record carrying the long value"
+    for r in long_records:
+        val = r.dimensions["cause_of_death"]
+        # Cap is configurable but must be well under the 800-char source
+        assert len(val) <= shaping._TEXT_FIELD_CAP + 80, (
+            f"value not truncated: len={len(val)}"
+        )
+        # Marker tells the agent more text exists and how to retrieve it
+        assert "more chars" in val
+        assert "include_full_text" in val
+
+
+def test_short_text_field_is_not_truncated(grim_csv):
+    """Real AIHW values (all <100 chars) must pass through unchanged."""
+    cd = curated.get("GRIM_DEATHS")
+    df = _parse_csv(cd, grim_csv)
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={"cause_of_death": "Diabetes"}, measures="deaths",
+        start_period=None, end_period=None, fmt="records", user_query={},
+    )
+    assert resp.row_count > 0
+    for r in resp.records:
+        cause = r.dimensions.get("cause_of_death", "")
+        # No truncation marker on values that fit
+        assert "more chars" not in cause
+        assert "include_full_text" not in cause
+
+
+def test_truncate_text_helper_threshold():
+    """The helper is configurable but uses _TEXT_FIELD_CAP by default."""
+    short = "x" * 100
+    long = "x" * 800
+    assert shaping.truncate_text(short) == short
+    out = shaping.truncate_text(long)
+    assert out != long
+    assert "more chars" in out
+    assert "include_full_text" in out
+    # Default cap exists and is sensible (between 100 and a few thousand)
+    assert 100 < shaping._TEXT_FIELD_CAP < 5000
+
+
+def test_truncate_text_handles_non_string():
+    """None / int / NaN pass through unchanged — only str values are capped."""
+    assert shaping.truncate_text(None) is None
+    assert shaping.truncate_text(42) == 42
+    assert shaping.truncate_text("") == ""

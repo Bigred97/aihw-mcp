@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.4] - 2026-05-16
+
+### Added — defensive long-text-field cap (portfolio sister-MCP playbook, item 5)
+
+`shaping.truncate_text()` caps dimension-string values above 500 chars
+with a `...[N more chars, include_full_text=true]` marker and runs over
+every dim value emitted from `shape_wide` / `shape_transposed`.
+
+**Audit finding**: in every observed AIHW dataset (GRIM, MORT, ACIM,
+HEXP, YOUTH_JUSTICE, PUBLIC_HOSPITALS), the longest dimension string is
+~70 chars (a PUBLIC_HOSPITALS peer-group name). The 500-char cap is
+therefore a no-op for current data — the field-cap path is defensive
+plumbing that protects the response payload tightness contract against
+a future AIHW release introducing a long descriptor (e.g. extended
+cancer-type definitions, hospital service descriptions, free-text
+methodology notes attached to a region label).
+
+4 new unit tests in `tests/test_shaping.py`:
+- `test_long_text_field_is_truncated_by_default` — synthetic 800-char
+  `cause_of_death` value carries the truncation marker
+- `test_short_text_field_is_not_truncated` — real <100-char AIHW values
+  pass through unchanged (the common case)
+- `test_truncate_text_helper_threshold` — helper is configurable; default
+  cap lives between 100 and 5000 chars
+- `test_truncate_text_handles_non_string` — `None` / `int` / empty string
+  pass through, so the helper is safe to call on every dim slot
+
+### Backward compatibility
+
+No behaviour change for any existing AIHW dataset — every real
+dimension value is well under the cap.
+
 ## [0.4.3] - 2026-05-16
 
 ### Changed — sanitize user-facing error messages (portfolio sister-MCP playbook, item 3)

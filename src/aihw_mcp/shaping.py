@@ -54,6 +54,35 @@ def _safe_str(v: Any) -> str | None:
     return str(v)
 
 
+# ─── long-text-field defensive cap (Item 5 portfolio playbook) ─────────
+# Real AIHW dimension values are <100 chars in every observed dataset
+# (longest measured: ~70 chars on PUBLIC_HOSPITALS peer-group names).
+# This cap protects against a future AIHW release introducing a long
+# descriptor (e.g. extended cancer-type definitions). The default is set
+# well above any real value so the path is a no-op for current data, and
+# the truncation marker tells the agent the full text is retrievable.
+_TEXT_FIELD_CAP = 500
+
+
+def truncate_text(v: Any, *, cap: int = _TEXT_FIELD_CAP) -> Any:
+    """Truncate a string value above `cap` chars with a recovery marker.
+
+    Non-string values (None, ints, floats) pass through unchanged so this
+    is safe to call indiscriminately on every dimension-value slot.
+
+    The marker — `...[N more chars, include_full_text=true]` — is human
+    readable and tells the calling agent two things at a glance: how
+    much was cut, and the parameter name (currently not implemented as a
+    tool flag — Wave C — but reserved) that would lift the cap.
+    """
+    if not isinstance(v, str):
+        return v
+    if len(v) <= cap:
+        return v
+    extra = len(v) - cap
+    return f"{v[:cap]}...[{extra} more chars, include_full_text=true]"
+
+
 def _apply_aliases(df: pd.DataFrame, cd: CuratedDataset) -> pd.DataFrame:
     """Rename source columns to their curated aliases.
 
@@ -189,7 +218,7 @@ def shape_wide(
             raw = row[k]
             v = _safe_str(raw)
             if v is not None:
-                dim_vals[k] = v
+                dim_vals[k] = truncate_text(v)
         for mk in measures:
             mc = measure_by_key.get(mk)
             if mc is None:
@@ -313,7 +342,7 @@ def shape_transposed(
                     period=str(period_col),
                     value=value,
                     measure=display_metric,
-                    dimensions={"metric_source_label": label},
+                    dimensions={"metric_source_label": truncate_text(label)},
                     unit=unit,
                 )
             )

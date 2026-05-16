@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aihw-mcp"
-version = "0.4.3"
+version = "0.4.4"
 description = "MCP server for Australian Institute of Health and Welfare data. Plain-English access to mortality (GRIM/MORT), cancer incidence, health expenditure, youth justice detention, and the public hospitals register."
 readme = "README.md"
 requires-python = ">=3.11"

@@ -200,21 +200,21 @@ def _validate_measures(measures: Any) -> str | list[str] | None:
                 raise ValueError(
                     f"measures list entries must be strings, got {type(m).__name__}. "
                     "Example: measures=['deaths', 'crude_rate_per_100000']. "
-                    "Try describe_dataset(<id>) to see available measure keys."
+                    "See the dataset's measures list for available keys."
                 )
             s = m.strip()
             if not s:
                 raise ValueError(
                     "measures list contains an empty string. "
                     "Drop the empty entry, or pass measures=['deaths'] (or similar). "
-                    "Try describe_dataset(<id>) to see available measure keys."
+                    "See the dataset's measures list for available keys."
                 )
             out.append(s)
         return out
     raise ValueError(
         f"measures must be a string or list of strings, got {type(measures).__name__}. "
         "Example: measures='deaths' or measures=['deaths', 'crude_rate_per_100000']. "
-        "Try describe_dataset(<id>) to see available measure keys."
+        "See the dataset's measures list for available keys."
     )
 
 
@@ -753,7 +753,7 @@ async def top_n(
         raise ValueError(
             "measure is required and must be a non-empty string. "
             "Example: top_n('GRIM_DEATHS', 'deaths', n=10). "
-            "Try describe_dataset(<id>) to see available measure keys."
+            "See the dataset's measures list for available keys."
         )
     if isinstance(n, bool) or not isinstance(n, int):
         raise ValueError(

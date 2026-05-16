@@ -172,7 +172,7 @@ async def test_flow_series_format_for_charting(mocked_client):
 @pytest.mark.asyncio
 async def test_flow_unhappy_path_helpful_error(mocked_client):
     """Customer typos a sex value. Error must guide them to valid options."""
-    with pytest.raises(ValueError, match="Try one of") as exc_info:
+    with pytest.raises(ValueError, match="Valid values") as exc_info:
         await server.get_data(
             "GRIM_DEATHS",
             filters={"sex": "narnia"},

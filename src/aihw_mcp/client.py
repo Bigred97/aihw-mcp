@@ -154,18 +154,26 @@ class AIHWClient:
                         upstream = f"AIHW API returned {e.response.status_code}"
                     else:
                         upstream = f"AIHW API unreachable ({type(e).__name__})"
+                    # Don't include the full URL in stale_reason — surfaced
+                    # verbatim in DataResponse.stale_reason and would leak
+                    # internal CKAN paths.
                     _mark_stale(
-                        f"{upstream} for {url}; serving cached payload from "
+                        f"{upstream}; serving cached payload from "
                         f"~{age_min} minute(s) ago"
                     )
                     future.set_result(payload)
                     return payload
-                # Genuinely no cache to fall back to — preserve original behaviour
+                # Genuinely no cache to fall back to — preserve original behaviour.
+                # Don't echo the upstream URL in error text: it leaks internal
+                # CKAN paths to MCP clients and clutters the agent's reasoning
+                # chain. The status / error class is sufficient context.
                 if isinstance(e, httpx.HTTPStatusError):
                     raise AIHWAPIError(
-                        f"data.gov.au returned {e.response.status_code} for {url}"
+                        f"data.gov.au returned {e.response.status_code}"
                     ) from e
-                raise AIHWAPIError(f"data.gov.au request failed: {e}") from e
+                raise AIHWAPIError(
+                    f"data.gov.au request failed ({type(e).__name__})"
+                ) from e
             await self.cache.set(url, resp.content, kind=kind)
             future.set_result(resp.content)
             return resp.content

@@ -340,8 +340,7 @@ def translate_filter_value(
     rest = f" ({len(valid)} total)" if len(valid) > len(shown) else ""
     raise ValueError(
         f"Unknown value {user_value!r} for filter {dim_key!r} on dataset {cd.id!r}. "
-        f"{suggest_msg}Try one of: {', '.join(shown)}{rest}. "
-        f"Try describe_dataset({cd.id!r}) for the full list."
+        f"{suggest_msg}Valid values: {', '.join(shown)}{rest}."
     )
 
 
@@ -427,8 +426,7 @@ def resolve_measure_keys(
             rest = f" ({len(valid_sorted)} total)" if len(valid_sorted) > len(shown) else ""
             raise ValueError(
                 f"Empty measure key for dataset {cd.id!r}. "
-                f"Try one of: {', '.join(shown)}{rest}. "
-                f"Try describe_dataset({cd.id!r}) for the full list."
+                f"Valid measures: {', '.join(shown)}{rest}."
             )
         if v_str in valid_keys:
             out.append(v_str)
@@ -447,8 +445,7 @@ def resolve_measure_keys(
             suggest_msg = f"Did you mean {suggestion!r}? " if suggestion else ""
             raise ValueError(
                 f"Unknown measure {v!r} for dataset {cd.id!r}. "
-                f"{suggest_msg}Try one of: {valid_hint}. "
-                f"Try describe_dataset({cd.id!r}) for the full list."
+                f"{suggest_msg}Valid measures: {valid_hint}."
             )
     # Dedupe while preserving order.
     seen: set[str] = set()

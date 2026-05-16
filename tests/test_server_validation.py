@@ -178,3 +178,162 @@ def test_validate_period_rejects_bool_with_hint():
     """bool is a subclass of int but must NOT be coerced silently."""
     with pytest.raises(ValueError, match="bool"):
         server._validate_period(True, "start_period")
+
+
+# ─── Item 3: error-message sanitization ────────────────────────────────
+# Error strings surfaced to MCP clients must not leak internal references:
+#   - `describe_dataset(<id>)` (a sister-MCP tool name is a UX dead-end for
+#     non-MCP callers + clutters the message for MCP callers who can use
+#     auto-discovery anyway)
+#   - data.gov.au URLs (internal CKAN paths leak implementation detail)
+# These tests pin the user-facing surface.
+
+
+@pytest.mark.asyncio
+async def test_unknown_dataset_error_omits_describe_dataset():
+    """`Dataset 'X' is not curated` must not direct the user to describe_dataset()."""
+    try:
+        await server.get_data("DOES_NOT_EXIST")
+    except ValueError as e:
+        assert "describe_dataset(" not in str(e), (
+            f"Unknown-dataset error leaks tool ref: {e}"
+        )
+        # And no data.gov.au URLs either
+        assert "data.gov.au" not in str(e), f"Error leaks .gov.au URL: {e}"
+    else:
+        pytest.fail("expected ValueError")
+
+
+@pytest.mark.asyncio
+async def test_unknown_filter_error_omits_describe_dataset():
+    """`Unknown filter 'X' on dataset 'Y'` must not direct to describe_dataset()."""
+    # Use GRIM_DEATHS — load the curated metadata so we hit the shaping-layer
+    # filter check without needing the real CSV fetch. Force a cached parse.
+    import pandas as pd
+
+    from aihw_mcp import curated as _curated
+    from aihw_mcp.shaping import build_response
+
+    cd = _curated.get("GRIM_DEATHS")
+    assert cd is not None
+    # Construct a tiny df matching the columns the YAML expects.
+    df = pd.DataFrame({
+        "grim": ["GRIM0000"],
+        "cause_of_death": ["All causes combined"],
+        "year": ["2023"],
+        "sex": ["Persons"],
+        "age_group": ["Total"],
+        "deaths": [100.0],
+        "crude_rate_per_100000": [10.0],
+        "age_standardised_rate_per_100000": [10.0],
+    })
+    try:
+        build_response(
+            cd=cd,
+            df=df,
+            filters={"not_a_real_dim": "x"},
+            measures=None,
+            start_period=None,
+            end_period=None,
+            fmt="records",
+            user_query={"filters": {"not_a_real_dim": "x"}},
+        )
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+
+
+def test_unknown_filter_value_error_omits_describe_dataset():
+    """`Unknown value 'X' for filter 'Y'` must not direct to describe_dataset()."""
+    from aihw_mcp import curated as _curated
+
+    cd = _curated.get("GRIM_DEATHS")
+    assert cd is not None
+    try:
+        _curated.translate_filter_value(cd, "sex", "not-a-sex-value")
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+
+
+def test_unknown_measure_error_omits_describe_dataset():
+    """`Unknown measure 'X' for dataset 'Y'` must not direct to describe_dataset()."""
+    from aihw_mcp import curated as _curated
+
+    cd = _curated.get("GRIM_DEATHS")
+    assert cd is not None
+    try:
+        _curated.resolve_measure_keys(cd, "not-a-real-measure")
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+
+
+def test_empty_measure_error_omits_describe_dataset():
+    """Empty measure string error must not direct to describe_dataset()."""
+    from aihw_mcp import curated as _curated
+
+    cd = _curated.get("GRIM_DEATHS")
+    assert cd is not None
+    try:
+        _curated.resolve_measure_keys(cd, "  ")
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+
+
+@pytest.mark.asyncio
+async def test_top_n_measure_error_omits_describe_dataset():
+    """top_n's measure-validation errors must not direct to describe_dataset()."""
+    try:
+        await server.top_n("GRIM_DEATHS", measure="", n=5)
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+
+
+@pytest.mark.asyncio
+async def test_measures_validation_errors_omit_describe_dataset():
+    """`measures` list validation errors must not direct to describe_dataset()."""
+    # Non-string entry in list
+    try:
+        server._validate_measures([1, 2])  # type: ignore[list-item]
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+    # Empty string in list
+    try:
+        server._validate_measures(["", "x"])
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")
+    # Bad type
+    try:
+        server._validate_measures(123)
+    except ValueError as e:
+        msg = str(e)
+        assert "describe_dataset(" not in msg, f"leaks tool ref: {msg}"
+        assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
+    else:
+        pytest.fail("expected ValueError")

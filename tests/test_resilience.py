@@ -142,3 +142,78 @@ async def test_fetch_resource_in_flight_dedup(fresh_cache: Cache):
         results = await asyncio.gather(*(client.fetch_resource(url) for _ in range(10)))
     assert all(r == b"hello" for r in results)
     assert route.call_count == 1
+
+
+# ─── Item 3: error-message sanitization on the client layer ────────────
+# AIHWAPIError messages surface up through `_fetch_and_parse` into the
+# user-facing ValueError. They must not contain the full CKAN URL.
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_fetch_resource_500_error_does_not_leak_url(fresh_cache: Cache):
+    """5xx error message must not embed the full URL — it's an internal detail."""
+    url = "https://data.gov.au/data/api/3/action/some-internal-ckan-path"
+    respx.get(url).mock(return_value=httpx.Response(503, text="gone"))
+    async with AIHWClient(cache=fresh_cache) as client:
+        with pytest.raises(AIHWAPIError) as exc_info:
+            await client.fetch_resource(url)
+        msg = str(exc_info.value)
+        assert "503" in msg  # status code is fine to surface
+        assert url not in msg, f"error leaks full URL: {msg}"
+        assert "/data/api/3/action/" not in msg, f"error leaks CKAN path: {msg}"
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_fetch_resource_connection_error_does_not_leak_url(
+    fresh_cache: Cache,
+):
+    """Network-error message must not embed the full URL either."""
+    url = "https://data.gov.au/data/api/3/action/some-internal-ckan-path"
+    respx.get(url).mock(side_effect=httpx.ConnectError("dns failed"))
+    async with AIHWClient(cache=fresh_cache) as client:
+        with pytest.raises(AIHWAPIError) as exc_info:
+            await client.fetch_resource(url)
+        msg = str(exc_info.value)
+        assert url not in msg, f"error leaks full URL: {msg}"
+        assert "/data/api/3/action/" not in msg, f"error leaks CKAN path: {msg}"
+
+
+@pytest.mark.asyncio
+@respx.mock
+async def test_stale_signal_reason_does_not_leak_url(fresh_cache: Cache):
+    """Stale fallback reason must not embed the upstream URL — it's user-visible."""
+    from aihw_mcp.client import get_stale_signal, reset_stale_signal
+
+    url = "https://data.gov.au/data/api/3/action/some-internal-ckan-path"
+    # Prime the cache.
+    respx.get(url).mock(return_value=httpx.Response(200, content=b"hello"))
+    async with AIHWClient(cache=fresh_cache) as client:
+        assert await client.fetch_resource(url) == b"hello"
+
+    # Now make the upstream fail and re-fetch — stale fallback should fire.
+    respx.get(url).mock(return_value=httpx.Response(503))
+    async with AIHWClient(cache=fresh_cache) as client:
+        # Force TTL bypass: stale fallback only triggers when cache.get returns None.
+        # Use ttl=0 path via clearing fresh entries, but simplest: just reset signal
+        # then directly invoke _fetch_cached with a kind that has expired TTL.
+        reset_stale_signal()
+        # Use fetch_resource normally — the cached entry is still warm so it'll be
+        # served from cache (not stale path). To exercise the stale path, we need
+        # to clear the cache TTL. Drop in a new client with a cache whose TTL is 0
+        # for "data". Simpler: monkey-patch cache.get to return None.
+
+        async def force_miss(*_a, **_kw):
+            return None
+
+        client.cache.get = force_miss  # type: ignore[method-assign]
+        body = await client.fetch_resource(url)
+        assert body == b"hello"  # stale fallback served
+        stale, reason = get_stale_signal()
+        assert stale is True
+        assert reason is not None
+        assert url not in reason, f"stale_reason leaks full URL: {reason}"
+        assert "/data/api/3/action/" not in reason, (
+            f"stale_reason leaks CKAN path: {reason}"
+        )

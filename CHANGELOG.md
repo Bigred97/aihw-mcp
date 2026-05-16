@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.3] - 2026-05-16
+
+### Changed — sanitize user-facing error messages (portfolio sister-MCP playbook, item 3)
+
+Strip internal references from `ValueError` strings surfaced to MCP clients:
+
+- **Unknown filter / unknown filter value / unknown measure**: replace the
+  trailing `Try describe_dataset('<id>') for the full list.` hint with an
+  inline `Valid filters: ...` / `Valid values: ...` / `Valid measures: ...`
+  list. The error already enumerates the valid options; the second pointer
+  to a sister-tool was redundant and leaked the MCP tool name to non-MCP
+  callers.
+- **measures validation errors** (`top_n` measure required, list-of-int,
+  empty string, bad type): same — drop the trailing `describe_dataset(<id>)`
+  pointer; the inline example already shows the expected shape.
+- **AIHWAPIError messages from `client.py`**: stop echoing the full CKAN
+  resource URL in error text. The status code (or exception class) plus the
+  service name (`data.gov.au`) is the right amount of context — the URL
+  itself is an implementation detail that leaks to MCP clients via the
+  wrapped `ValueError` in `_fetch_and_parse`.
+- **`stale_reason`** (surfaced verbatim in `DataResponse.stale_reason`):
+  drop the URL from the human-readable reason for the same reason.
+
+10 new unit tests in `tests/test_server_validation.py` and
+`tests/test_resilience.py` pin the user-facing surface so this never
+regresses. 2 existing tests updated to match the new phrasing
+(`Try one of` → `Valid values`).
+
+### Backward compatibility
+
+No behaviour change. Inputs that previously raised still raise with the
+same `ValueError` class; the message body is cleaner. Cache, response
+envelope, and tool signatures are unchanged.
+
 ## [0.4.2] - 2026-05-16
 
 ### Fixed — JSON-string `filters` parameter (portfolio-wide)

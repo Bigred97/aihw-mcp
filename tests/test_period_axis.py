@@ -296,9 +296,9 @@ async def test_far_off_input_no_misleading_suggestion(mocked_client):
             filters={"sex": "xyzqwerty"},
             measures="deaths",
         )
-    # No 'Did you mean' — just the 'Try one of' fallback
+    # No 'Did you mean' — just the 'Valid values' fallback
     assert "Did you mean" not in str(exc_info.value)
-    assert "Try one of" in str(exc_info.value)
+    assert "Valid values" in str(exc_info.value)
 
 
 # ---------------------------------------------------------------------------

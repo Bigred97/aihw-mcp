@@ -144,8 +144,7 @@ def _apply_filters(
             rest = f" ({len(valid)} total)" if len(valid) > len(shown) else ""
             raise ValueError(
                 f"Unknown filter {user_key!r} for dataset {cd.id!r}. "
-                f"{suggest_msg}Try one of: {', '.join(shown)}{rest}. "
-                f"Try describe_dataset({cd.id!r}) for the full list."
+                f"{suggest_msg}Valid filters: {', '.join(shown)}{rest}."
             )
         # Lists mean "OR" across values.
         if isinstance(user_val, list):
@@ -153,8 +152,7 @@ def _apply_filters(
                 raise ValueError(
                     f"Filter {user_key!r} has an empty list on dataset {cd.id!r}. "
                     f"Pass at least one value (e.g. {{{user_key!r}: 'value'}}) "
-                    "or omit the filter entirely. "
-                    f"Try describe_dataset({cd.id!r}) to see valid values."
+                    "or omit the filter entirely."
                 )
             resolved = [translate_filter_value(cd, user_key, str(v).strip()) for v in user_val]
             mask = out[user_key].astype("string").isin(resolved)

@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.9] - 2026-05-17
+
+### Performance — Parquet on-disk parsed-DataFrame cache
+
+The in-process LRU (`_df_cache`) handles warm queries in ~50ms but it's
+empty on cold restart. The `ausdata-api` customer-sim flagged
+`CANCER_INCIDENCE_MORTALITY` at 6.2s on cold parse — the
+openpyxl/pandas parse cost. Cold-restart loads now read Parquet in
+~0.5-1s.
+
+Mirrors the wgea-mcp 0.6.4 pattern:
+
+- After parse, DataFrame is persisted to
+  `~/.aihw-mcp/parquet-cache/{sha256-of-cache-key}.parquet` (path
+  overridable via `AIHW_MCP_PARQUET_CACHE_DIR`).
+- Before parsing, check the file: read with `pd.read_parquet` if fresh.
+- TTL: 24h, matching the SQLite byte-cache TTL for `data` kind on AIHW.
+  AIHW publishes updates more often than WGEA, so the TTL is tighter.
+- Self-heal: a corrupt Parquet file is unlinked, falls through to a
+  fresh parse + write.
+- Writes go through a `.parquet.tmp` sibling + rename for atomicity.
+
+### Internal
+
+- Added `pyarrow>=15` dep.
+- New `parquet_cache.py` module + 7 regression tests in
+  `tests/test_parquet_cache.py`.
+- `reset_df_cache_for_tests()` now clears both the in-memory LRU and
+  the Parquet cache.
+- Conftest fixture redirects `AIHW_MCP_PARQUET_CACHE_DIR` to a
+  per-session tmp dir for test isolation.
+
 ## [0.4.8] - 2026-05-17
 
 ### Improved — transport-agnostic Field descriptions

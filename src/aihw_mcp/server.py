@@ -25,7 +25,7 @@ import pandas as pd
 from fastmcp import FastMCP
 from pydantic import Field
 
-from . import catalog, curated
+from . import catalog, curated, parquet_cache
 from .client import AIHWAPIError, AIHWClient, get_stale_signal, reset_stale_signal
 from .curated import _suggest as _fuzzy_suggest
 from .discovery import DiscoveryError, DiscoverySpec, resolve_latest_url
@@ -55,6 +55,14 @@ _df_cache_lock = asyncio.Lock()
 
 
 def reset_df_cache_for_tests() -> None:
+    """Drop the in-memory LRU + the on-disk Parquet cache.
+
+    Tests calling this expect a true cache-miss next call; without
+    clearing the Parquet cache too, a "second call should re-parse"
+    assertion silently fails because Parquet serves a warm copy.
+    """
+    _df_cache.clear()
+    parquet_cache.reset_for_tests()
     """Drop the parsed-DataFrame cache. Tests use this to start from clean."""
     _df_cache.clear()
 
@@ -327,6 +335,18 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
             _df_cache.move_to_end(cache_key)
             return cached
 
+    # On-disk Parquet fallback (warm cache for cold-restart workers).
+    # AIHW XLSX files like CANCER_INCIDENCE_MORTALITY take ~6s to parse
+    # via openpyxl; Parquet-on-disk reads the same DataFrame in ~0.5-1s.
+    parquet_df = await asyncio.to_thread(parquet_cache.read_if_fresh, cache_key)
+    if parquet_df is not None:
+        async with _df_cache_lock:
+            _df_cache[cache_key] = parquet_df
+            _df_cache.move_to_end(cache_key)
+            while len(_df_cache) > _DF_CACHE_MAX_ENTRIES:
+                _df_cache.popitem(last=False)
+        return parquet_df
+
     # Run sync pandas/openpyxl parse off the event loop. Large AIHW files
     # (GRIM ~10MB, multi-decade mortality history) otherwise block the
     # async tool for seconds and time out downstream consumers like the
@@ -357,6 +377,9 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
         _df_cache.move_to_end(cache_key)
         while len(_df_cache) > _DF_CACHE_MAX_ENTRIES:
             _df_cache.popitem(last=False)
+
+    # Persist for the next cold worker. Best-effort; swallows IO errors.
+    await asyncio.to_thread(parquet_cache.write, cache_key, df)
 
     return df
 

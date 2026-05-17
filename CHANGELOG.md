@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.12] - 2026-05-18
+
+### Fixed — three-pool ranker design splits CANCER/GRIM tie
+
+Follow-up to 0.4.11: 'cancer incidence' tied CANCER_INCIDENCE_MORTALITY
+and GRIM_DEATHS at rel=100 because both contained 'incidence' in their
+name/description, and the two-pool ranker's final `min(..., 100)` clamp
+collapsed their distinct raw scores.
+
+Switched to a three-pool design:
+- `id+name` token_set_ratio is the PRIMARY discriminator (the dataset's
+  own name is the strongest semantic match)
+- Keywords broaden recall at reduced weight (KEYWORD_WEIGHT=0.4)
+- Description capped at 30
+- PHRASE_BONUS=15 when the query is a literal substring of the keyword
+  haystack
+- Proportional scaling against leader's raw — no pre-sort clamp
+
+Verification:
+- 'cancer incidence' → CANCER_INCIDENCE_MORTALITY at 100, GRIM at 73.8
+- 'hospital' → PUBLIC_HOSPITALS at 81.8 (was 100-tied with HEALTH_EXPENDITURE)
+- 'youth justice' → YOUTH_JUSTICE_DETENTION alone at 100
+- 'mortality' → 3-way 100 tie (CORRECT: all three are mortality datasets)
+
+318 unit tests pass.
+
 ## [0.4.11] - 2026-05-18
 
 ### Improved — two-pool search ranker

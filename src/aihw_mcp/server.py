@@ -90,7 +90,7 @@ def _unknown_dataset_msg(dataset_id: str) -> str:
     return (
         f"Dataset {dataset_id!r} is not a curated aihw-mcp dataset. "
         f"{suggest_msg}Valid options: {', '.join(shown)}{rest}. "
-        "Try list_curated() to enumerate, or search_datasets('<topic>') to find by keyword."
+        "Enumerate the curated set or search by keyword to discover IDs."
     )
 
 
@@ -98,12 +98,12 @@ def _normalize_dataset_id(dataset_id: Any) -> str:
     if not isinstance(dataset_id, str):
         raise ValueError(
             f"dataset_id must be a string, got {type(dataset_id).__name__}. "
-            "Try search_datasets() or list_curated() to discover IDs."
+            "Search by keyword or enumerate the curated set to discover IDs."
         )
     norm = dataset_id.strip().upper()
     if not norm:
         raise ValueError(
-            "dataset_id is empty. Try list_curated() to see available IDs."
+            "dataset_id is empty. Enumerate the curated set to see available IDs."
         )
     if not _DATASET_ID_PATTERN.match(norm):
         raise ValueError(
@@ -327,15 +327,21 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
             _df_cache.move_to_end(cache_key)
             return cached
 
+    # Run sync pandas/openpyxl parse off the event loop. Large AIHW files
+    # (GRIM ~10MB, multi-decade mortality history) otherwise block the
+    # async tool for seconds and time out downstream consumers like the
+    # ausdata-api gateway. `asyncio.to_thread` offloads to the default
+    # ThreadPoolExecutor; cooperatively yields back during the parse.
     if cd.format == "csv":
-        df = read_csv(body, usecols=usecols, dtype=dtype)
+        df = await asyncio.to_thread(read_csv, body, usecols=usecols, dtype=dtype)
     else:
         if cd.sheet is None:
             raise ValueError(
                 f"Dataset {cd.id!r} declares format='xlsx' but has no sheet name. "
                 "Fix the curated YAML."
             )
-        df = read_xlsx(
+        df = await asyncio.to_thread(
+            read_xlsx,
             body,
             sheet=cd.sheet,
             header_row=cd.header_row,

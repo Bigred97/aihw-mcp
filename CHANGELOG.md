@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.7] - 2026-05-17
+
+### Fixed — sync XLSX/CSV parse no longer blocks the event loop
+
+`get_data()` and `latest()` previously called `pd.read_excel` / `pd.read_csv` synchronously inside the async tool body, which blocked the event loop for the entire parse duration. For large AIHW resources (GRIM mortality history ~10MB, multi-decade) this could stall a downstream consumer (e.g. ausdata-api gateway worker) for 5-20+ seconds and trip 20s upstream timeouts.
+
+Fix: wrap both parser entry points with `asyncio.to_thread(...)` in `server.py`. The sync pandas work now runs in the default ThreadPoolExecutor, the event loop yields cooperatively, and the gateway can handle other concurrent requests during the parse. Tests 311/311 pass. No public API change; pure latency / concurrency win.
+
+Reported via ausdata-api customer-simulation testing (`GRIM_DEATHS` timing out at 20s, CPU spike to 100% on a single worker). The gateway blocklist on `aihw.GRIM_DEATHS` can now be removed.
+
 ## [0.4.6] - 2026-05-17
 
 ### Fixed — `latest()` no longer returns a random cell from multi-dim cross-tabs

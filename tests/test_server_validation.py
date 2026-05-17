@@ -6,6 +6,10 @@ hint) rather than crashing partway through with an obscure error.
 """
 from __future__ import annotations
 
+import ast
+import pathlib
+import re
+
 import pytest
 
 from aihw_mcp import server
@@ -116,21 +120,22 @@ async def test_unknown_dataset_id_suggests_close_match():
         await server.describe_dataset("GRIM_DEATH")
     msg = str(exc_info.value)
     assert "Did you mean 'GRIM_DEATHS'" in msg
-    # Also includes the corrective pointer + a worked list
-    assert "list_curated()" in msg
+    # Also includes the corrective pointer + a worked list (transport-agnostic
+    # phrasing — no `list_curated()` etc. per the cross-sister convention).
+    assert "Enumerate the curated set" in msg
     assert "GRIM_DEATHS" in msg
 
 
 @pytest.mark.asyncio
 async def test_unknown_dataset_id_lists_valid_options():
     """Even when no close fuzzy match exists, the message enumerates valid IDs
-    and points at list_curated()."""
+    and points at the curated set (transport-agnostic phrasing)."""
     with pytest.raises(ValueError) as exc_info:
         await server.describe_dataset("WHO_KNOWS_WHAT_THIS_IS")
     msg = str(exc_info.value)
     # At least the canonical dataset IDs we ship in v0.1
     assert "GRIM_DEATHS" in msg
-    assert "list_curated()" in msg or "search_datasets" in msg
+    assert "Enumerate the curated set" in msg or "search by keyword" in msg
 
 
 @pytest.mark.asyncio
@@ -337,3 +342,74 @@ async def test_measures_validation_errors_omit_describe_dataset():
         assert "data.gov.au" not in msg, f"leaks .gov.au URL: {msg}"
     else:
         pytest.fail("expected ValueError")
+
+
+# ----- transport-agnostic error hints (mirrors rba-mcp's guard) -----
+#
+# Error messages must not reference MCP-tool names (e.g. `describe_dataset()`,
+# `search_datasets()`, `list_curated()`). An error from the aihw_mcp package
+# should read the same whether the caller is an MCP client, a REST gateway,
+# or a Python script calling the functions directly.
+
+_SRC_ROOT = pathlib.Path(__file__).resolve().parent.parent / "src" / "aihw_mcp"
+
+
+def _extract_user_facing_strings() -> list[tuple[pathlib.Path, int, str]]:
+    """Walk every .py under src/aihw_mcp/, parse the AST, and yield only the
+    string arguments to `raise <SomeExc>(...)` calls — these are the strings
+    users actually see in error reports.
+
+    Skips: docstrings, Field(description=..., examples=...), comments,
+    return values. Just rejection-path messages.
+    """
+    out: list[tuple[pathlib.Path, int, str]] = []
+    for py in _SRC_ROOT.rglob("*.py"):
+        tree = ast.parse(py.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Raise) or node.exc is None:
+                continue
+            call = node.exc if isinstance(node.exc, ast.Call) else None
+            if call is None:
+                continue
+            for arg in call.args:
+                pieces: list[str] = []
+                if isinstance(arg, ast.Constant) and isinstance(arg.value, str):
+                    pieces.append(arg.value)
+                elif isinstance(arg, ast.JoinedStr):
+                    for v in arg.values:
+                        if isinstance(v, ast.Constant) and isinstance(v.value, str):
+                            pieces.append(v.value)
+                elif isinstance(arg, ast.BinOp):
+                    stack: list[ast.AST] = [arg]
+                    while stack:
+                        cur = stack.pop()
+                        if isinstance(cur, ast.Constant) and isinstance(cur.value, str):
+                            pieces.append(cur.value)
+                        elif isinstance(cur, ast.BinOp):
+                            stack.append(cur.left)
+                            stack.append(cur.right)
+                        elif isinstance(cur, ast.JoinedStr):
+                            for v in cur.values:
+                                stack.append(v)
+                if pieces:
+                    out.append((py, node.lineno, "".join(pieces)))
+    return out
+
+
+def test_no_mcp_tool_refs_in_error_strings():
+    """No error message references an MCP tool by name
+    (`describe_dataset(...)`, `search_datasets(...)`, `list_curated(...)`).
+    The hint must suggest what to do (look up valid keys, retry, etc.)
+    without naming a specific transport's API surface.
+    """
+    pat = re.compile(r"\b(describe_dataset|search_datasets|list_curated)\s*\(")
+    offenders: list[str] = []
+    for path, lineno, text in _extract_user_facing_strings():
+        if pat.search(text):
+            offenders.append(f"{path.relative_to(_SRC_ROOT.parent.parent)}:{lineno}: {text!r}")
+    assert not offenders, (
+        "User-facing error messages reference MCP tool names — "
+        "these are transport-specific and shouldn't leak through ValueError. "
+        "Replace with transport-agnostic hints (e.g. 'See the valid-options list "
+        f"for X').\n  {chr(10).join(offenders)}"
+    )

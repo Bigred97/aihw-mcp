@@ -443,8 +443,9 @@ async def describe_dataset(
         str,
         Field(
             description=(
-                "Curated dataset ID. Use search_datasets() to discover or "
-                "list_curated() to enumerate. Case-insensitive."
+                "Curated dataset ID. Use the search endpoint or search tool "
+                "to discover, or the list-curated endpoint/tool to enumerate. "
+                "Case-insensitive."
             ),
             examples=[
                 "GRIM_DEATHS",
@@ -590,7 +591,7 @@ async def get_data(
     dataset_id: Annotated[
         str,
         Field(
-            description="Curated dataset ID. Use search_datasets() / list_curated().",
+            description="Curated dataset ID. Use the search or list-curated endpoint/tool to discover.",
             examples=["GRIM_DEATHS", "MORT_GEOGRAPHY", "CANCER_INCIDENCE_MORTALITY"],
         ),
     ],
@@ -770,7 +771,7 @@ async def top_n(
     dataset_id: Annotated[
         str,
         Field(
-            description="Curated dataset ID. Use search_datasets() / list_curated().",
+            description="Curated dataset ID. Use the search or list-curated endpoint/tool to discover.",
             examples=["GRIM_DEATHS", "MORT_GEOGRAPHY", "PUBLIC_HOSPITALS"],
         ),
     ],
@@ -778,8 +779,8 @@ async def top_n(
         str,
         Field(
             description=(
-                "Plain-English measure key to rank by. Use describe_dataset() "
-                "to see available measures."
+                "Plain-English measure key to rank by. Use the describe "
+                "endpoint or describe tool to see available measures."
             ),
             examples=["deaths", "age_standardised_rate_per_100000", "real_expenditure_millions"],
         ),

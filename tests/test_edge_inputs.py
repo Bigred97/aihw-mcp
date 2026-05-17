@@ -230,12 +230,18 @@ async def test_get_data_rejects_bad_format(bad_format):
 
 @pytest.mark.asyncio
 async def test_get_data_filter_with_url_injection_chars(mocked_client):
-    r = await server.get_data(
-        "GRIM_DEATHS",
-        filters={"cause_of_death": "Diabetes?&=/#"},
-        measures="deaths",
-    )
-    assert r.row_count == 0
+    # aihw-mcp 0.4.13: high-confidence Did-you-mean? path catches values
+    # like "Diabetes?&=/#" whose alphabetic prefix ("Diabetes") closely
+    # matches a real cause_of_death. This is helpful, not harmful — the
+    # customer gets the closest real value back. Values with no close
+    # match to any real cause_of_death (random strings, gibberish)
+    # still pass through silently with row_count == 0.
+    with pytest.raises(ValueError, match="Did you mean"):
+        await server.get_data(
+            "GRIM_DEATHS",
+            filters={"cause_of_death": "Diabetes?&=/#"},
+            measures="deaths",
+        )
 
 
 @pytest.mark.asyncio

@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.13] - 2026-05-18
+
+### Improved — high-confidence "Did you mean?" on free-form filter typos
+
+Filtering a free-form dim (cause_of_death, year_of_registration, etc.)
+with a typo previously returned 0 rows silently. Customer-impact: no
+hint that the filter value was wrong.
+
+Now: after applying a filter on a non-enum dim, if the result is empty
+AND difflib finds a HIGH-confidence close match (cutoff=0.7), raise a
+ValueError with the suggestion. Conservative cutoff preserves the
+empty-result contract for legitimately-absent values, unicode, random
+strings, etc. Matches ato-mcp 0.8.13 design.
+
+Example:
+- `cause_of_death='Diabetes?&=/#'` → "Did you mean 'Diabetes'?"
+- `cause_of_death='qwerty zxcvbn'` → silent 0 rows (no close match)
+
+318 unit tests pass.
+
 ## [0.4.12] - 2026-05-18
 
 ### Fixed — three-pool ranker design splits CANCER/GRIM tie

@@ -18,6 +18,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import re
+import threading
 from collections import OrderedDict
 from typing import Annotated, Any, Literal
 
@@ -41,8 +42,12 @@ _VALID_FORMATS = {"records", "series", "csv"}
 
 mcp = FastMCP("aihw-mcp")
 
-_client: AIHWClient | None = None
-_client_lock = asyncio.Lock()
+# Per-thread client cache. The gateway runs MCP tools from worker threads,
+# each with its own asyncio event loop. A module-level singleton holding httpx
+# state from a previous (now-closed) loop raises ``RuntimeError: Event loop is
+# closed``. ``threading.local()`` gives each thread its own client bound to
+# whichever loop is current on that thread when it's first constructed.
+_thread_local = threading.local()
 
 # Parsed-DataFrame cache. The byte cache already short-circuits the network,
 # but pandas still re-parses bytes on every warm call — for the largest
@@ -68,22 +73,29 @@ def reset_df_cache_for_tests() -> None:
 
 
 async def _get_client() -> AIHWClient:
-    global _client
-    async with _client_lock:
-        if _client is None:
-            _client = AIHWClient()
-        return _client
+    client = getattr(_thread_local, "client", None)
+    if client is None:
+        client = AIHWClient()
+        _thread_local.client = client
+    return client
 
 
 async def reset_client_for_tests() -> None:
-    """Drop the cached client. Tests that span event loops must clear it."""
-    global _client
-    if _client is not None:
+    """Drop the cached client for the current thread.
+
+    Tests that span event loops must clear it. ``aclose()`` is best-effort —
+    if the underlying loop is already closed we just drop the reference.
+    """
+    client = getattr(_thread_local, "client", None)
+    if client is not None:
         try:
-            await _client.aclose()
+            await client.aclose()
         except Exception:
             pass
-        _client = None
+        try:
+            del _thread_local.client
+        except AttributeError:
+            pass
 
 
 def _unknown_dataset_msg(dataset_id: str) -> str:

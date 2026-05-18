@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.16] - 2026-05-18
+
+### Improved — year-range hint instead of misleading fuzzy match
+
+Customer-sim flagged that `get_data('CANCER_INCIDENCE_MORTALITY',
+filters={'year': 2022})` returned "Did you mean '2002'?". The fuzzy
+suggestion is technically valid but misleading — the customer hasn't
+mistyped 2002 as 2022; they're asking for a year that doesn't exist
+in the dataset.
+
+For year-shaped dims (4-digit numeric), the error now reports the
+valid range AND the direction of the miss:
+
+  "No data for year=2022 on dataset 'CANCER_INCIDENCE_MORTALITY'.
+  Valid range: 1968-2011 — requested 2022 is AFTER the latest
+  published year."
+
+Fuzzy-match suggestions still fire for non-year free-form filter
+typos (e.g. cause_of_death).
+
+318 unit tests pass.
+
 ## [0.4.15] - 2026-05-18
 
 ### Fixed — short-query ranker misses

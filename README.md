@@ -9,6 +9,8 @@
 
 **MCP server for Australian Institute of Health and Welfare statistics.** Plain-English access to long-term mortality (GRIM), regional mortality (MORT), cancer incidence and mortality (ACIM), national health expenditure, youth justice detention, and the public hospitals register — all from a single `uvx` command.
 
+> **Hosted access?** For cross-source queries, webhooks, an always-on REST API, and a uniform response envelope across all 9 sources, see **[ausdata.io](https://ausdata.io)** — free tier available (500 calls/mo, no card).
+
 ```text
 "How have diabetes deaths changed since 1980?"
 "What's the age-standardised mortality rate in the Sydney - Inner West SA3?"

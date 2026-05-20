@@ -1,5 +1,7 @@
 # aihw-mcp
 
+mcp-name: io.ausdata/aihw-mcp
+
 [![PyPI](https://img.shields.io/pypi/v/aihw-mcp.svg)](https://pypi.org/project/aihw-mcp/)
 [![Python](https://img.shields.io/pypi/pyversions/aihw-mcp.svg)](https://pypi.org/project/aihw-mcp/)
 [![License](https://img.shields.io/pypi/l/aihw-mcp.svg)](https://github.com/Bigred97/aihw-mcp/blob/main/LICENSE)

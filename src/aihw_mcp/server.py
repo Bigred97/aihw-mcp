@@ -31,7 +31,7 @@ from .client import AIHWAPIError, AIHWClient, get_stale_signal, reset_stale_sign
 from .curated import _suggest as _fuzzy_suggest
 from .discovery import DiscoveryError, DiscoverySpec, resolve_latest_url
 from .models import DataResponse, DatasetDetail, DatasetSummary, ColumnDetail, Observation
-from .parsing import drop_blank_rows, read_csv, read_xlsx
+from .parsing import drop_blank_rows, read_csv, read_myhospitals_json, read_xlsx
 from .shaping import build_response
 
 # Curated IDs are uppercase letters + digits + underscore.
@@ -315,10 +315,18 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
     client = await _get_client()
     url = await _resolve_download_url(cd, client)
     try:
-        body = await client.fetch_resource(url, kind=kind)  # type: ignore[arg-type]
+        if cd.format == "myhospitals_json":
+            body = await client.fetch_myhospitals_extract(url, kind=kind)  # type: ignore[arg-type]
+        else:
+            body = await client.fetch_resource(url, kind=kind)  # type: ignore[arg-type]
     except AIHWAPIError as e:
+        source_label = (
+            "the AIHW MyHospitals API"
+            if cd.format == "myhospitals_json"
+            else "data.gov.au"
+        )
         raise ValueError(
-            f"Could not fetch dataset {cd.id} from data.gov.au. ({e})"
+            f"Could not fetch dataset {cd.id} from {source_label}. ({e})"
         ) from e
 
     usecols, dtype = _parse_hints(cd)
@@ -366,6 +374,8 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
     # ThreadPoolExecutor; cooperatively yields back during the parse.
     if cd.format == "csv":
         df = await asyncio.to_thread(read_csv, body, usecols=usecols, dtype=dtype)
+    elif cd.format == "myhospitals_json":
+        df = await asyncio.to_thread(read_myhospitals_json, body)
     else:
         if cd.sheet is None:
             raise ValueError(
@@ -561,6 +571,20 @@ async def _get_data_impl(
     cd = curated.get(norm_id)
     if cd is None:
         raise ValueError(_unknown_dataset_msg(dataset_id))
+    # 0.4.19: apply the curated `headline_slice` ONLY when the caller passed
+    # no filters at all. The original 0.4.19 attempt unconditionally merged
+    # the slice (matching `latest()` semantics), which silently restricted
+    # multi-row queries — e.g. `get_data("MORT_GEOGRAPHY", filters={"category":
+    # "state", ...})` was injected with `geography="Australia (total)"` and
+    # returned 1 row instead of 10. The correct rule for `get_data` is:
+    # - no user filters → apply slice → get the canonical row (fixes
+    #   YOUTH_JUSTICE_DETENTION returning 0 rows on a no-filter call);
+    # - any user filters supplied → respect them entirely, no slice merge.
+    # `latest()` keeps its existing "merge with user winning per-key"
+    # semantics because it's an explicit single-row request.
+    pre_validated = _validate_filters(filters)
+    if cd.headline_slice and not pre_validated:
+        filters = _merge_headline_slice(dataset_id, filters)
     filters_d = _validate_filters(filters)
     measures_v = _validate_measures(measures)
     start_v = _validate_period(start_period, "start_period")

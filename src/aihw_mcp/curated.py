@@ -65,8 +65,8 @@ class CuratedDataset:
     name: str
     description: str
     source_url: str                          # the data.gov.au dataset page
-    download_url: str                        # direct CSV/XLSX resource URL (fallback if discovery fails)
-    format: Literal["xlsx", "csv"]
+    download_url: str                        # direct CSV/XLSX/JSON resource URL (fallback if discovery fails)
+    format: Literal["xlsx", "csv", "myhospitals_json"]
     sheet: str | None                        # XLSX sheet name; None for CSV
     header_row: int                          # 1-indexed
     data_start_row: int | None               # optional override (defaults to header_row + 1)
@@ -167,8 +167,11 @@ def _load_one(path: Path) -> CuratedDataset:
         dim_values[key] = _parse_dimension_values(val_raw)
 
     fmt = str(raw.get("format", "xlsx")).lower()
-    if fmt not in ("xlsx", "csv"):
-        raise ValueError(f"{path.name}: format must be 'xlsx' or 'csv', got {fmt!r}")
+    if fmt not in ("xlsx", "csv", "myhospitals_json"):
+        raise ValueError(
+            f"{path.name}: format must be 'xlsx', 'csv', or 'myhospitals_json', "
+            f"got {fmt!r}"
+        )
 
     layout = str(raw.get("layout", "wide")).lower()
     if layout not in ("wide", "transposed"):

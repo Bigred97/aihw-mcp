@@ -98,6 +98,114 @@ class AIHWClient:
             raise AIHWAPIError(f"Refusing to fetch non-http(s) URL: {url!r}")
         return await self._fetch_cached(url, kind=kind)
 
+    async def fetch_myhospitals_extract(
+        self,
+        base_url: str,
+        *,
+        kind: CacheKind = "data",
+        page_size: int = 1000,
+        max_pages: int = 1000,
+    ) -> bytes:
+        """Fetch every page of an AIHW MyHospitals flat-data-extract endpoint.
+
+        The MyHospitals API caps each call to 1000 records via `top`, paginated
+        by `skip`. We walk pages until either the API returns fewer than
+        `page_size` records (last page) or `max_pages * page_size` records
+        have been collected (defensive ceiling). The concatenated record
+        list is serialised as `{"records": [...]}` JSON bytes and stored in
+        the SQLite HTTP cache against `base_url` so a warm call reuses the
+        whole walk via one cache hit.
+
+        Raises AIHWAPIError on any non-2xx page or unparseable payload.
+        Graceful degradation falls through `_fetch_cached`'s stale-cache
+        fallback path: if the first page hits HTTP error and we have a
+        cached concatenated payload, we serve that and mark stale.
+        """
+        import json as _json
+
+        if not base_url.startswith(("http://", "https://")):
+            raise AIHWAPIError(
+                f"Refusing to fetch non-http(s) URL: {base_url!r}"
+            )
+
+        # Check the cache once against the unparameterised URL — this is the
+        # cache key for the entire concatenated walk. We delegate to
+        # _fetch_cached only on the *first* page so the stale-cache fallback
+        # signal works against the right key.
+        cached = await self.cache.get(base_url, ttl=TTL[kind])
+        if cached is not None:
+            return cached
+
+        sep = "&" if "?" in base_url else "?"
+        all_records: list[dict[str, Any]] = []
+        try:
+            for page in range(max_pages):
+                skip = page * page_size
+                page_url = f"{base_url}{sep}skip={skip}&top={page_size}"
+                try:
+                    resp = await self._http.get(page_url)
+                    resp.raise_for_status()
+                except (httpx.HTTPStatusError, httpx.RequestError) as e:
+                    # Only the first page can trigger the stale-cache fallback
+                    # (subsequent pages mid-walk are a hard failure — partial
+                    # data would silently corrupt the cached concatenation).
+                    if page == 0:
+                        fallback = await self.cache.get_stale(base_url)
+                        if fallback is not None:
+                            payload, cached_at = fallback
+                            age_min = max(0, int((time.time() - cached_at) / 60))
+                            if isinstance(e, httpx.HTTPStatusError):
+                                upstream = (
+                                    f"AIHW MyHospitals API returned "
+                                    f"{e.response.status_code}"
+                                )
+                            else:
+                                upstream = (
+                                    f"AIHW MyHospitals API unreachable "
+                                    f"({type(e).__name__})"
+                                )
+                            _mark_stale(
+                                f"{upstream}; serving cached payload from "
+                                f"~{age_min} minute(s) ago"
+                            )
+                            return payload
+                    if isinstance(e, httpx.HTTPStatusError):
+                        raise AIHWAPIError(
+                            f"MyHospitals API returned "
+                            f"{e.response.status_code} on page {page}"
+                        ) from e
+                    raise AIHWAPIError(
+                        f"MyHospitals API request failed on page {page} "
+                        f"({type(e).__name__})"
+                    ) from e
+                try:
+                    payload = json.loads(resp.content.decode("utf-8"))
+                except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                    raise AIHWAPIError(
+                        f"MyHospitals API non-JSON response on page {page}: {e}"
+                    ) from e
+                result = payload.get("result") if isinstance(payload, dict) else None
+                page_records = result.get("data") if isinstance(result, dict) else None
+                if not isinstance(page_records, list):
+                    raise AIHWAPIError(
+                        f"MyHospitals API page {page}: missing result.data list"
+                    )
+                all_records.extend(page_records)
+                if len(page_records) < page_size:
+                    break
+            else:
+                # max_pages exhausted — defensive guard.
+                raise AIHWAPIError(
+                    f"MyHospitals API exceeded max_pages={max_pages} "
+                    f"({len(all_records)} records collected) at {base_url!r}"
+                )
+        except AIHWAPIError:
+            raise
+
+        concatenated = _json.dumps({"records": all_records}).encode("utf-8")
+        await self.cache.set(base_url, concatenated, kind=kind)
+        return concatenated
+
     async def fetch_package(self, package_id: str) -> dict[str, Any]:
         """Fetch CKAN package_show for a dataset slug. Returns the result dict.
 

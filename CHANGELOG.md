@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.19] — 2026-05-25
+
+### Added
+
+- **MyHospitals API integration** + two new curated datasets driven by it:
+  - `ED_WAITING_TIMES` — emergency-department triage waiting times.
+  - `ELECTIVE_SURGERY_WAITING_TIMES` — elective surgery waiting times.
+  Includes a new `myhospitals_json` format on the curated schema, a
+  `fetch_myhospitals_extract` paginated client method, and a
+  `read_myhospitals_json` parser that flattens the concatenated record
+  payload. Covered by `tests/test_myhospitals.py` (15 test cases).
+
+### Fixed
+
+- **`get_data` now applies the curated `headline_slice` ONLY when the
+  caller passed no filters at all.** Without this, wide-layout datasets
+  like `YOUTH_JUSTICE_DETENTION` returned 0 rows to a no-filter call
+  because their dim space needs every key pinned to resolve a row. The
+  new rule:
+  - no user filters → apply slice → return the canonical headline row;
+  - any user filters supplied → respect them entirely, no slice merge.
+  This is intentionally narrower than `latest()`, which keeps its
+  "merge slice + user filters with user winning per-key" semantics
+  because it's an explicit single-row request. The looser merge in
+  `get_data` would silently restrict multi-row queries — e.g.
+  `get_data("MORT_GEOGRAPHY", filters={"category": "state", ...})`
+  would have `geography="Australia (total)"` injected and return 1 row
+  instead of 10.
+
+### Tests
+
+- Bumped two stale `assert len(list_curated()) == 6` checks to `== 8`
+  matching the new curated count after `ED_WAITING_TIMES` +
+  `ELECTIVE_SURGERY_WAITING_TIMES` were added.
+- 10× consecutive zero-flake runs on the deterministic suite (328 tests
+  each) before tagging.
+
+
 ## [0.4.18] — 2026-05-21
 
 ### Added

@@ -24,7 +24,9 @@ def test_every_curated_dataset_has_required_fields():
         assert cd.description, f"missing description on {cd.id}"
         assert cd.source_url.startswith("https://"), f"bad source_url on {cd.id}: {cd.source_url}"
         assert cd.download_url.startswith("https://"), f"bad download_url on {cd.id}: {cd.download_url}"
-        assert cd.format in ("xlsx", "csv"), f"bad format on {cd.id}: {cd.format}"
+        assert cd.format in ("xlsx", "csv", "myhospitals_json"), (
+            f"bad format on {cd.id}: {cd.format}"
+        )
         if cd.format == "xlsx":
             assert cd.sheet, f"xlsx dataset {cd.id} missing sheet name"
         assert cd.header_row >= 1, f"bad header_row on {cd.id}"

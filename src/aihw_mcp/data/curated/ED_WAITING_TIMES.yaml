@@ -1,0 +1,168 @@
+id: ED_WAITING_TIMES
+name: Emergency Department Waiting Times (MyHospitals API)
+description: |
+  AIHW MyHospitals — emergency department (ED) presentations and the
+  percentage of patients who commenced treatment within the
+  triage-category recommended time, broken down by:
+    - Australasian Triage Scale category (Resuscitation, Emergency,
+      Urgent, Semi-Urgent, Non-Urgent)
+    - reporting unit: per-hospital (`reporting_unit_type=H`, with
+      `hospital_code` like 'H0021' = Royal Prince Alfred) where AIHW
+      reports it, with state-level rollups (`reporting_unit_type=S`,
+      e.g. 'NSW', 'VIC') also included
+    - financial year (`reporting_start_date` to `reporting_end_date`)
+
+  Triage-time targets (minutes the patient should commence treatment
+  within): Resuscitation immediately (2 min), Emergency 10 min, Urgent
+  30 min, Semi-Urgent 60 min, Non-Urgent 120 min. The "percentage
+  within recommended time" measure is the proportion of presentations
+  in each triage band that met that target.
+
+  Source: AIHW MyHospitals API (v1) — the canonical machine-readable
+  feed for hospital performance data. Period coverage extends from
+  2011-12 to the most recent published financial year.
+period_coverage: 2011-12 to most recent published financial year (typically lags 6-12 months)
+update_frequency: annual
+source_url: https://www.aihw.gov.au/reports-data/myhospitals/sectors/emergency-department-care
+download_url: https://myhospitalsapi.aihw.gov.au/api/v1/flat-data-extract/MYH-ED-WAITS
+format: myhospitals_json
+header_row: 1
+layout: wide
+cache_kind: data
+period_dimension: reporting_start_date
+search_keywords:
+  - emergency department waiting times
+  - ed waiting times
+  - triage category
+  - resuscitation
+  - emergency triage
+  - urgent triage
+  - non-urgent triage
+  - ed presentations
+  - treatment commencement
+  - hospital ed performance
+  - myhospitals ed
+  - ed triage australia
+columns:
+  reporting_start_date:
+    source_column: "reporting_start_date"
+    description: Start of reporting period (typically a financial-year July 1).
+    role: dimension
+    dtype: string
+  reporting_end_date:
+    source_column: "reporting_end_date"
+    description: End of reporting period (typically a financial-year June 30).
+    role: dimension
+    dtype: string
+  hospital_code:
+    source_column: "reporting_unit_code"
+    description: |
+      AIHW MyHospitals reporting unit code. For hospital-level rows this
+      is a stable hospital ID like 'H0021' (Royal Prince Alfred) or
+      'H0014' (The Children's Hospital at Westmead). For state-level
+      rollups this is the state code ('NSW', 'VIC', etc.).
+    role: id
+    dtype: string
+  hospital_name:
+    source_column: "reporting_unit_name"
+    description: Full hospital name (e.g. 'Royal Prince Alfred Hospital') or state name for state-level rows.
+    role: dimension
+    dtype: string
+  reporting_unit_type:
+    source_column: "reporting_unit_type_code"
+    description: |
+      Granularity of the row. 'H' = per-hospital, 'S' = state-level
+      aggregate, 'P' = peer group, 'A' = Australia. Use this to filter
+      to the granularity you need.
+    role: dimension
+    dtype: string
+  state:
+    source_column: "mapped_state"
+    description: State or territory the reporting unit belongs to (NSW, VIC, etc.).
+    role: dimension
+    dtype: string
+  triage_category:
+    source_column: "reported_measure_category_name"
+    description: |
+      Australasian Triage Scale category — 'Resuscitation' (treat
+      immediately), 'Emergency' (within 10 min), 'Urgent' (30 min),
+      'Semi-Urgent' (60 min), 'Non-Urgent' (120 min).
+    role: dimension
+    dtype: string
+  measure_code:
+    source_column: "measure_code"
+    description: |
+      AIHW measure code. 'MYH0010' = Number of patients presenting to
+      the emergency department (count). 'MYH0011' = Percentage of
+      patients who commenced treatment within the recommended time.
+    role: dimension
+    dtype: string
+  measure_name:
+    source_column: "measure_name"
+    description: Human-readable measure name.
+    role: dimension
+    dtype: string
+  peer_group:
+    source_column: "peer_group_name"
+    description: |
+      AIHW peer group the hospital belongs to (e.g. 'Principal referral
+      and Women's and children's hospitals', 'Public acute group A').
+      Null for state/aggregate rows.
+    role: dimension
+    dtype: string
+  value:
+    source_column: "value"
+    description: |
+      The metric value — either a patient count (when units='patients')
+      or a percentage 0-100 (when units='percent'). Filter by
+      `measure_code` to disambiguate.
+    role: measure
+    dtype: float
+  units:
+    source_column: "units_name"
+    description: Units the value is reported in — 'patients' or 'percent'.
+    role: dimension
+    dtype: string
+dimension_values:
+  reporting_unit_type:
+    hospital: "H"
+    state: "S"
+    peer_group: "P"
+    australia: "A"
+    H: "H"
+    S: "S"
+    P: "P"
+    A: "A"
+  state:
+    nsw: NSW
+    vic: VIC
+    qld: QLD
+    sa: SA
+    wa: WA
+    tas: TAS
+    nt: NT
+    act: ACT
+    NSW: NSW
+    VIC: VIC
+    QLD: QLD
+    SA: SA
+    WA: WA
+    TAS: TAS
+    NT: NT
+    ACT: ACT
+  triage_category:
+    resuscitation: Resuscitation
+    emergency: Emergency
+    urgent: Urgent
+    semi_urgent: Semi-Urgent
+    non_urgent: Non-Urgent
+    Resuscitation: Resuscitation
+    Emergency: Emergency
+    Urgent: Urgent
+    Semi-Urgent: Semi-Urgent
+    Non-Urgent: Non-Urgent
+  measure_code:
+    presentations: MYH0010
+    percent_within_target: MYH0011
+    MYH0010: MYH0010
+    MYH0011: MYH0011

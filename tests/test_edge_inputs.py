@@ -327,5 +327,7 @@ def test_list_curated_idempotent():
     assert ids1 == sorted(ids1)
 
 
-def test_list_curated_returns_six():
-    assert len(server.list_curated()) == 6
+def test_list_curated_returns_eight():
+    """0.4.19: bumped 6 → 8 after ED_WAITING_TIMES and
+    ELECTIVE_SURGERY_WAITING_TIMES were added (test was stale)."""
+    assert len(server.list_curated()) == 8

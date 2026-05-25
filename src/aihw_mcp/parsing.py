@@ -164,6 +164,45 @@ def read_csv(
     return df
 
 
+def read_myhospitals_json(body: bytes) -> pd.DataFrame:
+    """Flatten a concatenated MyHospitals flat-data-extract JSON payload to a DataFrame.
+
+    The fetcher pages through the API (top=1000 per call) and concatenates
+    every page's `result.data` array into a single JSON document shaped as
+    `{"records": [...]}` before storing in the cache. This parser deserialises
+    that and returns a DataFrame with the union of all record keys as columns.
+
+    The MyHospitals API ships ~50 fields per record; we keep them all here
+    and let `shaping._apply_aliases` drop the unwanted columns. That keeps
+    this parser dataset-agnostic — the same code path serves
+    ED_WAITING_TIMES and ELECTIVE_SURGERY_WAITING_TIMES even though their
+    YAMLs reference slightly different field subsets.
+    """
+    import json as _json
+
+    if not body:
+        raise ParseError("empty MyHospitals JSON body")
+    try:
+        payload = _json.loads(body.decode("utf-8"))
+    except (UnicodeDecodeError, _json.JSONDecodeError) as e:
+        raise ParseError(f"MyHospitals JSON decode failed: {e}") from e
+    if not isinstance(payload, dict) or "records" not in payload:
+        raise ParseError(
+            "MyHospitals JSON payload missing top-level 'records' key — "
+            "expected the aihw-mcp client's concatenated shape."
+        )
+    records = payload["records"]
+    if not isinstance(records, list):
+        raise ParseError(
+            f"MyHospitals JSON 'records' must be a list, got {type(records).__name__}"
+        )
+    if not records:
+        return pd.DataFrame()
+    df = pd.DataFrame.from_records(records)
+    df.columns = [_normalize_header(c) for c in df.columns]
+    return df
+
+
 def drop_blank_rows(df: pd.DataFrame, key_columns: list[str]) -> pd.DataFrame:
     """Drop rows where every column in `key_columns` is NaN.
 

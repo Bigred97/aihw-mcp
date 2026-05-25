@@ -1,0 +1,160 @@
+id: ELECTIVE_SURGERY_WAITING_TIMES
+name: Elective Surgery Waiting Times (MyHospitals API)
+description: |
+  AIHW MyHospitals — elective surgery waiting times by hospital,
+  surgical specialty, and reporting year. Two headline measures:
+    - MYH0009 — median waiting time for elective surgery (days)
+    - MYH0007 — percentage of patients who waited longer than 365 days
+
+  Granularity:
+    - hospital-level (`reporting_unit_type=H`) where AIHW reports it
+      (`hospital_code` like 'H0014' = Children's Hospital at Westmead)
+    - state-level rollups (`reporting_unit_type=S`)
+    - Australia-wide (`reporting_unit_type=A`)
+
+  Surgical specialty breakdowns include: Cardio-thoracic surgery,
+  Ear, nose and throat (ENT), General surgery, Gynaecology,
+  Neurosurgery, Ophthalmology, Orthopaedic, Plastic, Urology, plus
+  procedure-level cuts (Cataract extraction, Cholecystectomy, Coronary
+  artery bypass grafting, Cystoscopy, Inguinal herniotomy/herniorrhaphy).
+
+  `peer_value` accompanies hospital rows — the median for the hospital's
+  AIHW peer group — for benchmarking.
+
+  Source: AIHW MyHospitals API (v1). Period coverage extends from
+  2011-12 to the most recent published financial year.
+period_coverage: 2011-12 to most recent published financial year (typically lags 6-12 months)
+update_frequency: annual
+source_url: https://www.aihw.gov.au/reports-data/myhospitals/sectors/elective-surgery
+download_url: https://myhospitalsapi.aihw.gov.au/api/v1/flat-data-extract/MYH-ES
+format: myhospitals_json
+header_row: 1
+layout: wide
+cache_kind: data
+period_dimension: reporting_start_date
+search_keywords:
+  - elective surgery
+  - elective surgery waiting times
+  - median wait surgery
+  - cataract surgery wait
+  - hip replacement wait
+  - knee replacement wait
+  - hospital surgery wait
+  - 365 day wait
+  - long wait surgery
+  - cardio-thoracic surgery wait
+  - orthopaedic surgery wait
+  - ent surgery wait
+  - myhospitals elective surgery
+columns:
+  reporting_start_date:
+    source_column: "reporting_start_date"
+    description: Start of reporting period (typically a financial-year July 1).
+    role: dimension
+    dtype: string
+  reporting_end_date:
+    source_column: "reporting_end_date"
+    description: End of reporting period (typically a financial-year June 30).
+    role: dimension
+    dtype: string
+  hospital_code:
+    source_column: "reporting_unit_code"
+    description: |
+      AIHW MyHospitals reporting unit code. Hospital rows use codes like
+      'H0014' (Children's Hospital at Westmead); state rows use the
+      state code ('NSW', 'VIC' etc.); 'AUS' for the national rollup.
+    role: id
+    dtype: string
+  hospital_name:
+    source_column: "reporting_unit_name"
+    description: Full hospital name or state/national label for aggregate rows.
+    role: dimension
+    dtype: string
+  reporting_unit_type:
+    source_column: "reporting_unit_type_code"
+    description: |
+      'H' = per-hospital, 'S' = state aggregate, 'P' = peer group,
+      'A' = Australia. Filter to the granularity you need.
+    role: dimension
+    dtype: string
+  state:
+    source_column: "mapped_state"
+    description: State or territory of the reporting unit (NSW, VIC, etc.).
+    role: dimension
+    dtype: string
+  surgical_specialty:
+    source_column: "reported_measure_category_name"
+    description: |
+      Surgical specialty or named procedure (e.g. 'Cardio-thoracic
+      surgery', 'Orthopaedic surgery', 'Cataract extraction',
+      'Coronary artery bypass grafting').
+    role: dimension
+    dtype: string
+  measure_code:
+    source_column: "measure_code"
+    description: |
+      'MYH0009' = Median waiting time for elective surgery (days).
+      'MYH0007' = Percentage of patients who waited longer than 365 days.
+    role: dimension
+    dtype: string
+  measure_name:
+    source_column: "measure_name"
+    description: Human-readable measure name.
+    role: dimension
+    dtype: string
+  peer_group:
+    source_column: "peer_group_name"
+    description: AIHW peer group the hospital belongs to (used by `peer_value`).
+    role: dimension
+    dtype: string
+  value:
+    source_column: "value"
+    description: |
+      The metric value — median waiting days when measure='MYH0009',
+      percentage 0-100 when measure='MYH0007'. Read `units` to confirm.
+    role: measure
+    dtype: float
+  peer_value:
+    source_column: "peer_value"
+    description: |
+      The same metric calculated across the hospital's AIHW peer group —
+      the benchmark you compare `value` against. Null for state/national rows.
+    role: measure
+    dtype: float
+  units:
+    source_column: "units_display"
+    description: Display units for the value — 'days' or '%'.
+    role: dimension
+    dtype: string
+dimension_values:
+  reporting_unit_type:
+    hospital: "H"
+    state: "S"
+    peer_group: "P"
+    australia: "A"
+    H: "H"
+    S: "S"
+    P: "P"
+    A: "A"
+  state:
+    nsw: NSW
+    vic: VIC
+    qld: QLD
+    sa: SA
+    wa: WA
+    tas: TAS
+    nt: NT
+    act: ACT
+    NSW: NSW
+    VIC: VIC
+    QLD: QLD
+    SA: SA
+    WA: WA
+    TAS: TAS
+    NT: NT
+    ACT: ACT
+  measure_code:
+    median_wait_days: MYH0009
+    percent_waited_over_365_days: MYH0007
+    MYH0009: MYH0009
+    MYH0007: MYH0007

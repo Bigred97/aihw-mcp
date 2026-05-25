@@ -105,7 +105,8 @@ async def test_list_curated_returns_sorted_ids():
     assert ids == sorted(ids)
     assert "GRIM_DEATHS" in ids
     assert "MORT_GEOGRAPHY" in ids
-    assert len(ids) == 6
+    # 0.4.19: 6 → 8 (ED_WAITING_TIMES + ELECTIVE_SURGERY_WAITING_TIMES added).
+    assert len(ids) == 8
 
 
 # ---------------------------------------------------------------------------

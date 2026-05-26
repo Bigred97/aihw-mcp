@@ -199,9 +199,21 @@ async def test_flow_response_envelope_invariants(mocked_client):
     assert data.server_version
 
 
+@pytest.mark.live
 @pytest.mark.asyncio
 async def test_flow_all_curated_datasets_return_data(mocked_client):
-    """Sanity: every curated dataset returns SOME data with a basic query."""
+    """Sanity: every curated dataset returns SOME data with a basic query.
+
+    Marked @pytest.mark.live because despite the `mocked_client` fixture
+    name, this iterates every curated dataset and exercises the live
+    MyHospitals / data.gov.au endpoints (`server.get_data` is not stubbed
+    here, only HTTP-level transport is). When MyHospitals 504s mid-sweep
+    (which happens periodically — multi-page XLSX downloads against a
+    flaky source) the test fails through no fault of our code. Per
+    portfolio convention, live tests are deselected from the default
+    pytest run (`addopts = -m 'not live'`) so customer-side upstream
+    blips don't flood the CI failure inbox.
+    """
     for dataset_id in curated.list_ids():
         cd = curated.get(dataset_id)
         wide_measures = [c.key for c in cd.columns.values() if c.role == "measure"]

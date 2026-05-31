@@ -24,6 +24,13 @@ from .cache import TTL, Cache, CacheKind
 DEFAULT_BASE_URL = "https://data.gov.au"
 DEFAULT_TIMEOUT = httpx.Timeout(120.0, connect=15.0)  # GRIM CSV is ~25MB; allow time
 
+# MyHospitals flat-data-extract paginates at a hard top=1000 cap. With
+# server-side filter push-down (server.py) keeping the row count small, the
+# remaining pages are fetched concurrently at this bound. Kept modest (6) so we
+# stay polite to the AIHW API — the unfiltered ~700-page walk throttled at high
+# concurrency, but a push-down-filtered ~30-page fetch at 6-in-flight does not.
+_MYHOSPITALS_PAGE_CONCURRENCY = 6
+
 
 # ─── stale signal (graceful-degradation reporting per CLAUDE.md dim #4) ─
 # When the upstream data.gov.au endpoint is unreachable, _fetch_cached
@@ -105,102 +112,131 @@ class AIHWClient:
         kind: CacheKind = "data",
         page_size: int = 1000,
         max_pages: int = 1000,
+        concurrency: int = _MYHOSPITALS_PAGE_CONCURRENCY,
     ) -> bytes:
         """Fetch every page of an AIHW MyHospitals flat-data-extract endpoint.
 
-        The MyHospitals API caps each call to 1000 records via `top`, paginated
-        by `skip`. We walk pages until either the API returns fewer than
-        `page_size` records (last page) or `max_pages * page_size` records
-        have been collected (defensive ceiling). The concatenated record
-        list is serialised as `{"records": [...]}` JSON bytes and stored in
-        the SQLite HTTP cache against `base_url` so a warm call reuses the
-        whole walk via one cache hit.
+        The API caps each call to 1000 records via `top`, paginated by `skip`.
+        Page 0's `result.pagination.total_results_available` reports the row
+        count up front, so we fetch page 0 then pull the remaining pages
+        CONCURRENTLY (bounded by `concurrency`) instead of walking them one by
+        one. Combined with server-side filter push-down (server.py) — which
+        keeps the row count small — this brings the previously-unservable bulk
+        extracts well under budget. If the API doesn't report a total we fall
+        back to a sequential walk-until-short-page. The concatenated record list
+        is serialised as `{"records": [...]}` JSON bytes and cached against
+        `base_url`, so a warm call reuses the whole walk via one cache hit.
 
-        Raises AIHWAPIError on any non-2xx page or unparseable payload.
-        Graceful degradation falls through `_fetch_cached`'s stale-cache
-        fallback path: if the first page hits HTTP error and we have a
-        cached concatenated payload, we serve that and mark stale.
+        Raises AIHWAPIError on any non-2xx page or unparseable payload. Graceful
+        degradation: if the FIRST page errors and a cached concatenated payload
+        exists, we serve it and mark stale. A failure on any later page is a
+        hard error — partial data would corrupt the cached concatenation.
         """
         import json as _json
 
         if not base_url.startswith(("http://", "https://")):
-            raise AIHWAPIError(
-                f"Refusing to fetch non-http(s) URL: {base_url!r}"
-            )
+            raise AIHWAPIError(f"Refusing to fetch non-http(s) URL: {base_url!r}")
 
-        # Check the cache once against the unparameterised URL — this is the
-        # cache key for the entire concatenated walk. We delegate to
-        # _fetch_cached only on the *first* page so the stale-cache fallback
-        # signal works against the right key.
         cached = await self.cache.get(base_url, ttl=TTL[kind])
         if cached is not None:
             return cached
 
         sep = "&" if "?" in base_url else "?"
-        all_records: list[dict[str, Any]] = []
-        try:
-            for page in range(max_pages):
-                skip = page * page_size
-                page_url = f"{base_url}{sep}skip={skip}&top={page_size}"
-                try:
-                    resp = await self._http.get(page_url)
-                    resp.raise_for_status()
-                except (httpx.HTTPStatusError, httpx.RequestError) as e:
-                    # Only the first page can trigger the stale-cache fallback
-                    # (subsequent pages mid-walk are a hard failure — partial
-                    # data would silently corrupt the cached concatenation).
-                    if page == 0:
-                        fallback = await self.cache.get_stale(base_url)
-                        if fallback is not None:
-                            payload, cached_at = fallback
-                            age_min = max(0, int((time.time() - cached_at) / 60))
-                            if isinstance(e, httpx.HTTPStatusError):
-                                upstream = (
-                                    f"AIHW MyHospitals API returned "
-                                    f"{e.response.status_code}"
-                                )
-                            else:
-                                upstream = (
-                                    f"AIHW MyHospitals API unreachable "
-                                    f"({type(e).__name__})"
-                                )
-                            _mark_stale(
-                                f"{upstream}; serving cached payload from "
-                                f"~{age_min} minute(s) ago"
-                            )
-                            return payload
-                    if isinstance(e, httpx.HTTPStatusError):
-                        raise AIHWAPIError(
-                            f"MyHospitals API returned "
-                            f"{e.response.status_code} on page {page}"
-                        ) from e
-                    raise AIHWAPIError(
-                        f"MyHospitals API request failed on page {page} "
-                        f"({type(e).__name__})"
-                    ) from e
-                try:
-                    payload = json.loads(resp.content.decode("utf-8"))
-                except (json.JSONDecodeError, UnicodeDecodeError) as e:
-                    raise AIHWAPIError(
-                        f"MyHospitals API non-JSON response on page {page}: {e}"
-                    ) from e
-                result = payload.get("result") if isinstance(payload, dict) else None
-                page_records = result.get("data") if isinstance(result, dict) else None
-                if not isinstance(page_records, list):
-                    raise AIHWAPIError(
-                        f"MyHospitals API page {page}: missing result.data list"
-                    )
-                all_records.extend(page_records)
-                if len(page_records) < page_size:
-                    break
-            else:
-                # max_pages exhausted — defensive guard.
+
+        async def _get_page(page: int) -> tuple[list[dict[str, Any]], int | None]:
+            """Fetch one page -> (records, total_results_available_or_None).
+
+            Retries transient throttling/server errors with backoff so a single
+            flaky page doesn't fail the whole (parallel) walk."""
+            page_url = f"{base_url}{sep}skip={page * page_size}&top={page_size}"
+            resp = None
+            for attempt in range(4):
+                resp = await self._http.get(page_url)
+                if resp.status_code in (429, 500, 502, 503, 504) and attempt < 3:
+                    await asyncio.sleep(0.5 * (attempt + 1))
+                    continue
+                break
+            assert resp is not None
+            resp.raise_for_status()
+            try:
+                payload = json.loads(resp.content.decode("utf-8"))
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
                 raise AIHWAPIError(
-                    f"MyHospitals API exceeded max_pages={max_pages} "
-                    f"({len(all_records)} records collected) at {base_url!r}"
+                    f"MyHospitals API non-JSON response on page {page}: {e}"
+                ) from e
+            result = payload.get("result") if isinstance(payload, dict) else None
+            records = result.get("data") if isinstance(result, dict) else None
+            if not isinstance(records, list):
+                raise AIHWAPIError(
+                    f"MyHospitals API page {page}: missing result.data list"
                 )
-        except AIHWAPIError:
-            raise
+            total = None
+            if isinstance(result, dict):
+                pag = result.get("pagination")
+                if isinstance(pag, dict):
+                    total = pag.get("total_results_available")
+            return records, (total if isinstance(total, int) else None)
+
+        # ── Page 0 (the only page eligible for the stale-cache fallback) ──
+        try:
+            first_records, total = await _get_page(0)
+        except (httpx.HTTPStatusError, httpx.RequestError) as e:
+            fallback = await self.cache.get_stale(base_url)
+            if fallback is not None:
+                payload, cached_at = fallback
+                age_min = max(0, int((time.time() - cached_at) / 60))
+                if isinstance(e, httpx.HTTPStatusError):
+                    upstream = f"AIHW MyHospitals API returned {e.response.status_code}"
+                else:
+                    upstream = f"AIHW MyHospitals API unreachable ({type(e).__name__})"
+                _mark_stale(
+                    f"{upstream}; serving cached payload from ~{age_min} minute(s) ago"
+                )
+                return payload
+            if isinstance(e, httpx.HTTPStatusError):
+                raise AIHWAPIError(
+                    f"MyHospitals API returned {e.response.status_code} on page 0"
+                ) from e
+            raise AIHWAPIError(
+                f"MyHospitals API request failed on page 0 ({type(e).__name__})"
+            ) from e
+
+        all_records: list[dict[str, Any]] = list(first_records)
+
+        if len(first_records) == page_size:
+            try:
+                if isinstance(total, int) and total > page_size:
+                    # Known total -> fetch the remaining pages CONCURRENTLY.
+                    n_pages = min(-(-total // page_size), max_pages)  # ceil
+                    sem = asyncio.Semaphore(max(1, concurrency))
+
+                    async def _guarded(p: int) -> tuple[int, list[dict[str, Any]]]:
+                        async with sem:
+                            recs, _ = await _get_page(p)
+                            return p, recs
+
+                    gathered = await asyncio.gather(
+                        *(_guarded(p) for p in range(1, n_pages))
+                    )
+                    for _p, recs in sorted(gathered, key=lambda t: t[0]):
+                        all_records.extend(recs)
+                else:
+                    # No total reported -> sequential walk-until-short-page.
+                    for page in range(1, max_pages):
+                        recs, _ = await _get_page(page)
+                        all_records.extend(recs)
+                        if len(recs) < page_size:
+                            break
+                    else:
+                        raise AIHWAPIError(
+                            f"MyHospitals API exceeded max_pages={max_pages} "
+                            f"({len(all_records)} records) at {base_url!r}"
+                        )
+            except (httpx.HTTPStatusError, httpx.RequestError) as e:
+                # Any later-page failure is a hard error (partial walk).
+                raise AIHWAPIError(
+                    f"MyHospitals API request failed mid-walk ({type(e).__name__})"
+                ) from e
 
         concatenated = _json.dumps({"records": all_records}).encode("utf-8")
         await self.cache.set(base_url, concatenated, kind=kind)

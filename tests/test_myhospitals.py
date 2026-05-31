@@ -186,6 +186,63 @@ def test_both_datasets_have_hospital_code_id():
         assert cd.columns["hospital_code"].role == "id"
 
 
+# ---------------------------------------------------------------------------
+# server-side filter push-down (the fix for ELECTIVE being unservable)
+# ---------------------------------------------------------------------------
+
+
+def test_pushdown_builds_safelisted_params_with_translated_values():
+    """Filters whose source_column the MyHospitals API honours are pushed to the
+    fetch URL, translated to canonical source values (alias -> code)."""
+    from aihw_mcp.server import _myhospitals_pushdown
+    cd = curated.get("ELECTIVE_SURGERY_WAITING_TIMES")
+    assert cd is not None
+    assert _myhospitals_pushdown(cd, {"reporting_unit_type": "state"}) == {
+        "reporting_unit_type_code": "S"
+    }
+    assert _myhospitals_pushdown(cd, {"measure_code": "median_wait_days"}) == {
+        "measure_code": "MYH0009"
+    }
+    assert _myhospitals_pushdown(
+        cd, {"reporting_unit_type": "state", "measure_code": "median_wait_days"}
+    ) == {"reporting_unit_type_code": "S", "measure_code": "MYH0009"}
+
+
+def test_pushdown_excludes_non_safelisted_filters():
+    """Filters the API does NOT honour (state, surgical_specialty, ...) must NOT
+    be pushed — they stay for in-process shaping. Pushing an unsupported param
+    is silently ignored by the API (returns all 693k rows), so a safelist guards
+    against that. Mixed input pushes only the safe key."""
+    from aihw_mcp.server import _myhospitals_pushdown
+    cd = curated.get("ELECTIVE_SURGERY_WAITING_TIMES")
+    assert cd is not None
+    assert _myhospitals_pushdown(
+        cd, {"state": "NSW", "surgical_specialty": "Orthopaedic surgery"}
+    ) == {}
+    assert _myhospitals_pushdown(
+        cd, {"reporting_unit_type": "state", "state": "NSW"}
+    ) == {"reporting_unit_type_code": "S"}
+
+
+def test_pushdown_empty_for_non_myhospitals_and_no_filters():
+    from aihw_mcp.server import _myhospitals_pushdown
+    es = curated.get("ELECTIVE_SURGERY_WAITING_TIMES")
+    assert _myhospitals_pushdown(es, None) == {}
+    assert _myhospitals_pushdown(es, {}) == {}
+    # a CSV/XLSX dataset never pushes down (not the MyHospitals API)
+    grim = curated.get("GRIM_DEATHS")
+    assert grim is not None
+    assert _myhospitals_pushdown(grim, {"cause_of_death": "Diabetes"}) == {}
+
+
+def test_pushdown_skips_non_scalar_filter_values():
+    """List/multi-value filters stay for in-process shaping (the API param is
+    single-valued); they must not be pushed."""
+    from aihw_mcp.server import _myhospitals_pushdown
+    cd = curated.get("ELECTIVE_SURGERY_WAITING_TIMES")
+    assert _myhospitals_pushdown(cd, {"reporting_unit_type": ["state", "hospital"]}) == {}
+
+
 def test_state_filter_routes_through_aus_identity():
     """The state filter accepts full names + postcodes via aus_identity."""
     cd = curated.get("ED_WAITING_TIMES")

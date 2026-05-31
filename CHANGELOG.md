@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.20] — 2026-05-29
+
+### Fixed
+
+- **MyHospitals server-side filter push-down + concurrent paging.** The elective
+  surgery extract is ~693,110 rows, and the API hard-caps pages at `top=1000`,
+  so an unfiltered walk needed ~700 sequential pages and the AIHW source 504'd
+  mid-walk — the dataset was effectively unservable. The API DOES support
+  server-side filtering on `reporting_unit_type_code` and `measure_code`, so
+  `get_data`/`latest` now push a caller's filters on those columns into the
+  fetch URL (alias → canonical value, via a verified safelist — an unsupported
+  param is silently ignored by the API, so we never blind-passthrough). Combined
+  with concurrent page fetching (page 0 reports the total, so the rest are
+  pulled in parallel, bounded to 6 in-flight, with per-page retry; falls back to
+  a sequential walk when no total is reported), a filtered query
+  (`reporting_unit_type=state`) now completes in ~5s cold / ~0.3s warm — down
+  from unservable. Non-pushed filters still apply in-process, so results are
+  unchanged. New tests in `tests/test_myhospitals.py` cover the push-down
+  safelist (translated values, non-safelisted exclusion, non-scalar skip,
+  non-MyHospitals no-op).
+
 ## [0.4.19] — 2026-05-25
 
 ### Added

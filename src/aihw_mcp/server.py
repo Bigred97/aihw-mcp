@@ -294,7 +294,52 @@ def _parse_hints(cd: curated.CuratedDataset) -> tuple[list[str] | None, dict[str
     return usecols, (dtype if dtype else None)
 
 
-async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
+# The MyHospitals flat-data-extract API supports SERVER-SIDE filtering on these
+# query params (each == a curated column's `source_column`). Pushing a caller's
+# filter into the fetch URL slashes the rows the API returns — e.g. ELECTIVE
+# goes from ~693,110 rows (unservable: ~700 sequential pages, the source 504s
+# mid-walk) to ~32,850 for `reporting_unit_type_code=S` (~33 pages, fast).
+# VERIFIED live 2026-05-29. An UNKNOWN/unsupported param is silently ignored by
+# the API (returns all rows), so we push down ONLY params confirmed honoured —
+# a safelist, never a blind passthrough. Everything not pushed still filters
+# in-process in shaping, so correctness is unchanged.
+_MYHOSPITALS_PUSHDOWN_PARAMS: frozenset[str] = frozenset(
+    {"reporting_unit_type_code", "measure_code"}
+)
+
+
+def _myhospitals_pushdown(
+    cd: curated.CuratedDataset, filters: dict[str, Any] | None
+) -> dict[str, str]:
+    """Compute the subset of `filters` that can be pushed to the MyHospitals API
+    as URL query params, translated to canonical source values.
+
+    Only filters whose source_column is in `_MYHOSPITALS_PUSHDOWN_PARAMS` AND
+    whose value is a scalar string are pushed (lists / non-scalars stay for
+    in-process shaping). `translate_filter_value` maps the user's alias to the
+    canonical source value (e.g. 'state' -> 'S', 'median_wait_days' -> 'MYH0009')
+    and raises a helpful error on an unknown value — surfacing it at fetch time
+    is fine, it's the same error in-process shaping would raise.
+    """
+    if cd.format != "myhospitals_json" or not filters:
+        return {}
+    pushed: dict[str, str] = {}
+    for key, value in filters.items():
+        if not isinstance(value, str):
+            continue
+        col = cd.columns.get(key)
+        if col is None or col.source_column not in _MYHOSPITALS_PUSHDOWN_PARAMS:
+            continue
+        pushed[col.source_column] = curated.translate_filter_value(cd, key, value)
+    return pushed
+
+
+async def _fetch_and_parse(
+    cd: curated.CuratedDataset,
+    *,
+    kind: str = "data",
+    pushdown: dict[str, str] | None = None,
+):
     """Download the dataset's primary resource and parse it into a DataFrame.
 
     The parsed DataFrame is cached in-process keyed by (url, parse-spec, body
@@ -314,6 +359,14 @@ async def _fetch_and_parse(cd: curated.CuratedDataset, *, kind: str = "data"):
     """
     client = await _get_client()
     url = await _resolve_download_url(cd, client)
+    if pushdown and cd.format == "myhospitals_json":
+        # Append the pushdown filters as API query params so the source returns
+        # only the relevant slice. The (filtered) url is part of the cache_key
+        # below, so each filter combination caches independently.
+        from urllib.parse import urlencode
+
+        sep = "&" if "?" in url else "?"
+        url = f"{url}{sep}{urlencode(pushdown)}"
     try:
         if cd.format == "myhospitals_json":
             body = await client.fetch_myhospitals_extract(url, kind=kind)  # type: ignore[arg-type]
@@ -624,7 +677,14 @@ async def _get_data_impl(
     if end_v:
         user_query["end_period"] = end_v
 
-    df = await _fetch_and_parse(cd, kind=cd.cache_kind)  # type: ignore[arg-type]
+    # Push verified-safe filters to the MyHospitals API so it returns only the
+    # relevant slice (turns the otherwise-unservable bulk extracts into small
+    # fast fetches). No-op for every non-MyHospitals dataset. Remaining filters
+    # still apply in-process via build_response below.
+    pushdown = _myhospitals_pushdown(cd, filters_d)
+    df = await _fetch_and_parse(  # type: ignore[arg-type]
+        cd, kind=cd.cache_kind, pushdown=pushdown
+    )
     resp = build_response(
         cd=cd,
         df=df,

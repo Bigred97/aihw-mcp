@@ -4,7 +4,7 @@ Mirrors the response shape used by abs-mcp, rba-mcp, and ato-mcp so a
 downstream agent that calls multiple Australian government MCPs gets a
 uniform envelope. AIHW-specific differences:
 - attribution names AIHW and the data.gov.au Creative Commons licence
-- DataResponse.source defaults to "Australian Institute of Health and Welfare"
+- DataResponse.source defaults to "Australian Institute of Health and Welfare (AIHW), via data.gov.au"
 - DataResponse.aihw_url points back at the data.gov.au dataset page
 - Observation.dimensions is open-ended (cause_of_death, year, sex, age_group, etc.)
 """
@@ -86,7 +86,7 @@ class DataResponse(BaseModel):
     row_count: int = 0
     records: list[Any] = Field(default_factory=list)
     csv: str | None = None
-    source: str = "Australian Institute of Health and Welfare"
+    source: str = "Australian Institute of Health and Welfare (AIHW), via data.gov.au"
     attribution: str = _AIHW_ATTRIBUTION
     retrieved_at: datetime
     source_url: str = Field(

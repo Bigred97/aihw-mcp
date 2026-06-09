@@ -32,6 +32,11 @@ header_row: 1
 layout: wide
 cache_kind: data
 period_dimension: reporting_start_date
+# `value` / `peer_value` have no static unit — median days on MYH0009 rows, a
+# percentage on MYH0007 rows. The per-row unit lives in the `units` dimension
+# (source `units_display`: 'days' / '%'); shaping stamps it onto each
+# Observation so the cross-sister unit contract holds.
+unit_dimension: units
 search_keywords:
   - elective surgery
   - elective surgery waiting times

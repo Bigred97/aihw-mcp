@@ -17,9 +17,9 @@ plus the cross-sister discipline.
 | PyPI package | `aihw-mcp` |
 | GitHub | https://github.com/Bigred97/aihw-mcp |
 
-## Curated datasets (6)
+## Curated datasets (8)
 
-GRIM_DEATHS · MORT_GEOGRAPHY · CANCER_INCIDENCE_MORTALITY · HEALTH_EXPENDITURE · PUBLIC_HOSPITALS · YOUTH_JUSTICE_DETENTION
+GRIM_DEATHS · MORT_GEOGRAPHY · CANCER_INCIDENCE_MORTALITY · HEALTH_EXPENDITURE · PUBLIC_HOSPITALS · YOUTH_JUSTICE_DETENTION · ED_WAITING_TIMES · ELECTIVE_SURGERY_WAITING_TIMES
 
 ## Repo-specific module set
 
@@ -33,7 +33,7 @@ Repo-specific extras:
 ## Repo-specific gotchas
 
 - **Licence is CC-BY 3.0 AU**, matching APRA / ATO / ASIC.
-- Most AIHW publications are PDF-only — only the 6 datasets with machine-readable XLSX on data.gov.au are curated.
+- Most AIHW publications are PDF-only — only datasets with machine-readable XLSX on data.gov.au (plus the two MyHospitals JSON-API datasets) are curated.
 - GRIM (General Record of Incidence of Mortality) goes back to 1907 — wide historical range, watch out for series breaks (1996 reclassification).
 
 ---
@@ -115,3 +115,13 @@ uv run pytest                                              # unit tests
 uv run pytest -m live                                      # live tests too
 uvx --refresh --from aihw-mcp==<ver> python -c "..."         # smoke a published wheel
 ```
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

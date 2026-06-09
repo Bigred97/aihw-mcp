@@ -1,6 +1,7 @@
 """Shaping contract tests against real AIHW sample files."""
 from __future__ import annotations
 
+import json as _json
 from io import BytesIO
 
 import pandas as pd
@@ -13,6 +14,79 @@ def _parse_csv(cd, body):
     df = parsing.read_csv(body)
     dim_cols = [c.source_column for c in cd.columns.values() if c.role == "dimension"]
     return parsing.drop_blank_rows(df, dim_cols)
+
+
+def _myhospitals_df(records: list[dict]):
+    """Build a parsed MyHospitals DataFrame from raw API record dicts."""
+    return parsing.read_myhospitals_json(
+        _json.dumps({"records": records}).encode("utf-8")
+    )
+
+
+# Minimal MyHospitals records exercising both unit variants per dataset.
+_ED_RECORDS = [
+    {  # count row — unit 'patients'
+        "reporting_start_date": "2023-07-01",
+        "reporting_end_date": "2024-06-30",
+        "reporting_unit_code": "H0021",
+        "reporting_unit_name": "Royal Prince Alfred Hospital",
+        "reporting_unit_type_code": "H",
+        "mapped_state": "NSW",
+        "reported_measure_category_name": "Resuscitation",
+        "measure_code": "MYH0010",
+        "measure_name": "Number of patients presenting",
+        "peer_group_name": "Principal referral hospitals",
+        "value": 1234.0,
+        "units_name": "patients",
+    },
+    {  # percentage row — unit 'percent'
+        "reporting_start_date": "2023-07-01",
+        "reporting_end_date": "2024-06-30",
+        "reporting_unit_code": "H0021",
+        "reporting_unit_name": "Royal Prince Alfred Hospital",
+        "reporting_unit_type_code": "H",
+        "mapped_state": "NSW",
+        "reported_measure_category_name": "Resuscitation",
+        "measure_code": "MYH0011",
+        "measure_name": "Percentage treated within recommended time",
+        "peer_group_name": "Principal referral hospitals",
+        "value": 87.5,
+        "units_name": "percent",
+    },
+]
+
+_ES_RECORDS = [
+    {  # median-days row — unit 'days', with a peer_value
+        "reporting_start_date": "2023-07-01",
+        "reporting_end_date": "2024-06-30",
+        "reporting_unit_code": "H0014",
+        "reporting_unit_name": "The Children's Hospital at Westmead",
+        "reporting_unit_type_code": "H",
+        "mapped_state": "NSW",
+        "reported_measure_category_name": "Cardio-thoracic surgery",
+        "measure_code": "MYH0009",
+        "measure_name": "Median waiting time for elective surgery",
+        "peer_group_name": "Children's hospitals",
+        "value": 36.0,
+        "peer_value": 35.0,
+        "units_display": "days",
+    },
+    {  # percentage row — unit '%'
+        "reporting_start_date": "2023-07-01",
+        "reporting_end_date": "2024-06-30",
+        "reporting_unit_code": "H0014",
+        "reporting_unit_name": "The Children's Hospital at Westmead",
+        "reporting_unit_type_code": "H",
+        "mapped_state": "NSW",
+        "reported_measure_category_name": "Cardio-thoracic surgery",
+        "measure_code": "MYH0007",
+        "measure_name": "Percentage who waited longer than 365 days",
+        "peer_group_name": "Children's hospitals",
+        "value": 2.1,
+        "peer_value": 1.8,
+        "units_display": "%",
+    },
+]
 
 
 def test_grim_unfiltered_returns_observations(grim_csv):
@@ -234,7 +308,7 @@ def test_response_carries_metadata(grim_csv):
     )
     assert resp.dataset_id == "GRIM_DEATHS"
     assert resp.dataset_name
-    assert resp.source == "Australian Institute of Health and Welfare"
+    assert resp.source == "Australian Institute of Health and Welfare (AIHW), via data.gov.au"
     assert "Creative Commons" in resp.attribution
     assert resp.aihw_url == cd.source_url
     assert resp.query == {"x": 1}
@@ -438,3 +512,129 @@ def test_truncate_text_handles_non_string():
     assert shaping.truncate_text(None) is None
     assert shaping.truncate_text(42) == 42
     assert shaping.truncate_text("") == ""
+
+
+# ─── unit contract: every non-null value carries a non-null unit ───────────
+# Portfolio binding rule (../CLAUDE.md): every numeric Observation.value MUST
+# carry a non-null `unit` string in native source scale. ED_WAITING_TIMES and
+# ELECTIVE_SURGERY_WAITING_TIMES have row-varying units (patients vs percent;
+# days vs %) sitting in the `units` dimension, not in a static measure unit —
+# these tests lock in that shape_wide falls back to the per-row unit.
+
+
+def test_ed_waiting_times_every_value_carries_unit():
+    cd = curated.get("ED_WAITING_TIMES")
+    df = _myhospitals_df(_ED_RECORDS)
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={}, measures="value",
+        start_period=None, end_period=None, fmt="records", user_query={},
+    )
+    assert resp.row_count == 2
+    for r in resp.records:
+        assert r.value is not None
+        assert r.unit is not None, f"value {r.value} missing unit"
+    # Per-row unit, native scale, no conversion.
+    units_by_value = {r.value: r.unit for r in resp.records}
+    assert units_by_value[1234.0] == "patients"
+    assert units_by_value[87.5] == "percent"
+
+
+def test_elective_surgery_every_value_carries_unit():
+    cd = curated.get("ELECTIVE_SURGERY_WAITING_TIMES")
+    df = _myhospitals_df(_ES_RECORDS)
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={}, measures=None,  # value + peer_value
+        start_period=None, end_period=None, fmt="records", user_query={},
+    )
+    # 2 rows × {value, peer_value} = 4 observations.
+    assert resp.row_count == 4
+    for r in resp.records:
+        assert r.value is not None
+        assert r.unit is not None, f"{r.measure}={r.value} missing unit"
+    # Both value and peer_value on a row inherit that row's unit.
+    days_units = {r.unit for r in resp.records if r.value in (36.0, 35.0)}
+    pct_units = {r.unit for r in resp.records if r.value in (2.1, 1.8)}
+    assert days_units == {"days"}
+    assert pct_units == {"%"}
+
+
+def test_unit_dimension_blank_falls_back_to_sentinel():
+    """If the unit-bearing dimension cell is blank, the value still carries a
+    non-null unit (the documented sentinel), never None."""
+    cd = curated.get("ED_WAITING_TIMES")
+    rec = dict(_ED_RECORDS[0])
+    rec["units_name"] = None  # source row with no declared unit
+    df = _myhospitals_df([rec])
+    resp = shaping.build_response(
+        cd=cd, df=df, filters={}, measures="value",
+        start_period=None, end_period=None, fmt="records", user_query={},
+    )
+    assert resp.row_count == 1
+    assert resp.records[0].unit == shaping._UNKNOWN_UNIT
+    assert resp.records[0].unit is not None
+
+
+def test_unit_contract_holds_for_all_curated_datasets(
+    grim_csv, mort_csv, acim_csv, hexp_csv, youthj_csv, pubhosp_csv,
+):
+    """General unit-contract scan: for EVERY curated dataset, every Observation
+    with a non-null value must carry a non-null unit. CSV/XLSX datasets are
+    driven from their fixtures; the two MyHospitals datasets from synthetic
+    API records. This is the canary that would have caught the ED/ELECTIVE
+    unit=None violation."""
+    csv_cases = {
+        "GRIM_DEATHS":                (grim_csv, "deaths"),
+        "MORT_GEOGRAPHY":             (mort_csv, "deaths"),
+        "CANCER_INCIDENCE_MORTALITY": (acim_csv, None),
+        "HEALTH_EXPENDITURE":         (hexp_csv, None),
+        "YOUTH_JUSTICE_DETENTION":    (youthj_csv, None),
+        "PUBLIC_HOSPITALS":           (pubhosp_csv, None),
+    }
+    json_cases = {
+        "ED_WAITING_TIMES":              _ED_RECORDS,
+        "ELECTIVE_SURGERY_WAITING_TIMES": _ES_RECORDS,
+    }
+
+    checked_ids: set[str] = set()
+    total_obs = 0
+
+    for ds_id, (body, measures) in csv_cases.items():
+        cd = curated.get(ds_id)
+        df = _parse_csv(cd, body)
+        resp = shaping.build_response(
+            cd=cd, df=df, filters={}, measures=measures,
+            start_period=None, end_period=None, fmt="records", user_query={},
+        )
+        for r in resp.records:
+            if r.value is not None:
+                assert r.unit is not None, (
+                    f"{ds_id}: measure {r.measure!r} value {r.value} has unit=None — "
+                    "unit-contract violation"
+                )
+                total_obs += 1
+        checked_ids.add(ds_id)
+
+    for ds_id, records in json_cases.items():
+        cd = curated.get(ds_id)
+        df = _myhospitals_df(records)
+        resp = shaping.build_response(
+            cd=cd, df=df, filters={}, measures=None,
+            start_period=None, end_period=None, fmt="records", user_query={},
+        )
+        for r in resp.records:
+            if r.value is not None:
+                assert r.unit is not None, (
+                    f"{ds_id}: measure {r.measure!r} value {r.value} has unit=None — "
+                    "unit-contract violation"
+                )
+                total_obs += 1
+        checked_ids.add(ds_id)
+
+    # Guard: ensure the scan actually covered every curated dataset, so a new
+    # dataset added without a fixture here fails loudly rather than silently
+    # escaping the unit-contract check.
+    assert checked_ids == set(curated.list_ids()), (
+        "Unit-contract scan does not cover all curated datasets. "
+        f"Uncovered: {sorted(set(curated.list_ids()) - checked_ids)}"
+    )
+    assert total_obs > 0

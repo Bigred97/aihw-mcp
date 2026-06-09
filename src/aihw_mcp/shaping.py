@@ -31,6 +31,7 @@ from .curated import (
     measure_columns,
     resolve_measure_keys,
     translate_filter_value,
+    unit_dimension_key,
 )
 from .models import DataResponse, Observation
 
@@ -50,9 +51,19 @@ def _safe_value(v: Any) -> float | None:
 def _safe_str(v: Any) -> str | None:
     if v is None:
         return None
-    if isinstance(v, float) and math.isnan(v):
+    # pd.isna catches np.nan, pd.NA (nullable dtypes) and pd.NaT; the string
+    # guard catches sources that already carry the literal "<NA>"/"NaT" text.
+    # Without this, a blank unit-dimension cell leaked the string "<NA>" as a
+    # unit instead of falling through to the _UNKNOWN_UNIT sentinel.
+    try:
+        if pd.isna(v):
+            return None
+    except (TypeError, ValueError):
+        pass
+    s = str(v)
+    if s in {"<NA>", "NaT"}:
         return None
-    return str(v)
+    return s
 
 
 # ─── long-text-field defensive cap (Item 5 portfolio playbook) ─────────
@@ -63,6 +74,17 @@ def _safe_str(v: Any) -> str | None:
 # well above any real value so the path is a no-op for current data, and
 # the truncation marker tells the agent the full text is retrievable.
 _TEXT_FIELD_CAP = 500
+
+
+# ─── unit-contract fallback default ────────────────────────────────────
+# Portfolio rule: every numeric Observation.value MUST carry a non-null
+# `unit` string. Most measures get their unit from the curated YAML's static
+# `unit:`. Row-varying-unit datasets (MyHospitals ED / elective surgery)
+# instead read the unit from a per-row dimension via `unit_dimension`. If a
+# row's unit-dimension cell is itself blank, we stamp this documented
+# sentinel rather than leaking a null unit — keeps the contract total while
+# flagging that the source row didn't declare its scale.
+_UNKNOWN_UNIT = "unknown"
 
 
 def truncate_text(v: Any, *, cap: int = _TEXT_FIELD_CAP) -> Any:
@@ -268,6 +290,13 @@ def shape_wide(
     dim_keys = dims + ids
     measure_by_key = {c.key: c for c in measure_columns(cd)}
 
+    # Unit-contract fallback: when a measure column declares no static `unit:`,
+    # its unit is row-varying and lives in a dimension column (e.g. MyHospitals
+    # `units` → 'patients' / 'percent' / 'days' / '%'). Resolve that dimension
+    # key once; per-row lookup happens inside the loop. None when the dataset's
+    # measures all carry static units (the common case).
+    unit_dim_key = unit_dimension_key(cd)
+
     records: list[Observation] = []
     for idx, row in df.iterrows():
         dim_vals: dict[str, Any] = {}
@@ -280,6 +309,10 @@ def shape_wide(
                 # uppercase source-column names (e.g. AIHW's CSV headers like
                 # YEAR / SEX) being preserved through to the response.
                 dim_vals[k.lower()] = truncate_text(v)
+        # Per-row unit from the unit-bearing dimension, if any.
+        row_unit: str | None = None
+        if unit_dim_key is not None and unit_dim_key in df.columns:
+            row_unit = _safe_str(row[unit_dim_key])
         for mk in measures:
             mc = measure_by_key.get(mk)
             if mc is None:
@@ -288,13 +321,18 @@ def shape_wide(
             value = _safe_value(cell)
             if value is None:
                 continue
+            # Unit resolution order: static measure unit → per-row unit
+            # dimension → documented sentinel. Never None for a non-null value
+            # (the cross-sister unit contract). Native scale preserved — we
+            # only label, never convert.
+            unit = mc.unit or row_unit or _UNKNOWN_UNIT
             records.append(
                 Observation(
                     period=None,
                     value=value,
                     measure=mk,
                     dimensions=dim_vals,
-                    unit=mc.unit,
+                    unit=unit,
                 )
             )
     return records

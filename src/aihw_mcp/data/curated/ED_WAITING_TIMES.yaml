@@ -30,6 +30,11 @@ header_row: 1
 layout: wide
 cache_kind: data
 period_dimension: reporting_start_date
+# `value` has no static unit — it's a patient count on MYH0010 rows and a
+# percentage on MYH0011 rows. The per-row unit lives in the `units` dimension
+# (source `units_name`: 'patients' / 'percent'); shaping stamps it onto each
+# Observation so the cross-sister unit contract holds.
+unit_dimension: units
 search_keywords:
   - emergency department waiting times
   - ed waiting times

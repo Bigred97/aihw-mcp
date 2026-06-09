@@ -96,6 +96,19 @@ class CuratedDataset:
     # Leave unset for register-style datasets without a meaningful time axis
     # (e.g. PUBLIC_HOSPITALS, where every row is one current establishment).
     period_dimension: str | None = None
+    # Optional dimension key naming a column that carries the PER-ROW unit for
+    # measure values. Used when a measure column has no static `unit:` because
+    # its unit varies row-by-row — e.g. the MyHospitals datasets, where one
+    # `value` column holds patient counts on some rows and percentages on
+    # others, with the unit string sitting in the `units` dimension (source
+    # `units_name` / `units_display`). When set, `shape_wide` reads this
+    # dimension's per-row value and stamps it on each Observation whose
+    # measure column lacks a static unit. This keeps the cross-sister unit
+    # contract (every numeric value carries a non-null unit, native scale)
+    # satisfiable for row-varying-unit datasets without inventing per-measure
+    # static units the source doesn't actually have. If unset, `shape_wide`
+    # falls back to auto-detecting a dimension keyed 'units'/'unit'.
+    unit_dimension: str | None = None
     # Optional default-filter slice applied by `latest()` so the no-filter call
     # returns ONE canonical headline row rather than an arbitrary cell from a
     # multi-dim cross-tab. For HEALTH_EXPENDITURE — a 5-dim table
@@ -185,6 +198,16 @@ def _load_one(path: Path) -> CuratedDataset:
     if period_dim_raw is not None and not isinstance(period_dim_raw, str):
         raise ValueError(f"{path.name}: period_dimension must be a string if provided")
 
+    unit_dim_raw = raw.get("unit_dimension")
+    if unit_dim_raw is not None:
+        if not isinstance(unit_dim_raw, str):
+            raise ValueError(f"{path.name}: unit_dimension must be a string if provided")
+        if unit_dim_raw not in columns:
+            raise ValueError(
+                f"{path.name}: unit_dimension {unit_dim_raw!r} is not a declared "
+                f"column. Valid column keys: {sorted(columns)}"
+            )
+
     headline_raw = raw.get("headline_slice")
     headline_slice: dict[str, str] | None = None
     if headline_raw is not None:
@@ -222,6 +245,7 @@ def _load_one(path: Path) -> CuratedDataset:
         unit_column=raw.get("unit_column"),
         discovery=discovery_raw,
         period_dimension=period_dim_raw,
+        unit_dimension=unit_dim_raw,
         headline_slice=headline_slice,
     )
 
@@ -276,6 +300,31 @@ def measure_columns(cd: CuratedDataset) -> list[CuratedColumn]:
 def id_columns(cd: CuratedDataset) -> list[CuratedColumn]:
     """All columns flagged role == 'id'."""
     return [c for c in cd.columns.values() if c.role == "id"]
+
+
+# Dimension keys that, by convention, carry the per-row unit of a measure value
+# when the measure column itself has no static `unit:`. Used as a fallback when
+# a dataset doesn't declare `unit_dimension` explicitly.
+_UNIT_DIM_KEY_NAMES = frozenset({"units", "unit"})
+
+
+def unit_dimension_key(cd: CuratedDataset) -> str | None:
+    """Resolve the dimension column key that carries per-row units, or None.
+
+    Prefers the explicit `unit_dimension` declared on the dataset. Falls back
+    to a dimension column conventionally keyed 'units' / 'unit'. Returns None
+    when no such column exists (the common case: measures carry static units).
+
+    The returned key is the curated alias (e.g. 'units'), which is also the
+    column name after `_apply_aliases` has renamed source headers — so the
+    shaping layer can read `row[key]` directly.
+    """
+    if cd.unit_dimension is not None:
+        return cd.unit_dimension
+    for c in cd.columns.values():
+        if c.role == "dimension" and c.key.lower() in _UNIT_DIM_KEY_NAMES:
+            return c.key
+    return None
 
 
 def _aus_identity_pass_through(user_value: str) -> str | None:

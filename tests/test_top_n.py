@@ -104,7 +104,7 @@ async def test_top_n_envelope_preserved(mocked_client):
     r = await server.top_n("GRIM_DEATHS", "deaths", n=3,
                             filters={"sex": "persons"})
     assert r.unit == "Deaths"
-    assert r.source == "Australian Institute of Health and Welfare"
+    assert r.source == "Australian Institute of Health and Welfare (AIHW), via data.gov.au"
     assert "Creative Commons" in r.attribution
     assert r.aihw_url.startswith("https://data.gov.au/")
 

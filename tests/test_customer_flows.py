@@ -192,7 +192,7 @@ async def test_flow_response_envelope_invariants(mocked_client):
     )
     assert data.dataset_id
     assert data.dataset_name
-    assert data.source == "Australian Institute of Health and Welfare"
+    assert data.source == "Australian Institute of Health and Welfare (AIHW), via data.gov.au"
     assert data.attribution
     assert data.retrieved_at
     assert data.aihw_url.startswith("https://data.gov.au/")
@@ -224,4 +224,4 @@ async def test_flow_all_curated_datasets_return_data(mocked_client):
         assert data.row_count > 0, (
             f"{dataset_id} returned no rows for measure {first_measure!r}"
         )
-        assert data.source == "Australian Institute of Health and Welfare"
+        assert data.source == "Australian Institute of Health and Welfare (AIHW), via data.gov.au"

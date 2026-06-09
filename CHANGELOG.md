@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.21] — 2026-06-09
+
+### Fixed
+
+- **Unit contract: `ED_WAITING_TIMES` / `ELECTIVE_SURGERY_WAITING_TIMES` now
+  carry per-row unit from the `units_name` dimension (was null).** These two
+  MyHospitals datasets have row-varying units (patient counts vs percentages;
+  median days vs %) that live in a `units` dimension, not in a static measure
+  `unit:`. `shape_wide` only read the static `mc.unit`, so every numeric value
+  shipped with `unit=None` — a violation of the portfolio rule that every
+  numeric `Observation.value` must carry a non-null `unit` in native scale.
+  Added an optional `unit_dimension` field to the curated schema; when a
+  measure column has no static unit, `shape_wide` now falls back to that
+  dimension's per-row value (with auto-detection of a `units`/`unit`-keyed
+  dimension, and a documented `"unknown"` sentinel if a source row declares no
+  unit). Values are unchanged — units are labelled, never converted. New
+  `tests/test_shaping.py` checks include a general scan asserting every curated
+  dataset satisfies the unit contract.
+
+### Changed
+
+- `source` default normalized to `"Australian Institute of Health and
+  Welfare (AIHW), via data.gov.au"` (was the short form) to match the trust
+  contract.
+
 ## [0.4.20] — 2026-05-29
 
 ### Fixed

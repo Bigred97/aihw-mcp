@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.24] — 2026-07-27
+
+### Fixed
+
+- **`filters` argument rejected a JSON-encoded STRING at the MCP transport
+  boundary, never reaching the lenient string-parsing helper.** `get_data()`,
+  `latest()`, and `top_n()` all typed `filters` as
+  `Annotated[dict[str, Any] | None, Field(...)]`. FastMCP validates incoming
+  MCP tool-call arguments against that Pydantic type BEFORE the function
+  body runs, so a spec-compliant client sending `filters` as JSON text (e.g.
+  `'{"sex": "female"}'`) was rejected with a raw `dict_type` error — the
+  existing `_validate_filters()` helper, which already `json.loads()`s a
+  string with a clear "filters must be a JSON object" hint on malformed
+  input, is dead code for any client sending filters this way. Reproduced
+  live via real MCP tool calls (not curl, not pytest — those call the
+  underlying async function directly with a Python dict and never cross the
+  JSON-RPC boundary where the bug lives). Fixed by widening the annotation
+  to `dict[str, Any] | str | None` on all three tools; `_validate_filters()`
+  was already called unconditionally as the first use of `filters` in every
+  affected function, so no call-site logic changed. New
+  `tests/test_mcp_protocol.py` drives all three tools through fastmcp's
+  in-process `Client` (the real protocol path) with `filters` as a JSON
+  string, confirming it now round-trips correctly and that malformed JSON
+  still surfaces the friendly hint instead of a raw validation error.
+
 ## [0.4.23] — 2026-07-27
 
 ### Fixed

@@ -717,7 +717,7 @@ async def get_data(
         ),
     ],
     filters: Annotated[
-        dict[str, Any] | None,
+        dict[str, Any] | str | None,
         Field(
             description=(
                 "Dimension filters. Keys are plain-English aliases from the dataset's "
@@ -820,7 +820,7 @@ async def latest(
         ),
     ],
     filters: Annotated[
-        dict[str, Any] | None,
+        dict[str, Any] | str | None,
         Field(
             description="Same filter shape as get_data. Useful for narrowing to one entity.",
             examples=[
@@ -943,7 +943,7 @@ async def top_n(
         ),
     ] = 10,
     filters: Annotated[
-        dict[str, Any] | None,
+        dict[str, Any] | str | None,
         Field(
             description="Optional dimension filters, same shape as get_data.",
             examples=[

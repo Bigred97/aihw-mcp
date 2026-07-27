@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.23] — 2026-07-27
+
+### Fixed
+
+- **`latest()` no longer collapses multi-entity/dimensional datasets to ~1 row.**
+  `shaping.build_response`'s `last_n` trim grouped records by `measure` ONLY,
+  with no carve-outs, and never sorted before taking the tail — so
+  `latest("PUBLIC_HOSPITALS")` (a ~700-hospital register with no
+  `period_dimension`) returned roughly one arbitrary hospital instead of the
+  register, and `latest("GRIM_DEATHS", filters={"cause_of_death": ...})`
+  (no `sex` filter) collapsed the Male/Female/Persons breakdown at the latest
+  year down to one arbitrary row. Fixed by porting ato-mcp's
+  skip-when-arbitrary design (see `ato_mcp/shaping.py`): the trim now (1)
+  skips entirely when every record has a null period, (2) skips entirely
+  when each measure group has only one distinct period, and (3) otherwise
+  sorts by normalised period ascending and keeps every record whose period
+  falls among the top `last_n` distinct periods per measure — so "latest"
+  means "the most recent period(s), keeping ALL entities/dimensions at that
+  period," not an arbitrary N rows. New regression tests in
+  `tests/test_shaping.py` and `tests/test_period_axis.py`.
+- **`latest()` had no cap for register-shaped datasets and `truncated_at` was
+  dead code.** `truncated_at` was declared on `DataResponse` in `models.py`
+  but never assigned anywhere, so a large register response was neither
+  capped nor flagged as truncated. Added a `limit` parameter to `latest()`
+  (`Annotated[int, ge=1, le=10000]`, default 50, mirroring ato-mcp) threaded
+  through `_get_data_impl` → `build_response`; when the cap fires,
+  `truncated_at` is set to the ORIGINAL (pre-truncation) row count.
+  `get_data()` is unaffected — it still has no cap.
+- **Same-day follow-up: the `last_n` trim above DROPPED records whose
+  effective period was blank/unparseable instead of preserving them.** The
+  trim's final row selection filtered `_effective_period(r) is not None` on
+  both the distinct-periods calculation AND the extend step, so any source
+  row with an empty/NaN period-dimension cell (e.g. a blank `year` cell for
+  one entity within an otherwise normal measure group) was silently dropped
+  — and if a measure group had NO row with a determinable period at all, the
+  entire group vanished from `latest()`. Fixed to mirror apra-mcp's wide-branch
+  `no_period` list (`apra_mcp/shaping.py`) and ato-mcp's guarantee that
+  `group_sorted[-last_n:]` always keeps at least `last_n` rows per group:
+  records with no resolvable period are now collected unconditionally and
+  never subject to the trim, so a group can never be reduced to zero
+  records just because "latest" is undecidable for some of its rows. New
+  regression test `test_latest_preserves_row_with_blank_period_cell` in
+  `tests/test_period_axis.py` drives the PUBLIC `server.latest()` tool
+  end-to-end against a GRIM fixture with a real blank `year` cell (fails
+  against the prior drop-unconditionally code, passes with the fix).
+
 ## [0.4.21] — 2026-06-09
 
 ### Fixed

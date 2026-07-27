@@ -172,6 +172,104 @@ async def test_get_data_period_range_filters_wide_dataset(mocked_client):
     assert len(years) >= 5
 
 
+# ---------------------------------------------------------------------------
+# v0.4.21 — BUG 1: latest() collapsed multi-entity/register data to ~1 row;
+# BUG 2: latest() had no `limit`/cap and truncated_at was never assigned.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.asyncio
+async def test_latest_pubhosp_returns_many_hospitals_not_one(mocked_client):
+    """Regression: server.latest("PUBLIC_HOSPITALS") must return many hospitals
+    (up to the `limit` cap), not collapse to ~1 row. PUBLIC_HOSPITALS has no
+    period_dimension, so the old per-measure-only grouping had nothing sane
+    to trim on and arbitrarily kept ~1 row."""
+    r = await server.latest("PUBLIC_HOSPITALS", limit=10000)
+    assert r.row_count > 1, f"expected many hospitals, got {r.row_count}"
+    hospital_names = {rec.dimensions.get("hospital_name") for rec in r.records}
+    assert len(hospital_names) > 1
+
+
+@pytest.mark.asyncio
+async def test_latest_limit_param_caps_and_sets_truncated_at(mocked_client):
+    """server.latest()'s new `limit` param caps register dumps and sets
+    truncated_at to the ORIGINAL (pre-truncation) row count."""
+    full = await server.latest("PUBLIC_HOSPITALS", limit=10000)
+    original_count = full.row_count
+    assert original_count > 10
+    assert full.truncated_at is None
+
+    capped = await server.latest("PUBLIC_HOSPITALS", limit=10)
+    assert len(capped.records) == 10
+    assert capped.row_count == 10
+    assert capped.truncated_at == original_count
+
+
+# ---------------------------------------------------------------------------
+# Same-day follow-up: latest()'s last_n trim must never DROP rows whose
+# period-dimension cell is blank/unparseable -- it must skip trimming THEM,
+# not delete them (a measure group that has no row with a determinable
+# period must never vanish entirely from the response).
+# ---------------------------------------------------------------------------
+
+@pytest.mark.asyncio
+async def test_latest_preserves_row_with_blank_period_cell(monkeypatch):
+    """A row whose period-dimension cell (`year`) is blank in the source CSV
+    must still appear in latest()'s response, alongside the normally-trimmed
+    most-recent-year row for that same (cause_of_death, sex, age_group) group.
+
+    Regression guard: the last_n trim branch filtered
+    `_effective_period(r) is not None` on BOTH the distinct-periods
+    calculation AND the final row selection, so any row with a blank/
+    unparseable period was dropped unconditionally -- if an entire measure
+    group had no row with a determinable period, the WHOLE GROUP silently
+    vanished from latest(). This drives the PUBLIC `server.latest()` tool
+    end-to-end (not `shaping.build_response` directly) against a real GRIM
+    fixture with one row's `year` cell blanked out, and fails against the
+    old code (the blank-year row is absent) / passes once no-period rows
+    are preserved unconditionally.
+    """
+    import pandas as pd
+
+    df = pd.read_csv(FIXTURE_DIR / "grim_head.csv")
+    template = df[
+        (df["cause_of_death"] == "Diabetes")
+        & (df["sex"] == "Persons")
+        & (df["age_group"] == "Total")
+    ].iloc[[0]].copy()
+    # Blank the period cell and give this synthetic row a distinctive
+    # `deaths` value so it can be identified unambiguously in the response.
+    template["year"] = pd.NA
+    template["deaths"] = 424242
+    df_with_blank_period = pd.concat([df, template], ignore_index=True)
+    csv_bytes = df_with_blank_period.to_csv(index=False).encode("utf-8")
+
+    async def _fake_fetch_with_blank(self, url, *, kind="data"):
+        if "grim-data-gov-au" in url:
+            return csv_bytes
+        raise RuntimeError(f"no fixture for {url}")
+
+    monkeypatch.setattr(AIHWClient, "fetch_resource", _fake_fetch_with_blank)
+
+    resp = await server.latest(
+        "GRIM_DEATHS",
+        filters={"cause_of_death": "Diabetes", "sex": "persons"},
+        measures="deaths",
+    )
+
+    blank_period_rows = [
+        r for r in resp.records
+        if r.dimensions.get("year") is None and r.value == 424242
+    ]
+    assert blank_period_rows, (
+        "row with a blank `year` period cell vanished from latest() -- "
+        f"got dimensions on returned records: {[r.dimensions for r in resp.records]}"
+    )
+    # The normal most-recent-year row for this group must ALSO still be
+    # present -- the fix must not turn last_n=1 into "keep everything".
+    normal_rows = [r for r in resp.records if r.dimensions.get("year") == "2023"]
+    assert normal_rows, "the normally-trimmed most-recent-year (2023) row is missing"
+
+
 @pytest.mark.asyncio
 async def test_get_data_start_period_only(mocked_client):
     r = await server.get_data(

@@ -593,6 +593,7 @@ def build_response(
     fmt: str,
     user_query: dict[str, Any],
     last_n: int | None = None,
+    limit: int | None = None,
 ) -> DataResponse:
     """The single entrypoint shaping uses to build a DataResponse from a parsed df.
 
@@ -603,7 +604,8 @@ def build_response(
     4. Resolve `measures` to a list of measure keys.
     5. Shape per layout (wide vs transposed).
     6. Optionally trim to last_n records per measure.
-    7. Emit in the requested format (records / series / csv).
+    7. Optionally cap the response to `limit` rows (sets truncated_at).
+    8. Emit in the requested format (records / series / csv).
     """
     renamed = _apply_aliases(df, cd)
     coerced = _coerce_dtypes(renamed, cd)
@@ -625,13 +627,85 @@ def build_response(
         records = shape_transposed(filtered, cd, measure_keys, start_period, end_period)
 
     if last_n is not None and last_n > 0 and records:
-        # last_n per measure — group by measure, keep tail
+        # last_n per measure — keep every record at the last_n MOST RECENT
+        # DISTINCT periods within each measure group (not just the tail
+        # last_n raw rows). Unlike ato-mcp's transposed datasets (where the
+        # "measure" key already IS the entity, e.g. one row per country), an
+        # aihw wide-layout dataset's period_dimension can vary independently
+        # of OTHER dimensions that are NOT baked into the measure key — e.g.
+        # GRIM_DEATHS filtered to one cause_of_death still has separate
+        # Male/Female/Persons rows for the same year, all under the same
+        # "deaths" measure. Slicing a stable-sorted tail would arbitrarily
+        # keep only ONE of those sex rows for the latest year; keeping every
+        # record whose (normalised) period falls among the top last_n
+        # distinct periods keeps ALL entities/dimensions at that period
+        # instead — which is what "latest" means for AIHW's shape.
+        #
+        # NOTE: `shape_wide` always leaves `Observation.period` as None — for
+        # wide-layout datasets the period lives in `dimensions[period_dimension]`
+        # instead (only `shape_transposed` populates `Observation.period`
+        # directly). So "the period" of a record has to be resolved from
+        # whichever of the two actually carries it.
+        def _effective_period(r: Observation) -> str | None:
+            if r.period is not None:
+                return r.period
+            if cd.period_dimension:
+                return r.dimensions.get(cd.period_dimension)
+            return None
+
+        # SKIP cases where the trim would arbitrarily slice rows:
+        #   1. All records have no resolvable period (register-shaped wide
+        #      datasets like PUBLIC_HOSPITALS declare no period_dimension at
+        #      all — trimming by "measure" here would arbitrarily pick 1 of
+        #      ~700 hospitals, which is never what `latest()` means).
+        #   2. Each measure has only ONE distinct period (single-year wide
+        #      tables where every entity/dimension shares the same period —
+        #      trimming would arbitrarily keep 1 of N entities instead of
+        #      all of them at that one period).
+        # latest() in those cases behaves like get_data(): every matching
+        # row is returned, not an arbitrary N rows.
         per_measure: dict[str, list[Observation]] = {}
         for r in records:
             per_measure.setdefault(r.measure or "", []).append(r)
-        records = []
-        for k in per_measure:
-            records.extend(per_measure[k][-last_n:])
+
+        all_null = all(_effective_period(r) is None for r in records)
+        single_period_per_measure = all(
+            len({_effective_period(r) for r in group if _effective_period(r) is not None}) <= 1
+            for group in per_measure.values()
+        )
+        if all_null or single_period_per_measure:
+            pass  # no trim — latest behaves like get_data on these shapes
+        else:
+            # A measure group can be a MIX of records with a determinable
+            # period and records with a blank/unparseable period cell (e.g.
+            # a source row where the period-dimension cell is empty for
+            # that particular entity). The trim below only knows how to
+            # rank PERIODIC rows by distinct period — it has no way to
+            # decide whether a no-period row is "latest" or not. Silently
+            # dropping those rows (the previous behaviour) made the entire
+            # measure group vanish from latest() whenever none of its rows
+            # had a usable period. Instead, mirror apra's wide-branch
+            # `no_period` list: no-period rows are never subject to the
+            # trim and always survive, same as ato's `group_sorted[-last_n:]`
+            # guaranteeing every group keeps at least last_n rows — a group
+            # must never be reduced to zero records just because "latest"
+            # is undecidable for it.
+            records = [r for r in records if _effective_period(r) is None]
+            for k, group in per_measure.items():
+                periodic_group = [r for r in group if _effective_period(r) is not None]
+                if not periodic_group:
+                    continue
+                distinct_periods = sorted(
+                    {
+                        _normalize_period(_effective_period(r) or "") or ""
+                        for r in periodic_group
+                    }
+                )
+                keep_periods = set(distinct_periods[-last_n:])
+                records.extend(
+                    r for r in periodic_group
+                    if (_normalize_period(_effective_period(r) or "") or "") in keep_periods
+                )
 
     response_unit: str | None = None
     if records:
@@ -646,6 +720,17 @@ def build_response(
         if periods:
             period_start = period_start or periods[0]
             period_end = period_end or periods[-1]
+
+    # `limit` is the customer-facing soft cap for register-shaped responses —
+    # currently only `latest()` passes it (get_data has no cap; see
+    # ../CLAUDE.md core-5 contract). When it fires, `truncated_at` records
+    # the ORIGINAL row count so agents can detect + surface the cap rather
+    # than silently receiving a partial dataset.
+    truncated_at: int | None = None
+    original_count = len(records)
+    if limit is not None and limit > 0 and original_count > limit:
+        truncated_at = original_count
+        records = records[:limit]
 
     if fmt == "csv":
         out_records: list[Observation] | list[dict[str, Any]] = []
@@ -669,4 +754,5 @@ def build_response(
         retrieved_at=datetime.now(timezone.utc),
         source_url=cd.source_url,
         aihw_url=cd.source_url,
+        truncated_at=truncated_at,
     )

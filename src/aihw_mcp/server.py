@@ -616,6 +616,7 @@ async def _get_data_impl(
     end_period: Any,
     fmt: Any,
     last_n: int | None = None,
+    limit: int | None = None,
 ) -> DataResponse:
     # Reset the graceful-degradation flag at the start of each tool call so
     # we only report staleness introduced by THIS call's fetches.
@@ -695,6 +696,7 @@ async def _get_data_impl(
         fmt=fmt_norm,
         user_query=user_query,
         last_n=last_n,
+        limit=limit,
     )
     # If any fetch in the chain served a stale-cache fallback because the
     # upstream API was unreachable, propagate it to the response.
@@ -834,12 +836,36 @@ async def latest(
             examples=["deaths", "real_expenditure_millions"],
         ),
     ] = None,
+    limit: Annotated[
+        int,
+        Field(
+            description=(
+                "Maximum rows to return. Register-shaped datasets "
+                "(PUBLIC_HOSPITALS ~700 hospitals) and dimensional datasets "
+                "(GRIM_DEATHS across causes/sex/age) would otherwise blow an "
+                "agent's context window. Pass filters to narrow to one entity, "
+                "or raise `limit` only if you need a bulk dump. Truncated "
+                "responses set DataResponse.truncated_at to the original row "
+                "count so agents can detect + surface it. Time-series datasets "
+                "already trim to the latest period and are rarely affected by "
+                "this cap."
+            ),
+            ge=1,
+            le=10000,
+            examples=[50, 100, 500],
+        ),
+    ] = 50,
 ) -> DataResponse:
     """Return the most recent observation(s) per measure for a dataset.
 
     For transposed time-series tables this trims to the most-recent period.
-    For wide single-year tables (most AIHW datasets) it returns the same
-    shape as get_data — there is only one period in those tables.
+    For wide datasets with a real period, "latest" means the most recent
+    period(s) — keeping ALL entities/dimensions at that period, not an
+    arbitrary N rows. For wide single-year tables with no period variation
+    (most AIHW datasets) it returns the same shape as get_data, capped at
+    `limit` rows so a large register (e.g. PUBLIC_HOSPITALS) doesn't blow
+    the response budget. Truncated responses set DataResponse.truncated_at
+    to the original row count.
 
     When the curated YAML declares a `headline_slice`, those filter values
     are applied automatically so the no-filter call returns ONE canonical
@@ -851,10 +877,13 @@ async def latest(
     Examples:
         # Latest year of GRIM data for All causes combined
         resp = await latest("GRIM_DEATHS", filters={"cause_of_death": "All causes combined"})
+
+        # All ~700 public hospitals (default cap of 50 would otherwise apply)
+        resp = await latest("PUBLIC_HOSPITALS", limit=1000)
     """
     merged_filters = _merge_headline_slice(dataset_id, filters)
     return await _get_data_impl(
-        dataset_id, merged_filters, measures, None, None, "records", last_n=1
+        dataset_id, merged_filters, measures, None, None, "records", last_n=1, limit=limit
     )
 
 

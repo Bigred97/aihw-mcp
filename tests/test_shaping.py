@@ -233,6 +233,89 @@ def test_pubhosp_state_filter(pubhosp_csv):
         assert r.dimensions["state"] == "NSW"
 
 
+def test_pubhosp_latest_does_not_collapse_to_one_row(pubhosp_csv):
+    """Regression (v0.4.21 BUG 1): latest() passes last_n=1 into build_response.
+    PUBLIC_HOSPITALS has no period_dimension at all (a register, not a time
+    series), so grouping the old way — by measure ONLY, with no null-period
+    carve-out — collapsed the whole ~700-hospital register to essentially one
+    arbitrary row. The fix must skip the trim entirely when every record has
+    a null period, returning the WHOLE matching set instead."""
+    cd = curated.get("PUBLIC_HOSPITALS")
+    df = _parse_csv(cd, pubhosp_csv)
+    resp = shaping.build_response(
+        cd=cd, df=df,
+        filters={},
+        measures="number_of_available_beds",
+        start_period=None, end_period=None, fmt="records", user_query={},
+        last_n=1,
+    )
+    assert resp.row_count > 1, (
+        f"latest() collapsed PUBLIC_HOSPITALS to {resp.row_count} row(s); "
+        "expected the full register (no period to trim on)."
+    )
+    hospital_names = {r.dimensions.get("hospital_name") for r in resp.records}
+    assert len(hospital_names) > 1, "expected multiple distinct hospitals in the response"
+
+
+def test_grim_latest_keeps_all_entities_at_latest_year(grim_csv):
+    """Regression (v0.4.21 BUG 1): dimensional datasets like GRIM_DEATHS also
+    collapsed under the old grouping. Filtering to one cause_of_death (but no
+    sex filter) leaves 3 rows per year (Males/Females/Persons) under the same
+    "deaths" measure — a per-measure-only trim would arbitrarily keep just one
+    of those three. latest() (last_n=1) must keep ALL entities at the most
+    recent period, not an arbitrary single row."""
+    cd = curated.get("GRIM_DEATHS")
+    df = _parse_csv(cd, grim_csv)
+    resp = shaping.build_response(
+        cd=cd, df=df,
+        filters={"cause_of_death": "All causes combined"},
+        measures="deaths",
+        start_period=None, end_period=None, fmt="records", user_query={},
+        last_n=1,
+    )
+    assert resp.row_count == 3, (
+        f"expected 3 rows (one per sex) at the latest year, got {resp.row_count}"
+    )
+    years = {r.dimensions["year"] for r in resp.records}
+    assert years == {"2023"}, f"expected only the most recent year, got {years}"
+    sexes = {r.dimensions["sex"] for r in resp.records}
+    assert sexes == {"Males", "Females", "Persons"}
+
+
+def test_latest_limit_caps_response_and_sets_truncated_at(pubhosp_csv):
+    """Regression (v0.4.21 BUG 2): latest() had no `limit`/cap for register-shaped
+    datasets, and truncated_at was declared in models.py but never assigned
+    anywhere. build_response must slice to `limit` and set truncated_at to the
+    ORIGINAL (pre-truncation) row count."""
+    cd = curated.get("PUBLIC_HOSPITALS")
+    df = _parse_csv(cd, pubhosp_csv)
+
+    full = shaping.build_response(
+        cd=cd, df=df,
+        filters={},
+        measures="number_of_available_beds",
+        start_period=None, end_period=None, fmt="records", user_query={},
+        last_n=1,
+    )
+    original_count = full.row_count
+    assert original_count > 10, "fixture too small to exercise the cap meaningfully"
+    assert full.truncated_at is None
+
+    capped = shaping.build_response(
+        cd=cd, df=df,
+        filters={},
+        measures="number_of_available_beds",
+        start_period=None, end_period=None, fmt="records", user_query={},
+        last_n=1, limit=10,
+    )
+    assert len(capped.records) == 10
+    assert capped.row_count == 10
+    assert capped.truncated_at == original_count, (
+        f"truncated_at should be the ORIGINAL row count ({original_count}), "
+        f"got {capped.truncated_at!r}"
+    )
+
+
 def test_pubhosp_id_columns_are_clean_strings(pubhosp_csv):
     """Numeric ID columns should not have trailing '.0' from float coercion."""
     cd = curated.get("PUBLIC_HOSPITALS")

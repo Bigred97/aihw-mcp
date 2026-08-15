@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.24 (2026-08-15) — latest() no longer collapses multi-entity datasets + filters accepts JSON-string over MCP transport
+
+### Changed
+
+- latest() no longer collapses multi-entity datasets + filters accepts JSON-string over MCP transport
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

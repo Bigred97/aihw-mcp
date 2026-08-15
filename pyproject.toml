@@ -54,8 +54,8 @@ dev = [
 aihw-mcp = "aihw_mcp.server:main"
 
 [project.urls]
-Homepage = "https://github.com/Bigred97/aihw-mcp"
-Documentation = "https://github.com/Bigred97/aihw-mcp#readme"
+Homepage = "https://ausdata.io"
+Documentation = "https://ausdata.io/sources/aihw/"
 Repository = "https://github.com/Bigred97/aihw-mcp"
 Issues = "https://github.com/Bigred97/aihw-mcp/issues"
 Changelog = "https://github.com/Bigred97/aihw-mcp/blob/main/CHANGELOG.md"

@@ -92,7 +92,7 @@ async def test_different_filters_share_parsed_df(
     await server.get_data("GRIM_DEATHS",
                           filters={"cause_of_death": "Diabetes", "sex": "female"}, measures="deaths")
     await server.get_data("GRIM_DEATHS",
-                          filters={"cause_of_death": "All causes combined", "sex": "persons"}, measures="deaths")
+                          filters={"cause_of_death": "All causes combined (ICD-10 all)", "sex": "persons"}, measures="deaths")
     assert mocked_read_csv_with_counter["calls"] == 1
 
 

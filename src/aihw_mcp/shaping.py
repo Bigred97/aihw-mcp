@@ -730,7 +730,16 @@ def build_response(
     original_count = len(records)
     if limit is not None and limit > 0 and original_count > limit:
         truncated_at = original_count
-        records = records[:limit]
+        # BUG (live audit 2026-08-16): records are in ASCENDING period order
+        # (oldest -> newest, ../CLAUDE.md invariant #5). Slicing the HEAD
+        # here kept the OLDEST rows whenever the last_n trim above hadn't
+        # already narrowed the set to a single period (e.g. a broad or
+        # unfiltered query) — so a "give me the latest N" caller could
+        # silently receive decades-old data instead of the most recent.
+        # Slice the TAIL instead: this keeps the LATEST rows and preserves
+        # ascending order within the surviving window (records[-1] stays
+        # the newest).
+        records = records[-limit:]
 
     if fmt == "csv":
         out_records: list[Observation] | list[dict[str, Any]] = []

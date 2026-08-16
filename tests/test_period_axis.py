@@ -119,7 +119,7 @@ async def test_latest_grim_per_measure_returns_most_recent(mocked_client):
     """With multiple measures, latest returns the most-recent per measure."""
     r = await server.latest(
         "GRIM_DEATHS",
-        filters={"cause_of_death": "All causes combined", "sex": "persons"},
+        filters={"cause_of_death": "All causes combined (ICD-10 all)", "sex": "persons"},
         measures=["deaths", "crude_rate_per_100000"],
     )
     assert r.row_count == 2  # one row per measure
@@ -472,14 +472,39 @@ async def test_latest_mort_geography_returns_national_aggregate(mocked_client):
 async def test_latest_grim_uses_headline_slice_with_no_filters(mocked_client):
     """Pre-0.4.6: latest("GRIM_DEATHS") returned an arbitrary
     (cause × sex × age_group) cell. Post-0.4.6: defaults to All causes
-    combined × Persons × Total — the headline national mortality number."""
+    combined × Persons × Total — the headline national mortality number.
+
+    BUG (live audit 2026-08-16): the headline_slice's `cause_of_death`
+    default was hardcoded to the STALE label 'All causes combined'. AIHW's
+    current GRIM release relabels this cell 'All causes combined (ICD-10
+    all)' (confirmed live against data.gov.au) — so the auto-applied slice
+    matched zero rows and every bare get_data("GRIM_DEATHS") /
+    latest("GRIM_DEATHS") call 400'd with "No matches ... Did you mean
+    'All causes combined (ICD-10 all)'?". `grim_head.csv` was updated to
+    carry the current real label so this (and every other GRIM fixture
+    test) exercises the live codelist shape.
+    """
     r = await server.latest("GRIM_DEATHS")
     # Three measures (deaths, crude_rate, age_standardised_rate)
     assert r.row_count >= 1
     for rec in r.records:
-        assert rec.dimensions["cause_of_death"] == "All causes combined"
+        assert rec.dimensions["cause_of_death"] == "All causes combined (ICD-10 all)"
         assert rec.dimensions["sex"] == "Persons"
         assert rec.dimensions["age_group"] == "Total"
+
+
+@pytest.mark.asyncio
+async def test_get_data_grim_bare_call_succeeds_against_current_codelist(mocked_client):
+    """Failing-test-first for the same defect via get_data(): a bare
+    get_data("GRIM_DEATHS") call (no filters at all) must succeed — not
+    400 — against AIHW's current cause_of_death codelist. get_data() applies
+    headline_slice through a different branch than latest() (inline in
+    `_get_data_impl`, not `_merge_headline_slice`), so this exercises that
+    call site independently."""
+    resp = await server.get_data("GRIM_DEATHS")
+    assert resp.row_count > 0
+    for rec in resp.records:
+        assert rec.dimensions["cause_of_death"] == "All causes combined (ICD-10 all)"
 
 
 # ---------------------------------------------------------------------------

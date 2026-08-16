@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.25 (2026-08-16) — latest-N cap now keeps the latest rows, not 1982
+
+### Fixed
+
+- **The `limit` cap in `build_response` sliced the HEAD of the ascending-ordered
+  record list** (`records[:limit]`), so a broad/unfiltered query could silently
+  serve the OLDEST rows — live audit caught `CANCER_INCIDENCE_MORTALITY`'s
+  default call returning 1982 data. Now slices the tail (`records[-limit:]`):
+  latest rows kept, ascending order preserved, `records[-1]` stays newest.
+- **`GRIM_DEATHS` bare call 400'd**: AIHW relabelled the aggregate row from
+  "All causes combined" to "All causes combined (ICD-10 all)" in the live GRIM
+  CSV; the curated default and the `grim_head.csv` fixture now match the source.
+- **MCP handshake `serverInfo.version` now reports the real package version**
+  (previously FastMCP's own library version; the DataResponse envelope's
+  `server_version` was always correct).
+
 ## 0.4.24 (2026-08-15) — latest() no longer collapses multi-entity datasets + filters accepts JSON-string over MCP transport
 
 ### Changed

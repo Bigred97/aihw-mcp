@@ -24,8 +24,16 @@ period_dimension: year
 # one canonical headline row per year — total deaths from all causes for
 # both sexes combined, all age groups rolled up. Without this, latest()
 # would return an arbitrary (cause × sex × age_group) cell.
+# NOTE (fixed 2026-08-16): cause_of_death was hardcoded to the stale label
+# "All causes combined", which no longer matches AIHW's current GRIM
+# release — the source now labels this row "All causes combined (ICD-10
+# all)" (confirmed live against data.gov.au). The mismatch meant every
+# bare/default get_data("GRIM_DEATHS") and latest("GRIM_DEATHS") call 400'd
+# with "No matches for 'All causes combined' ...". Keep this value in sync
+# with the live codelist — re-check via describe_dataset if AIHW relabels
+# it again.
 headline_slice:
-  cause_of_death: All causes combined
+  cause_of_death: All causes combined (ICD-10 all)
   sex: Persons
   age_group: Total
 search_keywords:

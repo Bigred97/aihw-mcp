@@ -124,7 +124,7 @@ def test_grim_canonical_sex_alias(grim_csv):
     for user_sex, canonical in (("female", "Females"), ("male", "Males"), ("persons", "Persons")):
         resp = shaping.build_response(
             cd=cd, df=df,
-            filters={"sex": user_sex, "cause_of_death": "All causes combined"},
+            filters={"sex": user_sex, "cause_of_death": "All causes combined (ICD-10 all)"},
             measures="deaths",
             start_period=None, end_period=None, fmt="records", user_query={},
         )
@@ -268,7 +268,7 @@ def test_grim_latest_keeps_all_entities_at_latest_year(grim_csv):
     df = _parse_csv(cd, grim_csv)
     resp = shaping.build_response(
         cd=cd, df=df,
-        filters={"cause_of_death": "All causes combined"},
+        filters={"cause_of_death": "All causes combined (ICD-10 all)"},
         measures="deaths",
         start_period=None, end_period=None, fmt="records", user_query={},
         last_n=1,
@@ -313,6 +313,49 @@ def test_latest_limit_caps_response_and_sets_truncated_at(pubhosp_csv):
     assert capped.truncated_at == original_count, (
         f"truncated_at should be the ORIGINAL row count ({original_count}), "
         f"got {capped.truncated_at!r}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# BUG (live audit 2026-08-16): the `limit` cap sliced records[:limit] on a
+# list in ASCENDING period order (oldest -> newest, ../CLAUDE.md invariant
+# #5), so whenever the pre-cap record count still exceeded `limit` without
+# already being narrowed to a single period -- e.g. `last_n` unset, or a
+# broad/unfiltered query -- the surviving window was the EARLIEST period
+# instead of the latest. Portfolio contract: a caller asking for latest-N
+# without a start period must get the MOST RECENT rows.
+# ---------------------------------------------------------------------------
+
+
+def test_limit_cap_keeps_latest_period_not_earliest(acim_csv):
+    """CANCER_INCIDENCE_MORTALITY, unfiltered, spans every year in the
+    fixture (2005-2011). Capping the (untrimmed) record set at `limit` must
+    keep the LATEST year's rows, not whichever year happens to sort first --
+    and ascending order must hold within the surviving window, so
+    records[-1] is the newest."""
+    cd = curated.get("CANCER_INCIDENCE_MORTALITY")
+    df = _parse_csv(cd, acim_csv)
+    resp = shaping.build_response(
+        cd=cd, df=df,
+        filters={},  # broad -- no headline_slice narrowing here
+        measures=None,
+        start_period=None, end_period=None, fmt="records", user_query={},
+        last_n=None,  # isolate the cap itself from the last_n trim
+        limit=20,
+    )
+    assert resp.truncated_at is not None, "fixture too small to exercise the cap"
+    all_years = sorted(df["Year"].astype(str).unique())
+    latest_year = all_years[-1]
+    years_in_response = {r.dimensions.get("year") for r in resp.records}
+    assert latest_year in years_in_response, (
+        f"limit cap kept only {sorted(years_in_response)}; the latest "
+        f"available year {latest_year!r} was truncated away instead of "
+        "the earliest year"
+    )
+    assert resp.records[-1].dimensions.get("year") == latest_year, (
+        "ascending order must hold within the capped window -- "
+        f"records[-1] should be {latest_year!r}, got "
+        f"{resp.records[-1].dimensions.get('year')!r}"
     )
 
 

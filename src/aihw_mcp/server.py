@@ -26,7 +26,7 @@ import pandas as pd
 from fastmcp import FastMCP
 from pydantic import Field
 
-from . import catalog, curated, parquet_cache
+from . import __version__, catalog, curated, parquet_cache
 from .client import AIHWAPIError, AIHWClient, get_stale_signal, reset_stale_signal
 from .curated import _suggest as _fuzzy_suggest
 from .discovery import DiscoveryError, DiscoverySpec, resolve_latest_url
@@ -40,7 +40,7 @@ _DATASET_ID_PATTERN = re.compile(r"^[A-Z][A-Z0-9_]*$")
 _PERIOD_PATTERN = re.compile(r"^[0-9-]{4,10}$")
 _VALID_FORMATS = {"records", "series", "csv"}
 
-mcp = FastMCP("aihw-mcp")
+mcp = FastMCP("aihw-mcp", version=__version__)
 
 # Per-thread client cache. The gateway runs MCP tools from worker threads,
 # each with its own asyncio event loop. A module-level singleton holding httpx
